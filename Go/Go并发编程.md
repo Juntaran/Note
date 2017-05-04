@@ -55,8 +55,22 @@ Go的并发变成模型更加成熟先进，目标在于大幅减少程序产生
 实现互斥的方法必须确保排他原则，==sync包==包含了对互斥的支持
 
 
+### socket通信
+socket既可以提供网络中不同计算机多个应用程序之间的通信支持，也可以成为单计算机上多个应用程序之间的通信手段。但是使用socket接口的绝大多数情况都是为了在网络中通信
+socket通信是基于TCP/IP协议栈的
+在Go提供了socket的API，需要使用标准库中的net包
 
-
+| 字面量 |socket协议|备注|
+| --- | --- | --- |
+|tcp|TCP|无|
+|tcp4|TCP|网际互联协议只支持IPv4|
+|tcp6|TCP|网际互联协议只支持IPv6|
+|udp|UDP|无|
+|udp4|UDP|网际互联协议只支持IPv4|
+|udp6|UDP|网际互联协议只支持IPv6|
+|unix|有效|可看作通信域为AF_UNIX切类型为SOCK_STREAM时内核采用的默认协议|
+|unixgram|有效|可看作通信域为AF_UNIX切类型为SOCK_DGRAM时内核采用的默认协议|
+|unixpacket|有效|可看作通信域为AF_UNIX切类型为SOCK_SEQPACKET时内核采用的默认协议|
 
 
 
