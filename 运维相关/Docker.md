@@ -121,11 +121,11 @@ Docker有着更少的抽象层，不需要Hypervisor实现硬件虚拟化，运�
 
 ----------
 **参考/引用来源：**
-[DaoCloud][2]
-[cbl709][3]
-[极客学院][4]
+[DaoCloud][1]
+[cbl709][2]
+[极客学院][3]
 
 
-  [2]: http://docs.daocloud.io/
-  [3]: http://blog.csdn.net/cbl709/article/details/43955687
-  [4]: http://wiki.jikexueyuan.com/project/docker-technology-and-combat/
+  [1]: http://docs.daocloud.io/
+  [2]: http://blog.csdn.net/cbl709/article/details/43955687
+  [3]: http://wiki.jikexueyuan.com/project/docker-technology-and-combat/
