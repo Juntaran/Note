@@ -30,9 +30,9 @@ grammar_cjkRuby: true
 # 多进程编程
 进程间通信的方式被称为IPC(Inter-Process Communication)
 在Linux中，IPC可以分为三类：
-1. 基于通信的IPC方法
-1.1 数据传送：`管道pipe`传送字节流，`消息队列message queue`传送结构化的消息对象
-1.2 共享内存：`共享内存shared memory`最快
+1. 基于通信的IPC方法  
+1.1 数据传送：`管道pipe`传送字节流，`消息队列message queue`传送结构化的消息对象  
+1.2 共享内存：`共享内存shared memory`最快  
 2. 基于信号的IPC方法
 `信号signal`，唯一的一种异步IPC方法
 3. 基于同步的IPC方法
