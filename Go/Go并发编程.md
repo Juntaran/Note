@@ -61,7 +61,7 @@ socket通信是基于TCP/IP协议栈的
 
 ![socket](https://raw.githubusercontent.com/Juntaran/Note/master/pictures/socket.jpg)
 
-![socket通信](https://raw.githubusercontent.com/Juntaran/Note/master/pictures/socketconn.jpg)
+![socket通信](https://raw.githubusercontent.com/Juntaran/Note/master/pictures/socketConn.jpg)
 
 
 每个socket都存在与一个通信域中，通信域决定了该socket的地址格式和通信范围
