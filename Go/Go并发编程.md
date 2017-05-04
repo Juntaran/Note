@@ -207,7 +207,7 @@ Go的socket编程API程序在底层获取的是一个`非阻塞式`的socket实�
 
 ___
 Reference:
-* [Go并发编程实战](http://www.ituring.com.cn/book/1950​1)
+* [Go并发编程实战](http://www.ituring.com.cn/book/1950)
 
 
 
