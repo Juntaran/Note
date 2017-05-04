@@ -168,6 +168,9 @@ Go的socket编程API程序在底层获取的是一个`非阻塞式`的socket实�
 这一特性成为`部分写(partial wirte)`，应用程序应该每次调用`write`之后都去检查该结果值
 
 除了`read`和`write`外，系统调用`accept`也会显现出一致的`非阻塞`风格
+它不会阻塞以等待新的连接到来，而会直接返回错误码为`EAGAIN`的错误
+但是Go的socket编程API在一定程度上帮助我们屏蔽了相关系统调用的EAGAIN错误，
+这使得有些socket变成API调用起来`像是阻塞式`的
 
 
 
