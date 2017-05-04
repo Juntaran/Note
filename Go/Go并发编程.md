@@ -117,7 +117,7 @@ socket有5种类型
 第二个ladder表示当前程序在网络中的标识  
 `laddr`是Local Address的缩写，格式为`host:port`  
 `host`处内容必须是当前计算机对应的IP地址或主机名  
-`port`则代表当前程序欲坚挺的端口号  
+`port`则代表当前程序欲监听的端口号  
 
     listener, err := net.Listen("tcp", "127.0.0.1:8085")
 
