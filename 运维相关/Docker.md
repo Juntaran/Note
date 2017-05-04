@@ -32,7 +32,7 @@ grammar_cjkRuby: true
 
 ## Docker是什么
 Docker是一种`容器`技术，把应用和环境打包，形成一个独立的，类似与APP形式的应用。与虚拟化技术类似，极大的方便了应用服务的部署，却又与虚拟化技术不同，它以一种更`轻量`的方式实现了应用服务的打包。使用Docker可以让每个应用彼此相互隔离，在同一台机器上同时运行多个应用。可以在更细的粒度上进行资源的管理，比虚拟化技术更节约资源。
-![enter description here][1]
+![](https://raw.githubusercontent.com/Juntaran/Note/master/pictures/VMvsDocker.jpg)
 上图是Docker与虚拟机的实现框架，可以很明显看出虚拟机的Guset OS层（虚拟机安装的操作系统）和Hypervisor层（硬件虚拟化平台，比如KVM）在Docker中被Docker Engine所替代。
 虚拟机实现资源隔离的方法是独立OS+虚拟化CPU、内存、IO设备。
 Docker实现资源隔离的方法是利用Linux内核本身支持的容器方式实现资源和环境隔离。
@@ -119,12 +119,11 @@ Docker有着更少的抽象层，不需要Hypervisor实现硬件虚拟化，运�
 
 ----------
 **参考/引用来源：**
-[DaoCloud][2]
-[cbl709][3]
-[极客学院][4]
+[DaoCloud][1]
+[cbl709][2]
+[极客学院][3]
 
 
-  [1]: ./images/vm-vs-docker-architecture1.png "vm-vs-docker-architecture1.png"
-  [2]: http://docs.daocloud.io/
-  [3]: http://blog.csdn.net/cbl709/article/details/43955687
-  [4]: http://wiki.jikexueyuan.com/project/docker-technology-and-combat/
+  [1]: http://docs.daocloud.io/
+  [2]: http://blog.csdn.net/cbl709/article/details/43955687
+  [3]: http://wiki.jikexueyuan.com/project/docker-technology-and-combat/
