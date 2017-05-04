@@ -100,6 +100,7 @@ socket有5种类型
     
 函数net.Listen用于获取监听器，它接受两个string类型的参数
 第一个是参数的含义是以何种监听协议给定的地址，该参数必须为`面向流`的协议
+
 | 字面量 |socket协议|备注|
 | --- | --- | --- |
 |tcp|TCP|无|
@@ -111,6 +112,7 @@ socket有5种类型
 |unix|有效|可看作通信域为AF_UNIX切类型为SOCK_STREAM时内核采用的默认协议|
 |unixgram|有效|可看作通信域为AF_UNIX切类型为SOCK_DGRAM时内核采用的默认协议|
 |unixpacket|有效|可看作通信域为AF_UNIX切类型为SOCK_SEQPACKET时内核采用的默认协议|
+
 如上表所示，第一个参数必须是`tcp`、`tcp4`、`tcp6`、`unix`和`unixpacket`中的一个
 
 第二个ladder表示当前程序在网络中的标识
