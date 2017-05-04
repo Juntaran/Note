@@ -94,12 +94,12 @@ socket有5种类型
 
 在Go提供了socket的API，需要使用标准库中的net包
 
-首先会用到这个函数
+在服务端首先会用到这个函数
 
     func Listen(net, laddr string) (Listener, error)
     
 函数net.Listen用于获取监听器，它接受两个string类型的参数
-第一个是何种监听协议给定的地址，该参数必须为`面向流`的协议
+第一个是参数的含义是以何种监听协议给定的地址，该参数必须为`面向流`的协议
 | 字面量 |socket协议|备注|
 | --- | --- | --- |
 |tcp|TCP|无|
@@ -111,8 +111,53 @@ socket有5种类型
 |unix|有效|可看作通信域为AF_UNIX切类型为SOCK_STREAM时内核采用的默认协议|
 |unixgram|有效|可看作通信域为AF_UNIX切类型为SOCK_DGRAM时内核采用的默认协议|
 |unixpacket|有效|可看作通信域为AF_UNIX切类型为SOCK_SEQPACKET时内核采用的默认协议|
+如上表所示，第一个参数必须是`tcp`、`tcp4`、`tcp6`、`unix`和`unixpacket`中的一个
 
-第二个是
+第二个ladder表示当前程序在网络中的标识
+`laddr`是Local Address的缩写，格式为`host:port`
+`host`处内容必须是当前计算机对应的IP地址或主机名
+`port`则代表当前程序欲坚挺的端口号
+
+    listener, err := net.Listen("tcp", "127.0.0.1:8085")
+
+监听函数Listen调用之后，当err为nil时，即可等待客户端的连接请求
+
+    conn, err := listener.Accept()
+
+调用监听器的Accept方法时，会进入阻塞状态，直到有客户端程序发起TCP连接
+
+
+客户端使用net包的Dial函数用于向制定的网络地址发送连接建立请求
+
+    func Dial(network, address string) (Conn, error)
+
+Dial函数同样接收两个参数
+第一个参数`network`与net.Listen函数的第一个参数`net`类似，但是有更多的选项
+除了net.Listen的第一个可选参数外，还可以使用`udp`、`udp4`、`udp6`、`ip`、`ip4`和`ip6`
+这是因为在发送数据前不一定要先建立连接，UDP协议和IP协议都是`面向无连接`的协议
+
+第二个参数`address`和net.Listen函数的第二个参数`laddr`完全一致
+它指定的是服务端的地址
+
+    conn, err := net.Dial("tcp", "127.0.0.1:8085")
+
+如果需要手动设置超时时间，可以使用DialTimeout函数（Dial函数默认timeout=75秒）
+
+    func DialTimeout(network, address string, timeout time.Duration) (Conn, error)
+
+DialTimeout函数的最后一个参数的单位是纳秒， 如果想设置2秒
+
+    conn, err := net.DialTimeout("tcp", "127.0.0.1:8085", 2*time.Second)
+
+服务端创建监听器并开始等待连接请求之后，一旦收到客户端的连接请求，服务端就和和客户端进行`三次握手`
+当成功建立连接后，无论服务端程序还是客户端程序都会获得一个`net.Conn`类型的值
+之后，两端便可以用该值交换数据了
+Go的socket编程API程序在底层获取的是一个`非阻塞式`的socket实例，
+这意味着在该实例之上的数据读取操作也都是非阻塞式的
+程序调用`read`从socket接收缓冲区中读取数据的时候，即使接收缓冲区没有任何数据，
+操作系统也不会使系统调用`read`进入`阻塞状态`，而是直接返回一个错误码为`EAGAIN`的错误
+应用程序不应该视此为一个真正的错误，应该`忽略`它，并稍等片刻再次读取
+
 
 
 
