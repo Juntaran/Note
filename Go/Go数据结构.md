@@ -1,7 +1,6 @@
 ---
-title: Go数据结构· 
+title: Go数据结构
 tags: Go,数据结构
-grammar_cjkRuby: true
 ---
 
 
