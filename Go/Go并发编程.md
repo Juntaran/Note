@@ -182,21 +182,84 @@ Go的socket编程API程序在底层获取的是一个`非阻塞式`的socket实�
 把`数据切分`和`分批返回`的任务交给调用方程序即可，因此`部分读`需要我们在程序中做一些额外的处理  
 
 
+* **Read方法**
 
+Read方法用于从socket的接收缓冲区中读取数据
 
+    Read(b []byte) (n int, err error)
+    
+该方法接收一个`[]byte`类型的参数，相当于一个用来存放从连接上接收到的数据的容器  
+Read方法会把它当作空的容器并试图填满，相应位置上的原元素会被替换  
+为了避免混乱，尽量让这个容器在填充之前保持绝对干净  
+也就是说，传递个Read方法的参数值应该是一个`不包含任何非零值元素的切片值`  
+可以这样使用：  
+    b := make([]byte, 10)
+    n, err := conn.Read(b)
+    content := string(b[:n])
+通过依据结果n对参数b做切片操作可以抽取出接收到的数据  
+如果socket编程API在从socket的接收缓冲区中读取数据时发现TCP连接已经被另一端关闭了  
+就会立刻返回一个error类型值，即`io.EOF`  
+意味着此TCP连接之上在没有可以读取的数据
 
+    var dataBuffer bytes.Buffer
+    b := make([]byte, 10)
+    for {
+    	n, err := conn.Read(b)
+        if err != nil {
+        	if err == io.EOF {
+            	fmt.Println("The connection is closed.")
+                conn.Close()
+            } else {
+            	fmt.Printf("Read Error: %s\n", err)
+            }
+            break
+        }
+        dataBuffer.Write(b[:n])
+    }
 
+上述的例子是一种最简单的情况，我们一般不会`在连接关闭之前无休止地`从连接上读取数据  
+作为一个处在TCP/IP协议栈应用层的程序，负责切分数据并生成有实际意义的消息  
+即使在最简单的情况下，应用层程序也知道怎样在接收到的字节流上进行切分  
+此外，还有一个更简便的方法：  
+利用标准库代码包`bufio`中的API实现一些较为复杂的数据切分操作  
+bufio是Buffered I/O的缩写，它提供了与带缓存的I/O操作有关的支持  
+比如通过包装不带缓存的I/O类型值的方式增强它们的功能  
+`bufio.NewReader`接收一个`io.Reader`类型的参数值  
+net.Conn类型实现了io.Reader接口中唯一的方法Read，所以它是该接口的一个实现类型  
+因此，可以使用bufio.NewReader函数包装变量conn  
 
+    reader := bufio.NewReader(conn)
+ReadBytes方法接收一个byte类型的参数值，该参数值是通信两端协商一致的消息边界  
 
+    line, err := reader.ReadBytes('\n')
+另外还有`bufio.NewScanner函数`、`bufio.Scanner类型及其方法`等
 
+* **Write方法**
+Write方法用于向socket发送缓冲区写入数据
 
+    Write(b []byte) (n int, err error)
+net.Conn类型是一个io.Writer接口的实现类型，所以net.Conn类型的值可以作为bufio.NewWriter函数的参数值  
 
+    writer := bufio.NewWriter(conn)
 
+与reader类似，writer的值可以看作是针对变量conn代表的TCP连接的缓冲写入器  
+可以通过调用其上的以`Writer为名称前缀`的方法来分批次地向其中的缓冲区写入数据  
+也可以通过调用它
 
+* **Close方法**
+Close放方法会关闭连接，调用Close方法时，Read方法或Write方法正在被调用且还未执行结束，  
+它们会立即执行结束并返回非nil的error值，即使它们处于阻塞状态  
 
+* **LocalAddr和RemoteAddr方法**
+顾名思义是获取当前通信的某一端在网络中的地址，返回一个net.Addr类型的结果  
+方法集合中有两个方法：`Network`和`String`  
+Network返回当前连接所使用的协议的名称`conn.LocalAddr().Network()`，得到`tcp`  
+String方法根据通信域返回相应格式的地址`conn.RemoteAddr().String()`  
 
-
-
+* **SetDeadline SetReadDeadline SetWriteDeadline方法**
+它们只接收一个time.Time类型值作为参数，返回一个error类型值作为结果  
+SetDeadline方法会设定在当前连接上的`I/O操作的超时时间`  
+SetReadDeadline和SetWriteDeadline方法分别针对读和写的超时控制  
 
 
 
