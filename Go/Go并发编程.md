@@ -238,6 +238,7 @@ ReadBytes方法接收一个byte类型的参数值，该参数值是通信两端�
 Write方法用于向socket发送缓冲区写入数据
 
     Write(b []byte) (n int, err error)
+    
 net.Conn类型是一个io.Writer接口的实现类型，所以net.Conn类型的值可以作为bufio.NewWriter函数的参数值  
 
     writer := bufio.NewWriter(conn)
