@@ -192,10 +192,11 @@ Read方法用于从socket的接收缓冲区中读取数据
 Read方法会把它当作空的容器并试图填满，相应位置上的原元素会被替换  
 为了避免混乱，尽量让这个容器在填充之前保持绝对干净  
 也就是说，传递个Read方法的参数值应该是一个`不包含任何非零值元素的切片值`  
-可以这样使用：  
+
     b := make([]byte, 10)
     n, err := conn.Read(b)
     content := string(b[:n])
+
 通过依据结果n对参数b做切片操作可以抽取出接收到的数据  
 如果socket编程API在从socket的接收缓冲区中读取数据时发现TCP连接已经被另一端关闭了  
 就会立刻返回一个error类型值，即`io.EOF`  
@@ -234,11 +235,12 @@ ReadBytes方法接收一个byte类型的参数值，该参数值是通信两端�
     line, err := reader.ReadBytes('\n')
 另外还有`bufio.NewScanner函数`、`bufio.Scanner类型及其方法`等
 
-* **Write方法**
-Write方法用于向socket发送缓冲区写入数据
+* **Write方法**  
+
+Write方法用于向socket的发送缓冲区写入数据  
 
     Write(b []byte) (n int, err error)
-    
+
 net.Conn类型是一个io.Writer接口的实现类型，所以net.Conn类型的值可以作为bufio.NewWriter函数的参数值  
 
     writer := bufio.NewWriter(conn)
