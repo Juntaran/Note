@@ -1,8 +1,4 @@
----
-title: Go的并发机制.md
-tags: Go,并发,Go并发编程实战
-grammar_cjkRuby: true
----
+# Go的并发机制
 
 **不要用共享内存的方式来通信，要以通信作为手段来共享内存**  
 推荐使用通道(channel)在多个goroutine之间传递数据，并且还能够保证整个过程的并发安全
