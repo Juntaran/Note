@@ -1,8 +1,4 @@
----
-title: Docker
-tags: Docker,容器
-grammar_cjkRuby: true
----
+# Docker
 
 *2016.11.22*
 

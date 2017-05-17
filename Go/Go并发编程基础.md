@@ -1,8 +1,4 @@
----
-title: Go并发编程
-tags: Go,并发,Go并发编程实战
-grammar_cjkRuby: true
----
+# Go并发编程
 
 *2017.5.1*
 

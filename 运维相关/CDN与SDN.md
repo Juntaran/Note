@@ -1,9 +1,4 @@
----
-title: CDN与SDN.md
-tags: CDN,SDN
-grammar_cjkRuby: true
----
-
+# CDN与SDN
 
 这两个完全不是一个东西  
 只是名字相近而已 
