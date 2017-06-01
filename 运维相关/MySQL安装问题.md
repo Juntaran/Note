@@ -54,7 +54,7 @@
 
     mysql>
     grant all privileges on *.*  to  'root'@'%'  identified by 'YourPassword'  with grant option;
-    mysql>flush privileges;
+    flush privileges;
 
 退出MySQL命令
 
