@@ -34,3 +34,11 @@
     mysqladmin -u root password 'root'
     mysql -u root -p
 
+## 测试MySQL
+
+    create database test;
+    show databases;
+    status;										// 查看MySQL版本
+    select version();							// 查看MySQL版本
+    show global variables like 'port';			// 查看MySQL端口号
+
