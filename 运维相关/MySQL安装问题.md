@@ -36,9 +36,27 @@
 
 ## 测试MySQL
 
+    mysql>
     create database test;
     show databases;
     status;										// 查看MySQL版本
     select version();							// 查看MySQL版本
     show global variables like 'port';			// 查看MySQL端口号
+    
+    
+    
+## 远程登陆MySQL
+
+    sudo vim/etc/mysql/my.cnf
+    sudo vim /etc/mysql/mysql.conf.d/mysqld.cnf
+
+找到 `bind-address = 127.0.0.1` 这一行，注释掉，或改为`0.0.0.0`
+
+    mysql>
+    grant all privileges on *.*  to  'root'@'%'  identified by 'YourPassword'  with grant option;
+    mysql>flush privileges;
+
+退出MySQL命令
+
+    sudo service mysql(d) restart
 
