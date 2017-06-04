@@ -8,10 +8,10 @@ Linux的硬盘命名方案是基于文件的，一般命名方式如下：
     /dev/hda2
     /dev/sdb3
 
-> /dev：所有设备文件存放目录
-> hd与sd：代表分区所在的设备类型。hd代表IDE硬盘，sd代表SCSI硬盘
-> a：表示分区在哪个设备上，比如/dev/hda代表第1块IDE硬盘
-> 2：代表分区，Linux下前4个分区（主分区或扩展分区）用数字1-4表示，逻辑分区从5开始
+> /dev：所有设备文件存放目录  
+> hd与sd：代表分区所在的设备类型。hd代表IDE硬盘，sd代表SCSI硬盘  
+> a：表示分区在哪个设备上，比如/dev/hda代表第1块IDE硬盘  
+> 2：代表分区，Linux下前4个分区（主分区或扩展分区）用数字1-4表示，逻辑分区从5开始  
 
  /dev/hda2表示第1块`IDE`硬盘的第2个主分区或扩展分区  
  /dev/sdc6表示第3块`SCSI`硬盘的第2个逻辑分区  
@@ -31,11 +31,11 @@ Ctrl+Alt+F1~F6切换，Ctrl+Alt+F7从字符界面切换到X-window
 #### 1.2 查看CPU信息
     more /proc/cpuinfo
 
-> processor：   逻辑处理器唯一标识符
-> physical id：  每个物理封装的唯一标识符，也就是一个物理CPU
-> siblings：　   相同物理封装中的逻辑处理器数量
-> core id：　　 每个内核唯一标识符
-> cpu cores：　相同物理封装中的内核数量
+> processor：   逻辑处理器唯一标识符  
+> physical id：  每个物理封装的唯一标识符，也就是一个物理CPU  
+> siblings：　   相同物理封装中的逻辑处理器数量  
+> core id：　　 每个内核唯一标识符  
+> cpu cores：　相同物理封装中的内核数量  
 
 在`siblings`和`cpu cores`值之间有对应关系，  
 如果`siblings`是`cpu cores`的两倍，则说明系统支持超线程，并且已打开  
@@ -66,10 +66,10 @@ Ctrl+Alt+F1~F6切换，Ctrl+Alt+F7从字符界面切换到X-window
 
 设备文件在Linux系统下的/dev下，命名方式是主设备号+次设备号，主设备号说明设备类型，次设备号说明具体指哪个设备
 
-> 软盘：　　/dev/fd(1,2..)
-> U盘：　　 /dev/sd(a,b..)(1,2..)　　U盘在Linux下识别为SCSI设备
-> 光驱：　　IDE光驱对应/dev/hd(a,b..)，SCSI光驱对应/dev/sr(1,2..)
-> 磁带：　　/dev/st(1,2..)
+> 软盘：　　/dev/fd(1,2..)  
+> U盘：　　 /dev/sd(a,b..)(1,2..)　　U盘在Linux下识别为SCSI设备  
+> 光驱：　　IDE光驱对应/dev/hd(a,b..)，SCSI光驱对应/dev/sr(1,2..)  
+> 磁带：　　/dev/st(1,2..)  
 
 #### 2.1 文件系统类型
 
