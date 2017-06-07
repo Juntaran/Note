@@ -1,0 +1,18 @@
+*2017.6.7*
+
+# 系统版本
+
+命令： uname -a
+作用： 查看系统内核版本号及系统名称 
+
+命令： cat /proc/version
+作用： 查看目录"/proc"下version的信息，也可以得到当前系统的内核版本号及系统名称 
+
+命令： lsb_release -c
+作用： 查看系统代号，比如ubuntu 12.04为precise， 14.04为trusty，15.04为vivid，15.10为wily，17.04为zesty
+
+命令： lsb_release -a
+作用： 显示系统信息以及代号
+
+命令： lisb_release -d
+作用： 显示系统号，比如Ubuntu 17.04
