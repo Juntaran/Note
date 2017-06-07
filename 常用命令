@@ -14,5 +14,5 @@
 命令： lsb_release -a
 作用： 显示系统信息以及代号
 
-命令： lisb_release -d
+命令： lisb_release -d  /  cat etc/issue
 作用： 显示系统号，比如Ubuntu 17.04
