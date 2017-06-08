@@ -65,17 +65,17 @@
 
 ## 三、yum安装方式
 
-    rpm -qa|grep yum    # 检查yum是否安装
+    rpm -qa|grep yum                 # 检查yum是否安装
 
-    rpm -ivh yum-*.noarch.rpm    # 安装yum
+    rpm -ivh yum-*.noarch.rpm        # 安装yum
 
-    yum install xxx                               # 安装
-    yum remove xxx                             # 删除
-    yum check-update                          # 检查更新
-    yum update                                    # 更新所有rpm包
+    yum install xxx                  # 安装
+    yum remove xxx                   # 删除
+    yum check-update                 # 检查更新
+    yum update                       # 更新所有rpm包
     yum update kernel kernel-source  # 更新内核
-    yum upgrade                                 # 升级版本
-    yum info                                        # 查询RPM包信息
+    yum upgrade                      # 升级版本
+    yum info                         # 查询RPM包信息
 
 ## 四、二进制软件安装
 
