@@ -121,7 +121,7 @@ depmod分析载入模块的相关性
 
 - 临时开启，重启失效
 
-        cat /proc/sys/net./ipv4/ip_forward    # 0是禁止转发，1是开启转发
+        cat /proc/sys/net/ipv4/ip_forward    # 0是禁止转发，1是开启转发
         echo "1" >/proc/sys/net/ipv4/ip_forward
 
 - 永久开启
