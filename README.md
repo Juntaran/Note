@@ -13,7 +13,8 @@
 
 ## Python相关
 
-* [微信机器人](https://github.com/LCTT/LCBot)
+* [微信机器人](https://github.com/Juntaran/LCBot)
+* [知乎爬虫](https://github.com/Juntaran/Passer-zhihu)
 
 ## Docker
 
