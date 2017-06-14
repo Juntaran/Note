@@ -17,6 +17,10 @@
 * [微信机器人](https://github.com/Juntaran/LCBot)
 * [知乎爬虫](https://github.com/Juntaran/Passer-zhihu)
 
+## Linux
+
+* [Linux教程](http://www.linuxprobe.com/chapter-00.html)
+
 ## Docker
 
 * [Docker技术入门与实战](https://github.com/yeasy/docker_practice/blob/master/SUMMARY.md)
