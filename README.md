@@ -8,6 +8,7 @@
 * [Go标准库](http://studygolang.com/pkgdoc)
 * [Go-JSON](https://github.com/Juntaran/Note/tree/master/Script)
 * [GoPsutil](https://github.com/Juntaran/gopsutil)
+* [Go Request库](https://github.com/Juntaran/req)
 * [Go二进制转换工具](https://github.com/Juntaran/biu)
 * [反向代理](https://github.com/Juntaran/golocproxy)
 * [Open-Falcon](https://github.com/Juntaran/falcon-plus)
