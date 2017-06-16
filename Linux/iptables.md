@@ -21,7 +21,7 @@ iptables有`四表五链`一说，即
 
 ### 1.3 规则表之间的优先级顺序
 
-Raw > Mangle > Nat > Filter
+raw > mangle > nat > filter
 
 
 ## 2. 数据包的流向
