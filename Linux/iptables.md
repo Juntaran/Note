@@ -146,6 +146,7 @@ raw > mangle > nat > filter
     // 重启Iptables服务
     service iptables restart
     
+iptables 防火墙的配置文件存放于`/etc/sysconfig/iptables`
 
 ### 7. 其他
 
