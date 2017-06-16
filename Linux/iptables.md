@@ -7,10 +7,10 @@
 iptables有`四表五链`一说，即  
 
 ### 1.1 四表：
-> **Filter**： 默认表，包含防火墙过滤的规则，内置规则链为INPUT、OUTPUT、FORWARD，内核模块对应 iptables_filter  
-> **Nat**： 用于 nat 功能（端口映射、地址映射等），包含源和目的地址及端口转发的规则，内置规则链为 PREROUTING、OUTPUT 和 POSTROUTING，内核模块对应 iptables_nat  
-> **Mangle**：用于对特定的数据包修改，设置特殊的数据包路由标志的规则，这些标志随后被 Filter 表中的规则检查，内置规则链为 PREROUTING、INPUT、FORWARD、POSTROUTING 和 OUTPUT，内核模块对应  iptable_mangle  
-> **Raw**： 优先级最高，设置 Raw 时一般是为了不再让 iptables 做数据包的链接跟踪处理，提高性能，内置规则链为 OUTPUT 和  PREROUTING，内核模块对应 iptable_raw  
+> **filter**： 默认表，包含防火墙过滤的规则，内置规则链为INPUT、OUTPUT、FORWARD，内核模块对应 iptables_filter  
+> **nat**： 用于 nat 功能（端口映射、地址映射等），包含源和目的地址及端口转发的规则，内置规则链为 PREROUTING、OUTPUT 和 POSTROUTING，内核模块对应 iptables_nat  
+> **mangle**：用于对特定的数据包修改，设置特殊的数据包路由标志的规则，这些标志随后被 Filter 表中的规则检查，内置规则链为 PREROUTING、INPUT、FORWARD、POSTROUTING 和 OUTPUT，内核模块对应  iptable_mangle  
+> **raw**： 优先级最高，设置 Raw 时一般是为了不再让 iptables 做数据包的链接跟踪处理，提高性能，内置规则链为 OUTPUT 和  PREROUTING，内核模块对应 iptable_raw  
 
 ### 1.2 五链：
 > **INPUT**： 当一个数据包由内核的路由计算确定为本地的 Linux 系统后，它会通过 INPUT 链的检查——进来的数据包应用此规则链中的策略  
@@ -98,12 +98,13 @@ Raw > Mangle > Nat > Filter
 
 ### 3.4 清楚规则和计数器
 
-    iptables [-t 表名] <-F | Z>
+    iptables [-t 表名] <-F | X | Z>
     
 | 参数 | 说明 |
 | --- | --- |
 | -t | 指定表，默认 filter |
 | -F | 删除指定表里所有规则 |
+| -X | 删除用户自定义的空链 |
 | -Z | 将指定表的数据包计数器和流量计数器清零 |
 
 ## 4. iptables 的状态
@@ -113,13 +114,13 @@ Raw > Mangle > Nat > Filter
 | 状态  | 说明  |
 |---|---|
 | NEW  | 主机向远程主机发送一个连接请求，该数据包状态为 NEW  |
-| ESTABLISH  | 三次握手后，主机和远程主机通信数据的状态为 ESTABLISH  |
+| ESTABLISHED  | 三次握手后，主机和远程主机通信数据的状态为 ESTABLISH  |
 | RELATED  | 如果出现了 RELATED 状态，那么一定已经有一个 ESTABLISH 与其相关，例如 FTP 服务：21端口传输命令，20端口传输数据，21端口状态为 ESTABLISH，20端口则为 RELATED  |
 | INVALID  | 无效的数据包，不能识别属于哪个连接或没有任何状态，通常这种数据包会被丢弃  |
 
 ### 4.2 针对状态的命令
 
-    iptables -m state --state [NEW | ESTABLISH | RELATED | INVALID]
+    iptables -m state --state [NEW | ESTABLISHED | RELATED | INVALID]
     
 可以将 -m 之后的内容与 `3.3` 的规则结合
 
