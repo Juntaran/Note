@@ -124,9 +124,9 @@ raw > mangle > nat > filter
     
 可以将 -m 之后的内容与 `3.3` 的规则结合
 
-### 5. iptables 的记录
+## 5. iptables 的记录
 
-#### 5.1 Conntrack 记录
+### 5.1 Conntrack 记录
 
 不建议在生产服务器开启`conntrack`功能，及消耗内存  
 可以通过`/proc/sys/net/ipv4/ip_conntrack_max`里进行查看和设置  
@@ -134,29 +134,43 @@ raw > mangle > nat > filter
 
     cat /proc/net/ip_conntrack
     
-#### 5.2 iptables 默认规则
+### 5.2 iptables 默认规则
 
     cat /etc/sysconfig/iptables
     
-### 6. iptables 规则的保存与恢复
+## 6. iptables 规则的保存与恢复
 
-    // 将规则保存在/etc/sysconfig/iptables文件里
+    // 将规则保存在 /etc/sysconfig/iptables 文件里
     service iptables save
     
-    // 重启Iptables服务
+    // 重启iptables服务
     service iptables restart
     
 iptables 防火墙的配置文件存放于`/etc/sysconfig/iptables`
 
-### 7. 其他
+## 7. 其他
 
-快速检测和防御`SYN flood`攻击
+### 7.1 SYN Flood
+
+快速检测和防御`SYN Flood`攻击
 
     echo "1" > /proc/sys/net/ipv4/tcp_syncookies
     
+### 7.2 iptables IP 转发
+
 iptables 作为 NAT 路由器时，存在多网卡现象，需要开启`IP 转发功能`，用于多个网卡之间数据流通
 
     echo "1" > /proc/sys/net/ipv4/ip_forward
+
+### 7.3 iptables 扩展模块
+
+-m multiport：表示启用多端口扩展，之后我们就可以启用比如 --dports 21,23,80
+
+    iptables -A INPUT -p tcp -m multiport --dports 22,80 -j ACCEPT
+    
+### 7.4 常用脚本
+
+[iptables常用脚本](https://github.com/Juntaran/Note/tree/master/Script/Shell/iptables)
 
 ______
 
@@ -166,3 +180,4 @@ ______
 * [Linux公社: SNAT、DNAT——iptables防火墙基础策略汇总](http://www.linuxidc.com/Linux/2013-08/88536.htm)
 * [AshlingR: 通过iptables实现数据包转发](http://blog.csdn.net/ashlingr/article/details/8947444)
 * [构建高可用Linux服务器](http://www.hzbook.com/Books/8030.html)
+* [iptables详解](http://blog.chinaunix.net/uid-26495963-id-3279216.html)
