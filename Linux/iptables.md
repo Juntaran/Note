@@ -140,10 +140,10 @@ raw > mangle > nat > filter
     
 ### 6. iptables 规则的保存与恢复
 
-    //将规则保存在/etc/sysconfig/iptables文件里
+    // 将规则保存在/etc/sysconfig/iptables文件里
     service iptables save
     
-    //重启Iptables服务
+    // 重启Iptables服务
     service iptables restart
     
 
