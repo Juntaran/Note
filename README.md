@@ -18,9 +18,15 @@
 * [微信机器人](https://github.com/Juntaran/LCBot)
 * [知乎爬虫](https://github.com/Juntaran/Passer-zhihu)
 
+## Script
+
+* [脚本](https://github.com/Juntaran/Note/tree/master/Script)
+
 ## Linux
 
 * [Linux教程](http://www.linuxprobe.com/chapter-00.html)
+* [Linux笔记](https://github.com/Juntaran/Note/tree/master/Linux)
+
 
 ## Docker
 
