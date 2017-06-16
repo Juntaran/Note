@@ -8,5 +8,8 @@
     
 ## 2. 覆盖 ~/.vimrc
 
-    mv .vimrc .vimrc_bak
-    cp .vimrc ~/.vimrc
+    wget -O vim.tar.gz https://raw.githubusercontent.com/Juntaran/Note/master/Linux/vim.tar.gz
+    tar -zxvf vim.tar.gz
+    mv ~/.vimrc ~/.vimrc_bak
+    mv vimrc ~/.vimrc
+    rm -rf vimrc vim.tar.gz
