@@ -2,7 +2,7 @@
 
 *2017.6.16*
 
-## 1. 四表五链
+## 1.四表五链
 
 iptables有`四表五链`一说，即  
 
@@ -121,4 +121,19 @@ Raw > Mangle > Nat > Filter
 
     iptables -m state --state [NEW | ESTABLISH | RELATED | INVALID]
     
-可以将 -m 之后的内容与 - [3.3](#3.3) 的规则结合
+可以将 -m 之后的内容与 `3.3` 的规则结合
+
+### 5. iptables 的记录
+
+#### 5.1 Conntrack 记录
+
+不建议在生产服务器开启`conntrack`功能，及消耗内存  
+可以通过`/proc/sys/net/ipv4/ip_conntrack_max`里进行查看和设置  
+查看`conntrack`记录
+
+    cat /proc/net/ip_conntrack
+    
+#### 5.2 iptables 默认规则
+
+    cat /etc/sysconfig/iptables
+    
