@@ -7,17 +7,17 @@
 iptables有`四表五链`一说，即  
 
 ### 1.1 四表：
-> **Filter**： 默认表，包含防火墙过滤的规则，内置规则链为INPUT、OUTPUT、FORWARD，内核模块对应 iptables_filter
-> **Nat**： 用于 nat 功能（端口映射、地址映射等），包含源和目的地址及端口转发的规则，内置规则链为 PREROUTING、OUTPUT 和 POSTROUTING，内核模块对应 iptables_nat
-> **Mangle**：用于对特定的数据包修改，设置特殊的数据包路由标志的规则，这些标志随后被 Filter 表中的规则检查，内置规则链为 PREROUTING、INPUT、FORWARD、POSTROUTING 和 OUTPUT，内核模块对应 iptable_mangle
-> **Raw**： 优先级最高，设置 Raw 时一般是为了不再让 iptables 做数据包的链接跟踪处理，提高性能，内置规则链为 OUTPUT 和  PREROUTING，内核模块对应 iptable_raw
+> **Filter**： 默认表，包含防火墙过滤的规则，内置规则链为INPUT、OUTPUT、FORWARD，内核模块对应 iptables_filter  
+> **Nat**： 用于 nat 功能（端口映射、地址映射等），包含源和目的地址及端口转发的规则，内置规则链为 PREROUTING、OUTPUT 和 POSTROUTING，内核模块对应 iptables_nat  
+> **Mangle**：用于对特定的数据包修改，设置特殊的数据包路由标志的规则，这些标志随后被 Filter 表中的规则检查，内置规则链为 PREROUTING、INPUT、FORWARD、POSTROUTING 和 OUTPUT，内核模块对应  iptable_mangle  
+> **Raw**： 优先级最高，设置 Raw 时一般是为了不再让 iptables 做数据包的链接跟踪处理，提高性能，内置规则链为 OUTPUT 和  PREROUTING，内核模块对应 iptable_raw  
 
 ### 1.2 五链：
-> **INPUT**： 当一个数据包由内核的路由计算确定为本地的 Linux 系统后，它会通过 INPUT 链的检查——进来的数据包应用此规则链中的策略
-> **OUTPUT**： 保留给系统自身生成数据包——外出的数据包应用此规则链中的策略
-> **FORWARD**： 经过 Linux 系统路由的数据包——转发数据包时应用此规则链中的策略
-> **PREROUTING**： 用于修改目标地址（DNAT），数据包在进入系统之前——对数据包作路由选择前应用此链中的规则（所有的数据包进来的时侯都先由这个链处理）
-> **POSTROUTING**： 用于修改源地址（SNAT），发送到网卡接口之前——对数据包作路由选择后应用此链中的规则（所有的数据包出来的时侯都先由这个链处理）
+> **INPUT**： 当一个数据包由内核的路由计算确定为本地的 Linux 系统后，它会通过 INPUT 链的检查——进来的数据包应用此规则链中的策略  
+> **OUTPUT**： 保留给系统自身生成数据包——外出的数据包应用此规则链中的策略  
+> **FORWARD**： 经过 Linux 系统路由的数据包——转发数据包时应用此规则链中的策略  
+> **PREROUTING**： 用于修改目标地址（DNAT），数据包在进入系统之前——对数据包作路由选择前应用此链中的规则（所有的数据包进来的时侯都先由这个链处理）  
+> **POSTROUTING**： 用于修改源地址（SNAT），发送到网卡接口之前——对数据包作路由选择后应用此链中的规则（所有的数据包出来的时侯都先由这个链处理）  
 
 ### 1.3 规则表之间的优先级顺序
 
