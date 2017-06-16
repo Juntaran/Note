@@ -138,6 +138,16 @@ Raw > Mangle > Nat > Filter
     cat /etc/sysconfig/iptables
     
 
+### 6. 其他
+
+快速检测和防御`SYN flood`攻击
+
+    echo "1" > /proc/sys/net/ipv4/tcp_syncookies
+    
+iptables 作为 NAT 路由器时，存在多网卡现象，需要开启 IP 转发功能，用于多个网卡之间数据流通
+
+    echo "1" > /proc/sys/net/ipv4/ip_forward
+
 ______
 
 
