@@ -138,8 +138,16 @@ raw > mangle > nat > filter
 
     cat /etc/sysconfig/iptables
     
+### 6. iptables 规则的保存与恢复
 
-### 6. 其他
+    //将规则保存在/etc/sysconfig/iptables文件里
+    service iptables save
+    
+    //重启Iptables服务
+    service iptables restart
+    
+
+### 7. 其他
 
 快速检测和防御`SYN flood`攻击
 
