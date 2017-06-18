@@ -160,3 +160,12 @@ gateway、broadcast、less、greater
 0x4854->"HT"  
 
         tcpdump  -XvvennSs 0 -i eth0 tcp[20:2]=0x4745 or tcp[20:2]=0x4854
+        
+______
+
+
+## Reference:
+* [tcpdump抓包命令详解](http://www.360doc.com/content/17/0618/16/14454117_664203330.shtml)
+* [kofandlizi: tcpdump抓取HTTP包](http://blog.csdn.net/kofandlizi/article/details/8106841)
+* [Linux tcpdump命令详解](http://www.cnblogs.com/ggjucheng/archive/2012/01/14/2322659.html)
+* [Linux大棚](http://www.broadview.com.cn/book/122)
