@@ -155,5 +155,8 @@ gateway、broadcast、less、greater
         tcpdump 'port ftp or ftp-data'
     
 10. 截取HTTP数据包
-    
+
+0x4745->"GE"  
+0x4854->"HT"  
+
         tcpdump  -XvvennSs 0 -i eth0 tcp[20:2]=0x4745 or tcp[20:2]=0x4854
