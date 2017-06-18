@@ -130,7 +130,7 @@ gateway、broadcast、less、greater
     
         tcpdump 'tcp[tcpflags] & (tcp-syn|tcp-fin) != 0 and not src and dst net localnet'
     
-4. 打印所有通过网关snup的ftp数据包，并且数据包的源或目的不是本地网络上的主机。(nt: localnet, 实际使用时要真正替换成本地网络的名字))
+4. 打印所有通过网关snup的ftp数据包，并且数据包的源或目的不是本地网络上的主机 （localnet，实际使用时要真正替换成本地网络的名字）
     
         tcpdump 'gateway snup and (port ftp or ftp-data)'
     
