@@ -8,6 +8,14 @@
 
 # 只开放22 80端口
 
+set -o errexit    # 如果有命令运行失败让脚本退出执行
+set -o nounset    # 若有用未设置的变量即让脚本退出执行
+
+if [[ "$EUID" -ne 0 ]]; then    # check root
+    echo 'Root Required' 
+    exit 1
+fi
+
 # 清空规则
 iptables -F
 iptables -X
