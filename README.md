@@ -26,6 +26,7 @@
 
 * [Linux教程](http://www.linuxprobe.com/chapter-00.html)
 * [Linux笔记](https://github.com/Juntaran/Note/tree/master/Linux)
+     * [Basic](/Linux/Basic)
 
 
 ## Docker
