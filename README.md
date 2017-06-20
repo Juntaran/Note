@@ -21,12 +21,16 @@
 ## Script
 
 * [脚本](https://github.com/Juntaran/Note/tree/master/Script)
+    * [Python脚本](/Script/Python)
+    * [Shell脚本](/Script/Shell)
 
 ## Linux
 
 * [Linux教程](http://www.linuxprobe.com/chapter-00.html)
 * [Linux笔记](https://github.com/Juntaran/Note/tree/master/Linux)
      * [Basic](/Linux/Basic)
+     * [Network](/Linux/Network)
+     * [常用命令总结](/Linux/常用命令.md)
 
 
 ## Docker
