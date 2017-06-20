@@ -19,10 +19,10 @@ set -o nounset    # 若有用未设置的变量即让脚本退出执行
 host=$(ifconfig ens33 | grep 'inet ' | sed 's/^.* inet //g' | sed 's/netmask.*$//g' | awk -v FS="." '{$4=null; print $0}' | sed 's/ /./g')
 echo $host
 
-for n in {1..255}; do
+for n in {1..254}; do
     hostall=$host$n
     echo $hostall
-    if ping $hostall -c 2 >> /dev/null; then
+    if ping $hostall -c 2 -w 2 >> /dev/null; then
         echo "$hostall is UP"
         echo "$hostall" >> /home/juntaran/workspace/shell/shell/alive.txt
     else
