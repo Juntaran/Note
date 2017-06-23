@@ -17,10 +17,15 @@ set -o nounset    # 若有用未设置的变量即让脚本退出执行
 #fi
 
 host=$(ifconfig ens33 | grep 'inet ' | sed 's/^.* inet //g' | sed 's/netmask.*$//g' | awk -v FS="." '{$4=null; print $0}' | sed 's/ /./g')
-echo $host
+
+if [ $# -eq 0 ]; then
+    temp=$host
+else
+    temp=$1
+fi
 
 for n in {1..254}; do
-    hostall=$host$n
+    hostall=$temp$n
     echo $hostall
     if ping $hostall -c 2 -w 2 >> /dev/null; then
         echo "$hostall is UP"
