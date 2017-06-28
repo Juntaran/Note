@@ -12,6 +12,7 @@
 * [Go练习代码](https://github.com/Juntaran/Go_In_Action)
 * [Go算法与数据结构](https://github.com/Juntaran/Golang_Algorithm)
 * [Go pkg手册](https://github.com/Juntaran/gopkg)
+* [Go官方文档](https://godoc.org/)
 * [Go标准库](http://studygolang.com/pkgdoc)
 * [awesome-go](https://github.com/avelino/awesome-go)
 * [Go-JSON](https://github.com/Juntaran/Note/tree/master/Script)
@@ -54,3 +55,4 @@
 * [运维工具](https://github.com/Juntaran/wstools)
 * [czxichen](https://github.com/czxichen)
 * [czxichen的博客](http://blog.csdn.net/fyxichen?viewmode=contents)
+* [拙_言](http://blog.csdn.net/xcltapestry/article/category/1728845)
