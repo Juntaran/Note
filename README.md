@@ -2,10 +2,18 @@
 
 ## Golang
 
+* [Go Book]()
+    * [Go语言圣经](https://www.2goo.info/media/html/gopl-zh-gh-pages/)
+    * [Go语言教程](http://www.yiibai.com/go/)
+    * [Go入门指南](https://github.com/Unknwon/the-way-to-go_ZH_CN/blob/master/eBook/directory.md)
+    * [实效Go编程](http://docscn.studygolang.com/doc/effective_go.html#Web服务器)
+    * [深入解析Go](https://tiancaiamao.gitbooks.io/go-internals/zh/)
+
 * [Go练习代码](https://github.com/Juntaran/Go_In_Action)
 * [Go算法与数据结构](https://github.com/Juntaran/Golang_Algorithm)
 * [Go pkg手册](https://github.com/Juntaran/gopkg)
 * [Go标准库](http://studygolang.com/pkgdoc)
+* [awesome-go](https://github.com/avelino/awesome-go)
 * [Go-JSON](https://github.com/Juntaran/Note/tree/master/Script)
 * [GoPsutil](https://github.com/Juntaran/gopsutil)
 * [Go Request库](https://github.com/Juntaran/req)
