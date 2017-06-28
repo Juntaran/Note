@@ -2,7 +2,7 @@
 
 ## Golang
 
-* [Go Book]()
+* [Go Book](https://github.com/juntaran/note)
     * [Go语言圣经](https://www.2goo.info/media/html/gopl-zh-gh-pages/)
     * [Go语言教程](http://www.yiibai.com/go/)
     * [Go入门指南](https://github.com/Unknwon/the-way-to-go_ZH_CN/blob/master/eBook/directory.md)
