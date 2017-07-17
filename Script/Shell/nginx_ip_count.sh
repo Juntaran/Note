@@ -16,4 +16,4 @@ set -o nounset    # 若有用未设置的变量即让脚本退出执行
 
 # 对 nginx 日志记录的 ip 根据连接次数进行倒序排序
 
-cat /usr/local/nginx/logs/access.log | awk '{print $1}' | sort -n | uniq -c | sort -rn
+cat /usr/local/nginx/logs/access.log | awk '{print $1}' | sort -n | uniq -c | sort -rn | head -10
