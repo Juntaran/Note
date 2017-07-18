@@ -5,7 +5,7 @@
 ### Nginx配置文件nginx.conf中文详解
 
 
-```python
+```bash
 #定义Nginx运行的用户和用户组
 user www www;
 
