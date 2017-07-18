@@ -14,7 +14,8 @@ set -o nounset    # 若有用未设置的变量即让脚本退出执行
 #    exit 1
 #fi
 
-# 通过pid查找进程位置
+# 查找进程位置
+# Usage: ./getCwd nginx
 
 pid=`ps aux | grep $1 | grep -v "grep" | awk '{print $2}'`
 for i in ${pid}
