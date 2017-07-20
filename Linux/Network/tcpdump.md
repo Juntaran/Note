@@ -102,7 +102,7 @@
 |---|---|---|
 | 否  | `!` 或 `not`  | 1  |
 | 与  | `&&` 或 `and`  | 2  |
-| 或  | `\|\|` 或 `or`  | 2  |
+| 或  | `//` 或 `or`  | 2  |
 
 结合顺序`自左向右`
 
@@ -119,47 +119,67 @@ gateway、broadcast、less、greater
 ## 3. 使用技巧
 
 1.  截获主机210.27.48.1 和主机210.27.48.2 或210.27.48.3的通信
-    
+
+``` bash
         tcpdump host 210.27.48.1 and \ (210.27.48.2 or 210.27.48.3 \)
+```
     
 2. 截获主机192.168.126.131发送的所有数据包
     
+``` bash
         tcpdump -i ens33 src host 192.168.126.131
+```
     
 3. 截获 TCP 会话的开始和结束的数据包
     
+``` bash
         tcpdump 'tcp[tcpflags] & (tcp-syn|tcp-fin) != 0 and not src and dst net localnet'
+```
     
 4. 打印所有通过网关snup的ftp数据包，并且数据包的源或目的不是本地网络上的主机 （localnet，实际使用时要真正替换成本地网络的名字）
     
+``` bash
         tcpdump 'gateway snup and (port ftp or ftp-data)'
+```
     
 5. 打印所有源或目的端口是80，网络层协议为IPv4，并且含有数据，而不是SYN、FIN以及ACK-only等不含数据的数据包
     
+``` bash
         tcpdump 'tcp port 80 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)'
+```
     
 6. 打印长度超过576字节，并且网关地址是 snup 的IP数据包
     
+``` bash
         tcpdump 'gateway snup and ip[2:2] > 576'
+```
     
 7. 打印所有IP层广播或多播的数据包，但不是物理以太网层的广播或多播数据报
     
+``` bash
         tcpdump 'ether[0] & 1 = 0 and ip[16] >= 224'
+```
     
 8. 打印所有非 ping 程序产生的数据包即打印除'echo request'或者'echo reply'类型以外的ICMP数据包
     
+``` bash
         tcpdump 'icmp[icmptype] != icmp-echo and icmp[icmptype] != icmp-echoreply'
+```
     
 9. 打印使用 ftp 端口和 ftp 数据端口的数据包
     
+``` bash
         tcpdump 'port ftp or ftp-data'
+```
     
 10. 截取HTTP数据包
 
     0x4745->"GE"  
     0x4854->"HT"  
 
+``` bash
         tcpdump  -XvvennSs 0 -i eth0 tcp[20:2]=0x4745 or tcp[20:2]=0x4854
+```
         
 ______
 

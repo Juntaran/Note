@@ -2,7 +2,71 @@
 
 *2017.7.18*
 
-### Nginx配置文件nginx.conf中文详解
+## Nginx 编译
+
+nginx 大部分常用模块，编译时 `./configure --help` 以 `--without` 开头的都默认安装  
+
+| 选项    |  作用   |  默认   |
+| --- | --- | --- |
+| --prefix=PATH    |  指定nginx的安装目录  | /usr/local/nginx    |
+| --conf-path=PATH    |  设置nginx.conf配置文件的路径。nginx允许使用不同的配置文件启动，通过命令行中的-c选项    |  prefix/conf/nginx.conf  |
+| --user=name    | 设置nginx工作进程的用户。安装完成后，可以随时在nginx.conf配置文件更改user指令    |  nobody  |
+| --with-pcre    | 设置PCRE库的源码路径    |    |
+| --with-zlib=PATH    |  指定 zlib（版本1.1.3 - 1.2.5）的源码解压目录   |    |
+| --with-http_ssl_module    |  使用https协议模块   |  默认不构建  |
+| --with-http_stub_status_module    |  用来监控 Nginx 的当前状态   |    |
+| --with-http_realip_module    | 通过这个模块允许我们改变客户端请求头中客户端IP地址值(例如X-Real-IP 或 X-Forwarded-For)，意义在于能够使得后台服务器记录原始客户端的IP地址    |    |
+| --add-module=PATH    |  添加第三方外部模块，如nginx-sticky-module-ng或缓存模块。每次添加新的模块都要重新编译   |    |
+
+
+## Nginx 命令行控制
+
+- 检查配置文件是否正确  
+
+``` bash    
+./sbin/nginx -t
+```
+
+- 启动 Nginx
+
+``` bash 
+./sbin/nginx
+```
+
+- 停止 Nginx
+
+``` bash 
+./sbin/nginx -s stop
+```
+
+- 优雅地停止
+
+``` bash 
+./sbin/nginx -s quit
+```
+
+- 重载配置文件
+
+``` bash 
+./sbin/nginx -s reload
+```
+
+- 查看 Nginx 版本
+
+``` bash 
+./sbin/nginx -v
+```
+
+- 查看 Nginx 编译选项
+
+``` bash 
+./sbin/nginx -V
+```
+
+
+
+
+## Nginx 配置文件 nginx.conf
 
 
 ```bash
@@ -338,8 +402,43 @@ http
 
 ```
 
+
+## 访问控制
+
+1. 可以分别有多个allow,deny，允许或禁止某个ip或ip段访问，依次满足任何一个规则就停止往下匹配
+
+```bash
+
+location /nginx-status {
+  stub_status on;
+  access_log off;
+#  auth_basic   "NginxStatus";
+#  auth_basic_user_file   /usr/local/nginx-1.6/htpasswd;
+
+  allow 192.168.10.100;
+  allow 172.29.73.0/24;
+  deny all;
+}
+
+```
+
+2. 用 `httpd-devel` 工具的 `htpasswd` 来为访问的路径设置登录密码
+
+``` bash
+
+# htpasswd -c htpasswd admin
+New passwd:
+Re-type new password:
+Adding password for user admin
+
+# htpasswd htpasswd admin    //修改admin密码
+# htpasswd htpasswd sean    //多添加一个认证用户
+
+```
+
 ______
 
 Reference:
+* [深入理解Nginx](http://product.china-pub.com/4918661)
 * [猎手家园](http://www.cnblogs.com/hunttown/p/5759959.html)
 * [seanlook](https://segmentfault.com/a/1190000002797601)
