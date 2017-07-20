@@ -13,24 +13,34 @@
 
 1. 为`juntaran`账号建立自己的公钥私钥，会在`/home/a/.ssh`中多出`id_rsa`和`id_rsa.pub`，分别是`私钥`和`公钥`
 
+```
         ssh-keygen -t rsa
+```
         
     全部回车跳过
         
 2. 建立信任关系，默认端口号为22，如果需要修改端口则需要加上`-p`
 
+```
         ssh-copy-id root@138.128.206.71 -p 27226
+```
         
     旧版本可能不支持`-p`选项，可以采取以下措施
         
+```
         ssh-copy-id "-p 27226 root@138.128.206.71"
+```
         
     之后流程就很简单
     
+```
         Are you sure you want to continue connecting (yes/no)? yes
+```
         
     再输入密码即可
     
 3. 直接免密登陆
 
+```
         ssh root@138.128.206.71 -p 27226
+```
