@@ -52,7 +52,7 @@ ______
 
 - 目的：
 
-借助 host2 实现 host1 和 host3 的通信
+> 借助 host2 实现 host1 和 host3 的通信
 
 - 操作：
 
@@ -86,7 +86,7 @@ ______
 
 - 目的：
 
-host2 可以 ssh 连接 host1, 那么 host1 就可以借助这条连接与 host3 进行通信
+> host2 可以 ssh 连接 host1, 那么 host1 就可以借助这条连接与 host3 进行通信
 
 - 操作：
 
