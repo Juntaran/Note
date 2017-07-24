@@ -60,7 +60,6 @@ ______
 
 ``` bash
     ssh -L 8080:host3:80 user@host2
-
     # 执行完成，在 host1 浏览器中 输入 localhost:8080 即可看到 host3 的 Web 页面 
     # 如果使用 xshell 等工具访问 host1, 那么可以使用 curl localhost:8080 来查看 Web 内容
 
@@ -80,7 +79,7 @@ ______
 
 > host1 <-x-> host3  
 > host2 <---> host3  
-> host2 <-ssh-> host1  
+> host2 -ssh-> host1  
 > host1 --x--> host2  
 > 在这种条件下， host1 就不可以 ssh 连接 host2 了，所以不能使用`本地转发端口`了
 
@@ -95,7 +94,6 @@ ______
 ``` bash
     # 通过访问 host1 本地 8080 端口来访问 host3 的 80 端口
     ssh -R 8080:host3:80 user@host1
-
     # 执行完成，在 host1 浏览器中 输入 localhost:8080 即可看到 host3 的 Web 页面
 ```
 
@@ -130,7 +128,40 @@ ______
 
 ______
 
+## 列出 SSH 隧道脚本
+
+``` bash
+    ps -ef | grep ssh | awk '$3 == 1' | awk '{for (i=8;i<=NF;i++) printf $i""FS;print""}'
+    # 结果
+    ssh -f -N -p2222 -R 1111:10.123.123.123:3333 10.234.234.234
+    ssh -f -N -p2222 -R 8080:10.123.123.123:8080 10.234.234.234
+```
+
+______
+
+## 保持长时间连接
+
+有些路由器会把长时间没有通信的连接断开。SSH 客户端的 `TCPKeepAlive` 选项可以避免这个问题的发生，默认情况下它是被开启的  
+如果它被关闭了，可以在 ssh 的命令上加上 `-o TCPKeepAlive=yes` 来开启  
+另外可以添加 `-o ServerAliveInterval=15` 
+
+TCPKeepAlive 和 ServerAliveInterval 的区别在于
+
+> ServerAliveInterval 是被加密过的，TCPKeepAlive 无法证实它是否是假冒的  
+
+
+
+另一种方法是，去掉 `-N` 参数，加入一个定期能产生输出的命令  
+例如: top 或者 vmstat 
+``` bash
+    ssh -f -p2222 -R 1111:10.123.123.123:3333 10.234.234.234 vmstat 30 
+```
+
+
+______
 
 ## Reference:
-* [倘若微小](http://www.ifmicro.com/ssh-port-forwarding/)
-
+* [倘若微小](http://www.ifmicro.com/%E8%AE%B0%E5%BD%95/2015/09/25/ssh-port-forwarding/)
+* [serverfault](https://serverfault.com/questions/538897/serveralivecountmax-in-ssh/538919#538919)
+* [SSH隧道自动检测脚本](http://chembo.iteye.com/blog/1926312)
+* [SSH隧道与端口转发及内网穿透](http://blog.creke.net/722.html)
