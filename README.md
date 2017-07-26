@@ -64,3 +64,4 @@
 - nginx 深入
 - Radix Tree & IP tree & black list
 - saltstack
+- Redis
