@@ -56,3 +56,12 @@
 * [czxichen](https://github.com/czxichen)
 * [czxichen的博客](http://blog.csdn.net/fyxichen?viewmode=contents)
 * [拙_言](http://blog.csdn.net/xcltapestry/article/category/1728845)
+
+
+## Todo
+
+- nc & 反向shell
+- nginx 深入
+- Radix Tree & IP tree & black list
+- saltstack
+- Redis
