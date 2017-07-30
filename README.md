@@ -63,7 +63,7 @@
 - nc & 反向shell
 - nginx 深入
 - Radix Tree & IP tree & black list
-- saltstack
+- stackstorm
 - Redis
 
 
