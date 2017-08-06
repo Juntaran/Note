@@ -155,7 +155,7 @@ st2ctl reload --register-all
 ```
 
 
-## 2. Action-Rule-Trigger
+## 2. Action-Trigger-Rule
 
 ### 2.1 Action
 
@@ -465,8 +465,69 @@ result:
   stdout: 'working'
 ```
 
+### 2.2 Sensors 和 Trigger
+
+`传感器(Sensor)` 的作用是把 `外部系统` 和 `事件` 与 `StackStorm` 结合起来  
+传感器是使用 `Python` 写的，利用 `周期轮询检查外部系统` 或是 `被动地等待事件的发生`  
+之后传感器连接 `触发器(Tirgger)` 到 `StackStorm` ，来匹配 `Rule` ，执行 `action`  
+
+`触发器(Trigger)` 的作用是识别传入给 StackStorm 的事件  
+一个触发器为 类型 (string) 和可选参数 (object) 的 tuple  
+`Rule` 和 `Trigger` 共同工作  
+传感器通常注册触发器，但是也有例外  
+比如常用的 `webhooks` 触发器触发注册 StackStorm ，但是它不需要一个传感器  
+
+
+_trigger & rule 没有太弄懂，待续_
+
+
+## 3. ChatOps
+
+一句话来说就是通过聊天软件如 slack 来控制 Ops  
+
+> 关键文件 /opt/stackstorm/chatops/st2chatops.env  
+
+根据选择的客户端，修改 `st2chatops.env`  
+
+``` bash
+export HUBOT_ADAPTER=slack
+export HUBOT_SLACK_TOKEN=xoxb-*******
+```
+
+创建自定义的 pack  
+
+``` bash
+cd /opt/stackstorm/packs/
+mkdir -p my-chatops/{actions,rules,sensors,aliases}
+```
+
+示例：  
+在 `aliases` 文件夹中创建一个 action  
+`aliases` 会通过 ssh 使用 `core.remote` 的 action 来执行命令  
+
+创建一个 remote.yaml  
+
+```yaml
+# packs/my-chatops/aliases/remote.yaml
+---
+name: "remote_shell_cmd"
+action_ref: "core.remote"
+description: "Execute a command on a remote host via SSH."
+formats:
+  - "run {{cmd}} on {{hosts}}"
+```
+
+令该 action 生效：  
+
+``` bash
+sudo st2ctl reload --register-all
+sudo service st2chatops restart
+```
+
+之后可以通过在机器人客户端执行 `!run <cmd> on <host>` 来在客户端查看命令执行的结果   
+也可以执行 `<hubot name>, <cmd> on <host>` 来在客户端查看命令执行的结果  
 
 ______
 
-Reference:
+## Reference:
 * [stackstorm](https://docs.stackstorm.com)
