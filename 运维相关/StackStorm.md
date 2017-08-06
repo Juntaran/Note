@@ -176,7 +176,7 @@ st2 action execute <action with parameters> # 执行该 action
 st2 run linux.check_loadavg hosts='192.168.102.129' # 一个小例子
 ```
 
-这里有个坑，也就是 run 与 execute 的区别：  
+**这里有个坑，也就是 run 与 execute 的区别：**  
 
 以 `core.http url="http://httpbin.org/get"` 这个 action 为例  
 
@@ -526,6 +526,17 @@ sudo service st2chatops restart
 
 之后可以通过在机器人客户端执行 `!run <cmd> on <host>` 来在客户端查看命令执行的结果   
 也可以执行 `<hubot name>, <cmd> on <host>` 来在客户端查看命令执行的结果  
+
+多命令组合写法：  
+
+``` bash
+!run cd /root; tree -L 2 -d on '138.128.206.71' port='27226' username='root' password='******'
+```
+
+**这里的坑：**
+
+> 1. 一些网络命令的问题，比如 ping，在客户端中输入 `!run ping baidu.com -c 3` 会报错，在网页控制台查看 history 会发现原因是默认把 `baidu.com` 转换成了 `http://baidu.com`，在网页控制台使用填参数的方法可以顺利执行，此问题经多次测试无解，此处在客户端只能 `ping ip`  
+> 2. 一些命令不识别的问题，例如 `fdisk`、`ss`、`mpstat`、`ifconfig` 等会返回 `bash: fdisk: command not found` 的错误，而 `free`、`tree`、`netstat` 等就可以执行，这里的处理就需要写脚本文件了  
 
 ______
 
