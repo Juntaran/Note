@@ -4,7 +4,7 @@
 
 ## 1. StackStorm 初步安装与测试
 
-### 1.1 CentOS7 安装 StackStorm
+### 1.1 CentOS 7 安装 StackStorm
 
 ``` bash
 sudo yum install curl nss
