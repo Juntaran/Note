@@ -11,6 +11,13 @@ sudo yum install curl nss
 curl -sSL https://stackstorm.com/packages/install.sh | bash -s -- --user=st2admin --password='yourpassword'
 ```
 
+设置防火墙规则  
+
+``` bash
+firewall-cmd --zone=public --add-service=http --add-service=https
+firewall-cmd --zone=public --permanent --add-service=http --add-service=https
+```
+
 此时登录 `https://yourhost` ，输入设定的用户名和密码即可登录  
 
 ### 1.2 生成 token
