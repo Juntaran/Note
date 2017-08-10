@@ -545,6 +545,18 @@ sudo service st2chatops restart
 > 1. 一些网络命令的问题，比如 ping，在客户端中输入 `!run ping baidu.com -c 3` 会报错，在网页控制台查看 history 会发现原因是默认把 `baidu.com` 转换成了 `http://baidu.com`，在网页控制台使用填参数的方法可以顺利执行，此问题经多次测试无解，此处在客户端只能 `ping ip`  
 > 2. 一些命令不识别的问题，例如 `fdisk`、`ss`、`mpstat`、`ifconfig` 等会返回 `bash: fdisk: command not found` 的错误，而 `free`、`tree`、`netstat` 等就可以执行，这里的处理就需要写脚本文件了  
 
+
+## 4. StackStorm 在小米的应用
+
+小米具有批量部署系统的方案，通过批量部署系统，安装 client  
+
+stackstorm 是通过 ssh 来执行脚本和命令的，因此如果使用自带的 remote 方案，有一定局限性  
+> 1. 每次执行脚本或命令输入密码  
+> 2. 如果不想输入密码必须建立 ssh 免密登录，但是如果 ssh 更新 key，就得重新执行  
+
+而 client 的功能是监听一个端口，小米在 stackstorm 加入了一个子服务端  
+子服务端向该端口发送命令，从而无需密码即可执行  
+
 ______
 
 ## Reference:
