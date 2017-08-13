@@ -5,6 +5,8 @@
 ```
 Usage:
 
+    pip install -r requirements.txt
     python train_ticket.py ¹þ¶û±õ ±±¾© 2017-08-20
 ```
 
+![Result](https://raw.githubusercontent.com/Juntaran/Note/master/pictures/train_ticket.jpg)
