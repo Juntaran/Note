@@ -484,6 +484,18 @@ result:
 传感器通常注册触发器，但是也有例外  
 比如常用的 `webhooks` 触发器触发注册 StackStorm ，但是它不需要一个传感器  
 
+#### stackstorm 的感知
+
+stackstorm 的感知方式有三种： `Sensor` / `Webhook` / `Chatbot`  
+
+1. stackstorm 感知到事件后，会产生 `trigger-instance` 发送到 rabbitmq  
+2. 监听消息队列的 st2rulesengine 会把 events 与事先配置的 `rules` 匹配  
+3. 根据匹配结果选择 Action-runner 执行 `rules` 中配置的 `action` 或者 `workflow`  
+4. 执行完成后， st2resultstracker 检查执行的结果，将结果记入数据库(mongodb)并以 events 的形式发送到 rabbitmq ，如果有 rules 匹配到该 events 则继续触发更多的 Action/workflow 执行  
+
+Sensor 是由一个 python 脚本和其配置构成的，它运行在 st2sensorcontainer 进程之中  
+
+
 
 _trigger & rule 没有太弄懂，待续_
 
@@ -491,6 +503,8 @@ _trigger & rule 没有太弄懂，待续_
 ## 3. ChatOps
 
 一句话来说就是通过聊天软件如 slack 来控制 Ops  
+
+stackstorm 中自带 hubot 模块，可以快速配置，也有断线重连功能    
 
 > 关键文件 /opt/stackstorm/chatops/st2chatops.env  
 
@@ -540,10 +554,57 @@ sudo service st2chatops restart
 !run cd /root; tree -L 2 -d on '138.128.206.71' port='27226' username='root' password='******'
 ```
 
+通过 ChatOps 执行 python 程序：  
+
+在 example 包的 aliases 下新建一个 action-alias  
+
+``` yaml
+---
+name: "train"
+action_ref: "example.train"
+description: "get 12306 information."
+formats:
+  - "train {{fromcity}} {{tocity}} {{starttime}}"
+ack:
+  append_url: false
+result:
+  format: "{{execution.result.result}}"
+```
+
+在 example 包的 action 下新建一个 action  
+
+``` yaml
+pack: example
+runner_type: 'python-script'
+description: get 12306 information.
+enabled: true
+entry_point: 'libs/train_ticket.py'
+parameters:
+    fromcity:
+        type: string
+        description: 'where are you from'
+    tocity:
+        type: string
+        description: 'where are you want to'
+    starttime:
+        type: string
+        description: 'the time to go'
+```
+
+把 `train_ticket.py` 放到 `/opt/stackstorm/packs/example/actions/libs` 即可  
+最后重启服务：  
+
+``` bash
+st2ctl reload --register-all
+service st2chatops restart
+```
+
+
 **这里的坑：**
 
 > 1. 一些网络命令的问题，比如 ping，在客户端中输入 `!run ping baidu.com -c 3` 会报错，在网页控制台查看 history 会发现原因是默认把 `baidu.com` 转换成了 `http://baidu.com`，在网页控制台使用填参数的方法可以顺利执行，此问题经多次测试无解，此处在客户端只能 `ping ip`  
 > 2. 一些命令不识别的问题，例如 `fdisk`、`ss`、`mpstat`、`ifconfig` 等会返回 `bash: fdisk: command not found` 的错误，而 `free`、`tree`、`netstat` 等就可以执行，这里的处理就需要写脚本文件了  
+> 3. stackstorm 在安装时会默认使用 `python 2.7` ，如果按以上方法执行 python 程序，程序需要支持 python 2.7  
 
 
 ## 4. StackStorm 在小米的应用
