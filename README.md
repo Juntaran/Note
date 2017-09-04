@@ -60,11 +60,12 @@
 
 ## Todo
 
-- nc & 反向shell
-- nginx 深入
-- Radix Tree & IP tree & black list
-- stackstorm
-- Redis
+- nc & 反向shell  
+- nginx  
+- Radix Tree & IP tree & black list  
+- stackstorm  
+- Redis  
+- kafka  
 
 
 ## 工具
