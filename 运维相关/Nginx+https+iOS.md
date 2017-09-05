@@ -51,7 +51,7 @@ ssl_session_cache shared:SSL:10m;
 也是通过一条条用手试，试出来的  
 
 such as:  
-![Apple Safari browsers fail to connect](https://community.letsencrypt.org/t/apple-safari-browsers-fail-to-connect/3731)
+* [Apple Safari browsers fail to connect](https://community.letsencrypt.org/t/apple-safari-browsers-fail-to-connect/3731)
 
 
 在我看来， iOS 的脑回路就是有坑，  
