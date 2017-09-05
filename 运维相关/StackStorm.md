@@ -522,7 +522,8 @@ cd /opt/stackstorm/packs/
 mkdir -p my-chatops/{actions,rules,sensors,aliases}
 ```
 
-示例：  
+### 通过 ChatOps 执行 bash 脚本：  
+
 在 `aliases` 文件夹中创建一个 action  
 `aliases` 会通过 ssh 使用 `core.remote` 的 action 来执行命令  
 
@@ -554,44 +555,105 @@ sudo service st2chatops restart
 !run cd /root; tree -L 2 -d on '138.128.206.71' port='27226' username='root' password='******'
 ```
 
-通过 ChatOps 执行 python 程序：  
+### 通过 ChatOps 执行 python 程序：  
 
 在 example 包的 aliases 下新建一个 action-alias  
 
+
+TmpReq.yaml:  
+
 ``` yaml
 ---
-name: "train"
-action_ref: "example.train"
-description: "get 12306 information."
+name: "TmpReq"
+description: "Temporary Request. !TmpReq -1|-2 {PASSWORD}."
 formats:
-  - "train {{fromcity}} {{tocity}} {{starttime}}"
-ack:
-  append_url: false
+  - "TmpReq {{a=parameter}} {{passwd=passwd}}"
 result:
   format: "{{execution.result.result}}"
+ack:
+  append_url: false
 ```
 
 在 example 包的 action 下新建一个 action  
 
+TmpReq.yaml:  
+
 ``` yaml
-pack: example
+name: "TmpReq"
+pack: "example"
 runner_type: 'python-script'
-description: get 12306 information.
+description: "Temporary Request."
 enabled: true
-entry_point: 'libs/train_ticket.py'
+entry_point: 'libs/TmpReq.py'
 parameters:
-    fromcity:
+    a:
+        type: "string"
+        description: '[-1] | [-2]'
+        required: true
+
+    paasswd:
+        type: "string"
+        description: "Your password."
+
+    user:
         type: string
-        description: 'where are you from'
-    tocity:
-        type: string
-        description: 'where are you want to'
-    starttime:
-        type: string
-        description: 'the time to go'
+        description: who speaks
+        default: "{{action_context.api_user}}"
 ```
 
-把 `train_ticket.py` 放到 `/opt/stackstorm/packs/example/actions/libs` 即可  
+把 `TmpReq.py` 放到 `/opt/stackstorm/packs/example/actions/libs` 即可  
+
+``` python
+# !/usr/bin/env python
+# coding=utf-8
+
+'''
+    Author: Juntaran
+    Email:  Jacinthmail@gmail.com
+    Date:   2017/8/30 18:06
+'''
+
+import requests, sys
+from St2BaseAction import St2BaseAction
+
+url = "http://www.test.com/test.html"
+
+def getRequest(user, passwd):
+
+    querystring = {"user":"rua","password":"qwerty"}
+    headers = {
+        'cache-control': "no-cache",
+    }
+    response = requests.request("GET", url, headers=headers, params=querystring)
+    return(response.text)
+
+def postRequest(user, passwd):
+
+    querystring = {"user":"rua","password":"qwerty"}
+    headers = {
+        'cache-control': "no-cache",
+    }
+    response = requests.request("POST", url, headers=headers, params=querystring)
+    return(response.text)
+
+
+class TmpReq(St2BaseAction):
+    def __init__(self, config):
+        super(TmpReq, self).__init__(config)
+
+    def run(self, a="", passwd="", user=""):
+        if a != '-1' and a != '-2':
+            return "Input Error"
+        if a == '-1':
+            if passwd == "":
+                return "Input Error"
+            return getRequest(user, passwd)
+        if a == '-2':
+            if passwd == "":
+                return "Input Error"
+            return postRequest(user, passwd)
+```
+
 最后重启服务：  
 
 ``` bash
