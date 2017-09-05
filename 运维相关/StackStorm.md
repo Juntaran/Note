@@ -620,7 +620,7 @@ url = "http://www.test.com/test.html"
 
 def getRequest(user, passwd):
 
-    querystring = {"user":"rua","password":"qwerty"}
+    querystring = {"user":user,"password":passwd}
     headers = {
         'cache-control': "no-cache",
     }
@@ -629,7 +629,7 @@ def getRequest(user, passwd):
 
 def postRequest(user, passwd):
 
-    querystring = {"user":"rua","password":"qwerty"}
+    querystring = {"user":user,"password":passwd}
     headers = {
         'cache-control': "no-cache",
     }
