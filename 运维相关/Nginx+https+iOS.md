@@ -18,7 +18,7 @@ ___
 第257行，服务器返回了一个 ACK  
 
 第258行，神奇的事情发生了，手机再次向服务器发送了一个 `Application Data`  
-可以看到这个数据包和256一模一样，被 wireshark 标记为了 `TCP Spurious Retransmission` ，即虚假重传  
+可以看到这个数据包和第256行一模一样，被 wireshark 标记为了 `TCP Spurious Retransmission` ，即虚假重传  
 第259行，服务器懵逼了，发送一个 RST 来复位，标记本连接异常要把它关掉  
 
 第287行，又开始循环，客户端向服务器发起 TLS 握手  
