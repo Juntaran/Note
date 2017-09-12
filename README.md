@@ -72,6 +72,7 @@
 * [czxichen](https://github.com/czxichen)
 * [czxichen的博客](http://blog.csdn.net/fyxichen?viewmode=contents)
 * [拙_言](http://blog.csdn.net/xcltapestry/article/category/1728845)
+* [xiaorui](http://xiaorui.cc/category/%E8%BF%90%E7%BB%B4/)
 
 
 ## Todo
