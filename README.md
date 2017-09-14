@@ -20,6 +20,7 @@
 * [Go标准库](http://studygolang.com/pkgdoc)
 * [awesome-go](https://github.com/avelino/awesome-go)
 * [GORM 中文文档](http://gorm.book.jasperxu.com/)
+* [GORM godoc](https://godoc.org/github.com/jinzhu/gorm#DB.CreateTable)
 * [Go-JSON](https://github.com/Juntaran/Note/tree/master/Script)
 * [GoPsutil](https://github.com/Juntaran/gopsutil)
 * [Go Request库](https://github.com/Juntaran/req)
