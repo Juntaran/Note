@@ -12,6 +12,10 @@
 * [beego](https://github.com/astaxie/beego)
     * [beego doc](https://beego.me/docs/intro/)
     * [beego 教程](https://my.oschina.net/lockupme/blog?sort=time&catalog=3591234&p=2&temp=1505120350767)
+    
+* [GORM](https://github.com/jinzhu/gorm)
+    * [GORM 中文文档](http://gorm.book.jasperxu.com/)
+    * [GORM godoc](https://godoc.org/github.com/jinzhu/gorm#DB.CreateTable)
 
 * [Go练习代码](https://github.com/Juntaran/Go_In_Action)
 * [Go算法与数据结构](https://github.com/Juntaran/Golang_Algorithm)
@@ -19,8 +23,6 @@
 * [Go官方文档](https://godoc.org/)
 * [Go标准库](http://studygolang.com/pkgdoc)
 * [awesome-go](https://github.com/avelino/awesome-go)
-* [GORM 中文文档](http://gorm.book.jasperxu.com/)
-* [GORM godoc](https://godoc.org/github.com/jinzhu/gorm#DB.CreateTable)
 * [Go-JSON](https://github.com/Juntaran/Note/tree/master/Script)
 * [GoPsutil](https://github.com/Juntaran/gopsutil)
 * [Go Request库](https://github.com/Juntaran/req)
