@@ -64,6 +64,7 @@
 
 * [Bootstrap](http://www.bootcss.com/)
 * [vue.js](https://cn.vuejs.org/v2/guide/)
+* [vue api](https://vuex.vuejs.org/zh-cn/api.html)
 
 
 ## Ops  
