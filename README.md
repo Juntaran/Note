@@ -66,6 +66,7 @@
 ## Front-end   
 
 * [Bootstrap](http://www.bootcss.com/)
+* [Bootstrap 特效对照手册](http://www.jqhtml.com/bootstraps-syntaxhigh/index.html)
 * [vue.js](https://cn.vuejs.org/v2/guide/)
 * [vue api](https://vuex.vuejs.org/zh-cn/api.html)
 
