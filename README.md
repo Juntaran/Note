@@ -69,6 +69,7 @@
 * [Bootstrap 特效对照手册](http://www.jqhtml.com/bootstraps-syntaxhigh/index.html)
 * [vue.js](https://cn.vuejs.org/v2/guide/)
 * [vue api](https://vuex.vuejs.org/zh-cn/api.html)
+* [axios-vue官推请求模块](https://github.com/mzabriskie/axios)
 
 
 ## Ops  
