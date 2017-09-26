@@ -66,10 +66,13 @@
 ## Front-end   
 
 * [Bootstrap](http://www.bootcss.com/)
-* [Bootstrap 特效对照手册](http://www.jqhtml.com/bootstraps-syntaxhigh/index.html)
+     * [Bootstrap 特效对照手册](http://www.jqhtml.com/bootstraps-syntaxhigh/index.html)
 * [vue.js](https://cn.vuejs.org/v2/guide/)
-* [vue api](https://vuex.vuejs.org/zh-cn/api.html)
-* [axios-vue官推请求模块](https://github.com/mzabriskie/axios)
+     * [Vue 1 新手教程](http://www.cnblogs.com/keepfool/category/845804.html)
+     * [Vue 2 新手教程](http://www.jianshu.com/p/5ba253651c3b)
+     * [vue api](https://vuex.vuejs.org/zh-cn/api.html)
+     * [axios-vue官推请求模块](https://github.com/mzabriskie/axios)
+* [Element](http://element.eleme.io/#/zh-CN/component/card)
 
 
 ## Ops  
