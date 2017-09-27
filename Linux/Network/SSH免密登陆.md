@@ -9,7 +9,7 @@
     
 此时需要输入密码
 
-免密制作流程：
+## 免密制作流程：
 
 1. 为`juntaran`账号建立自己的公钥私钥，会在`/home/a/.ssh`中多出`id_rsa`和`id_rsa.pub`，分别是`私钥`和`公钥`
 
@@ -44,3 +44,7 @@
 ```
         ssh root@138.128.206.71 -p 27226
 ```
+
+## 免密简洁方案：
+
+源 `/root/.ssh/id_rsa.pub` 内容，粘贴到目的机 `/root/.ssh/authorized_keys` 里
