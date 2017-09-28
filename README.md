@@ -71,9 +71,11 @@
 * [vue.js](https://cn.vuejs.org/v2/guide/)
      * [Vue 1 新手教程](http://www.cnblogs.com/keepfool/category/845804.html)
      * [Vue 2 新手教程](http://www.jianshu.com/p/5ba253651c3b)
-     * [axios-vue官推请求模块](https://github.com/mzabriskie/axios)
-     * [vuex api](https://vuex.vuejs.org/zh-cn/api.html)
-     
+     * [axios-Vue官推请求模块](https://github.com/mzabriskie/axios)
+     * [Vuex API](https://vuex.vuejs.org/zh-cn/api.html)
+     * [Vue 简易教程](http://yangyi1024.com/)
+     * [Vue-Layout Vue可视化布局](https://cnodejs.org/topic/5993e5acf36051a45246c07a)
+     
 * [Element](http://element.eleme.io/#/zh-CN/component/card)
 
 
