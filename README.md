@@ -63,6 +63,19 @@
 
 * [mgo mongodb go driver](https://godoc.org/labix.org/v2/mgo)
 
+## Stackstorm
+
+* [Stackstorm](https://github.com/StackStorm)
+    * [Stackstorm 官方文档](https://docs.stackstorm.com)
+    * [Stackstorm Docker 入门](https://linux.cn/article-8688-1.html#4_7048)
+
+## Hubot
+
+* [Hubot](https://github.com/hubotio/hubot)
+    * [Hubot Wechat](http://www.jianshu.com/p/3ff7a48be02d)
+    * [Hubot BearyChart](https://bearychat.com/integrations/hubot)
+    * [Hubot Shell](https://segmentfault.com/a/1190000006681056)
+
 ## Front-end   
 
 * [Bootstrap](http://www.bootcss.com/)
@@ -71,7 +84,7 @@
 * [Vue.js](https://cn.vuejs.org/v2/guide/)
      * [Vue 1 新手教程](http://www.cnblogs.com/keepfool/category/845804.html)
      * [Vue 2 新手教程](http://www.jianshu.com/p/5ba253651c3b)
-     * [axios-Vue官推请求模块](https://github.com/mzabriskie/axios)
+     * [axios-Vue 官推请求模块](https://github.com/mzabriskie/axios)
      * [Vuex API](https://vuex.vuejs.org/zh-cn/api.html)
      * [Vue 简易教程](http://yangyi1024.com)
      * [Vue-Layout Vue可视化布局](https://cnodejs.org/topic/5993e5acf36051a45246c07a)
@@ -92,8 +105,7 @@
 
 - [nc & 反向shell](http://xkon.github.io/2015/09/04/Linux%E5%BB%BA%E7%AB%8B%E5%8F%8D%E5%90%91shell%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F/)  
 - [nginx](https://trac.nginx.org/nginx/browser/nginx/src/)  
-- [Radix Tree & IP tree & black list](https://github.com/Juntaran/IPTree)  
-- [stackstorm](https://docs.stackstorm.com)  
+- [Radix Tree & IP tree & black list](https://github.com/Juntaran/IPTree)
 - [Redis](https://github.com/josiahcarlson/redis-in-action/tree/master/python)  
 - [kafka](http://wiki.n.miui.com/display/computing/Kafka)  
 - [Kubernetes](https://www.kubernetes.org.cn/docs)  
