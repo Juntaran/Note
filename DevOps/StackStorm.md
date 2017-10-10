@@ -680,6 +680,16 @@ stackstorm 是通过 ssh 来执行脚本和命令的，因此如果使用自带�
 而 client 的功能是监听一个端口，小米在 stackstorm 加入了一个子服务端  
 子服务端向该端口发送命令，从而无需密码即可执行  
 
+
+## 5. StackStorm Hubot 挂掉解决方案  
+
+根据在下经验，九成九是 mongodb 挂了  
+
+``` bash
+/usr/bin/mongod -f /etc/mongod.conf
+st2ctl reload --register-all
+service st2chatops restart
+```
 ______
 
 ## Reference:
