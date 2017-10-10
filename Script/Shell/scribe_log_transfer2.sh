@@ -37,7 +37,7 @@ do
 done
 
 # scp 限速 50M/s
-scp -rl 500000 $ScribeTemp 10.108.24.28:/home/scribeTemp/
+scp -prl 500000 $ScribeTemp 10.108.24.28:/home/scribeTemp/
 
 rm -rf dir_list.txt
 rm -rf $ScribeTemp
