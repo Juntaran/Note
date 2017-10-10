@@ -43,4 +43,5 @@ rm -rf temp.txt
 # scp 限速 50M/s ，传输到备份服务器
 # scp 传输之前，做 源->目的 的免密登录
 # 源 /root/.ssh/id_rsa.pub 内容，粘贴到目的机 /root/.ssh/authorized_keys 里
-scp -rl 500000 $ScribeTemp 192.168.1.1:/home/scribe30/
+# -p 保存文件创建时间、修改时间  -r 目录递归  -l 限速
+scp -prl 500000 $ScribeTemp 192.168.1.1:/home/scribe30/
