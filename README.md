@@ -119,6 +119,7 @@
    * [sarama-cluster](https://github.com/bsm/sarama-cluster)
    
 - [Kubernetes](https://www.kubernetes.org.cn/docs)  
+- [Raft](http://wiki.n.miui.com/pages/viewpage.action?pageId=26170911)
 
 
 ## Tools
