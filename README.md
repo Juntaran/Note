@@ -23,21 +23,23 @@
 * [Go官方文档](https://godoc.org/)
 * [Go标准库](http://studygolang.com/pkgdoc)
 * [awesome-go](https://github.com/avelino/awesome-go)
-* [Go-JSON](https://github.com/Juntaran/Note/tree/master/Script)
+* [Go-JSON](https://github.com/json-iterator/go)
 * [GoPsutil](https://github.com/Juntaran/gopsutil)
 * [Go Request库](https://github.com/Juntaran/req)
 * [Go二进制转换工具](https://github.com/Juntaran/biu)
 * [反向代理](https://github.com/Juntaran/golocproxy)
-* [Open-Falcon](https://github.com/Juntaran/falcon-plus)
+* [Open-Falcon](https://github.com/open-falcon/falcon-plus)
 * [netgraph: B/S架构的HTTP抓包工具](https://github.com/ga0/netgraph)
 * [FastHTTP: Go 的快速 HTTP 实现](https://github.com/valyala/fasthttp) 
 * [goHTTP: 一个http的文件服务器](https://github.com/codeskyblue/gohttp)
 * [DHT协议](https://github.com/Juntaran/dht)
 
 
+
 ## Python
 
-* [微信机器人](https://github.com/Juntaran/LCBot)
+* [微信机器人LCBot](https://github.com/LCTT/LCBot)
+* [微信机器人wxpy](https://github.com/youfou/wxpy)
 * [知乎爬虫](https://github.com/Juntaran/Passer-zhihu)
 
 ## Script
