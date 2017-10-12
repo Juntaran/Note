@@ -113,6 +113,9 @@
 - [Radix Tree & IP tree & black list](https://github.com/Juntaran/IPTree)
 - [Redis](https://github.com/josiahcarlson/redis-in-action/tree/master/python)  
 - [kafka](http://wiki.n.miui.com/display/computing/Kafka)  
+   * [sarama](https://github.com/Shopify/sarama)
+   * [sarama-cluster](https://github.com/bsm/sarama-cluster)
+   
 - [Kubernetes](https://www.kubernetes.org.cn/docs)  
 
 
