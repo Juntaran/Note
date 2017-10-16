@@ -115,10 +115,12 @@
 - [Radix Tree & IP tree & black list](https://github.com/Juntaran/IPTree)
 - [Redis](https://github.com/josiahcarlson/redis-in-action/tree/master/python)  
 - [kafka](http://wiki.n.miui.com/display/computing/Kafka)  
-   * [sarama](https://github.com/Shopify/sarama)
-   * [sarama-cluster](https://github.com/bsm/sarama-cluster)
+    * [sarama](https://github.com/Shopify/sarama)
+    * [sarama-cluster](https://github.com/bsm/sarama-cluster)
    
 - [Kubernetes](https://www.kubernetes.org.cn/docs)  
+    * [k8s-install-scripts](https://github.com/Juntaran/k8s-install-scripts)
+    
 - [Raft](http://wiki.n.miui.com/pages/viewpage.action?pageId=26170911)
 
 
