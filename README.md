@@ -121,9 +121,7 @@
     * [sarama](https://github.com/Shopify/sarama)
     * [sarama-cluster](https://github.com/bsm/sarama-cluster)
    
-- [Kubernetes](https://www.kubernetes.org.cn/docs)  
-    * [k8s-install-scripts](https://github.com/Juntaran/k8s-install-scripts)
-    
+- [Kubernetes](https://www.kubernetes.org.cn/docs) 
 - [Raft](http://wiki.n.miui.com/pages/viewpage.action?pageId=26170911)
 
 
