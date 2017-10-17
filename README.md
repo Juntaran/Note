@@ -97,6 +97,9 @@
     * [Falcon + Grafana](https://book.open-falcon.org/zh/dev/support_grafana.html)
     * [Open-Falcon plugin for Grafana](https://github.com/open-falcon/grafana-openfalcon-datasource)
     * [Open-falcon上搭建Grafana](http://blueswind8306.iteye.com/blog/2287561)
+    
+* [Echarts](https://github.com/ecomfe/echarts)
+    * [Echarts-doc](https://github.com/ecomfe/echarts-doc)
 
 
 ## Ops  
