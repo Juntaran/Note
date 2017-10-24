@@ -6,7 +6,7 @@
 
 ## 一、Kubernetes 集群部署
 
-### 1. 安装 kubeadm 和相关工具
+### 1. 安装 kubeadm 和相关工具
 
 ``` bash
 cd /etc/yum.repos.d
@@ -85,16 +85,16 @@ service docker restart
 ### 2. 下载 Kubernetes 相关镜像
 
 阿里云镜像仓库
-> 注册阿里云 registry https://dev.aliyun.com/search.html    
-> 可以参考 https://yq.aliyun.com/articles/70756    
+> 注册阿里云 registry https://dev.aliyun.com/search.html    
+> 可以参考 https://yq.aliyun.com/articles/70756    
 
-注册完之后在服务器登陆  
+注册完之后在服务器登陆  
 
 ```
 docker login registry.cn-hangzhou.aliyuncs.com
 ```
 
-12 个需要下载的镜像  
+12 个需要下载的镜像  
 
 ```
 docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/pause-amd64:3.0
