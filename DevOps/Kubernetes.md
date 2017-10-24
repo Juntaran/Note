@@ -85,7 +85,7 @@ service docker restart
 ### 2. 下载 Kubernetes 相关镜像
 
 阿里云镜像仓库
-> 注册阿里云 registry https://dev.aliyun.com/search.html    
+> 注册阿里云 registry https://dev.aliyun.com/search.html    
 > 可以参考 https://yq.aliyun.com/articles/70756    
 
 注册完之后在服务器登陆  
