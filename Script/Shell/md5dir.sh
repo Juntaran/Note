@@ -22,8 +22,6 @@ set -o nounset    # 若有用未设置的变量即让脚本退出执行
 
 # 文件较多的方案
 find ./ -type f > document.txt
-rm -rf md5.temp.txt
-rm -rf md5.txt
 
 for d in `cat document.txt`
 do
