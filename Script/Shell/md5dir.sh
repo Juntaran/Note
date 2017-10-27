@@ -22,8 +22,6 @@ set -o nounset    # 若有用未设置的变量即让脚本退出执行
 
 # 文件较多的方案
 find ./ -type f > document.txt
-rm -rf md5.temp.txt
-rm -rf md5.txt
 
 for d in `cat document.txt`
 do
@@ -34,3 +32,7 @@ cat md5.temp.txt | sort > md5.txt
 md5sum md5.txt >> md5.txt
 rm -rf md5.temp.txt
 rm -rf document.txt
+
+
+# 如果对比两个目录，把一个目录生成的 md5.txt 放到另一个目录
+# md5sum -c md5.txt | grep -v 'OK'
