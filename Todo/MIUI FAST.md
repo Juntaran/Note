@@ -5,7 +5,7 @@ MIUI SRE 的一个约2-3个季度的项目，目的是更好的让 SRE 掌握自
 
 ## 实现阶段:    
 
-1. 存储日志，以 nginx 日志为主，本地 log -> LCS -> Hive／HDFS (主要解决本地日志如何调用 LCS 即可，打到 Hive/HDFS 的区别在于通过 HDFS SHELL 可以实时查询到数据，Hive 新注册的数据流，必须要等到第二天才能使用数据工场的 Hive 进行查询)  
+1. 存储日志，以 nginx 日志为主，本地 log -> LCS -> Hive／HDFS (主要解决本地日志如何调用 LCS 即可，打到 Hive/HDFS 的区别在于通过 HDFS SHELL 可以实时查询到数据，，如果使用MapReduce或者Spark程序处理HDFS文件，会有一个小时的延迟。Hive 新注册的数据流，必须要等到第二天才能使用数据工场的 Hive 进行查询)  
 2. 构建数据分析集群 (Hadoop + Hive + HBase + Kylin)，分析挖掘高价值数据并长期存储，Hive -> Apache Kylin -> HBase  
 3. 高价值数据展示，HBase -> OpenTSDB -> Grafana/Echarts   
 4. 机器学习预测报警 + 预估资源配置  
