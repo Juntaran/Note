@@ -1,6 +1,6 @@
 # Kubernetes 集群部署
 
-*学习 Kubernetes 是源于与韩飞师兄吃饭时的闲谈*   
+*学习 Kubernetes 是源于与韩飞师兄吃饭时的闲谈*   
 *人生郁郁不得志，工作苦无出路，师兄建议我去学 k8s 找找乐子*  
 *唉*  
 
@@ -1086,4 +1086,4 @@ ___
 * [Kubernetes 中文文档](http://hardocs.com/d/kubernetes/)
 * [Kubernetes 中文文档_写的一般](https://www.kubernetes.org.cn/doc)
 * [使用 kubeadm 安装 Kubernetes 1.8](http://blog.frognew.com/2017/09/kubeadm-install-kubernetes-1.8.html#9heapster插件部署)
-* [青蛙小白博客_ Kubernetes 相关写的非常详细](http://blog.frognew.com/)
+* [青蛙小白博客_ Kubernetes 相关写的非常详细](http://blog.frognew.com/)
