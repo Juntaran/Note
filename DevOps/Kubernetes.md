@@ -6,101 +6,146 @@
 
 ## 一、Kubernetes 集群部署
 
-### 1: 自残式安装 kubeadm 和相关工具 (经过了3天自虐，本节只作为参考，建议中国人选择第二种方式 19 大期间在中国上外网，我真是石乐志)
+### 1. 配置 VMware Fusion 环境:  
 
-#### 1.1. 准备工作
+``` bash
+sudo vim /Library/Preferences/VMware\ Fusion/vmnet8/dhcpd.conf
+
+# 修改为以下配置
+
+allow unknown-clients;
+default-lease-time 1800;                # default is 30 minutes
+max-lease-time 7200;                    # default is 2 hours
+
+subnet 172.16.174.0 netmask 255.255.255.0 {
+	range 172.16.174.130 172.16.174.140;
+	option broadcast-address 172.16.174.255;
+	option domain-name-servers 172.16.174.2;
+	option domain-name localdomain;
+	default-lease-time 1800;                # default is 30 minutes
+	max-lease-time 7200;                    # default is 2 hours
+	option netbios-name-servers 172.16.174.2;
+	option routers 172.16.174.2;
+}
+host vmnet8 {
+	hardware ethernet 00:50:56:C0:00:08;
+	fixed-address 172.16.174.1;
+	option domain-name-servers 0.0.0.0;
+	option domain-name "";
+	option routers 0.0.0.0;
+}
+
+host k8s_master {
+    hardware ethernet 00:0c:29:7b:18:db;
+    fixed-address 172.16.174.131;
+}
+host k8s_node_1 {
+    hardware ethernet 00:0c:29:6c:59:7f;
+    fixed-address 172.16.174.132;
+}
+host k8s_node_2 {
+    hardware ethernet 00:0c:29:3f:bf:65;
+    fixed-address 172.16.174.133;
+}
+```
+
+
+### 2: kubeadm 安装 Kubernetes 1.8.1 
+
+经过了一周自虐，本节只作为参考，建议所有在大陆的中国人选择第二种方式  
+十九大期间在中国上外网，我真是石乐志，最后感谢阿里的开发者平台让我安装成功  
+
+#### 2.1 准备工作
+
+三台主机:  
 
 ```
+vim /etc/hosts
+
+172.16.174.131 node1
+172.16.174.132 node2
+172.16.174.133 node3
+```
+
+``` bash
 systemctl disable firewalld
 systemctl stop firewalld
-setenforce 0
 
+modprobe bridge
+modprobe br_netfilter
+
+swapoff -a
+```
+
+```
+vim /etc/sysctl.d/k8s.conf
+
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+vm.swappiness=0
+```
+
+``` bash
+sysctl -p /etc/sysctl.d/k8s.conf
+setenforce 0
 vim /etc/selinux/config
 SELINUX=enforcing 改为 SELINUX=disabled
 source /etc/selinux/config
 ```
 
+```
+vim /etc/fstab
 
+# 注释掉下面这一行
+/dev/mapper/centos-swap swap                    swap    defaults        0 0
+```
+
+更新 yum 源:  
 
 ``` bash
-cd /etc/yum.repos.d
+# 添加 163 源
 mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
+cd /etc/yum.repos.d
 wget http://mirrors.163.com/.help/CentOS7-Base-163.repo
-```
-
-k8s.repo
-```
-[k8s]
-name=Kubernetes Repository
-baseurl=https://packages.cloud.googlecom/yum/repos/kubernetes-el7-x86_64
-enabled=0
-gpgcheck=1
-repo_gpgcheck=0
-gpgkey=https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-```
-
-kubernetes.repo
-```
-[kubernetes]
-name=Kubernetes
-baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
-enabled=1
-gpgcheck=0
-```
-
-mritd.repo
-```
-[mritd]
-name=Mritd Repository
-baseurl=https://yumrepo.b0.upaiyun.com/centos/7/x86_64
-enabled=1
-gpgcheck=1
-gpgkey=https://mritd.b0.upaiyun.com/keys/rpm.public.key
-```
-
-``` sh
 yum clean all
 yum makecache
-yum install -y docker kubelet kubeadm kubectl kubernetes-cni
-systemctl enable docker && systemctl start docker
-systemctl enable kubelet && systemctl start kubelet
+
+# 添加 docker 源
+yum install -y yum-utils device-mapper-persistent-data lvm2
+yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 ```
 
-`记住 kubelet 的版本，本文为 1.7.5`  
-
-修改 docker 配置加速
-```
-vim /etc/sysconfig/docker
-```
-
-```
-# /etc/sysconfig/docker
-
-# Modify these options if you want to change the way the docker daemon runs
-OPTIONS='--selinux-enabled --log-driver=journald --signature-verification=false --registry-mirror=http://68e02ab9.m.daocloud.io'
-if [ -z "${DOCKER_CERT_PATH}" ]; then
-    DOCKER_CERT_PATH=/etc/docker
-fi
-
-# Do not add registries in this file anymore. Use /etc/containers/registries.conf
-# from the atomic-registries package.
-#
-
-# docker-latest daemon can be used by starting the docker-latest unitfile.
-# To use docker-latest client, uncomment below lines
-#DOCKERBINARY=/usr/bin/docker-latest
-#DOCKERDBINARY=/usr/bin/dockerd-latest
-#DOCKER_CONTAINERD_BINARY=/usr/bin/docker-containerd-latest
-#DOCKER_CONTAINERD_SHIM_BINARY=/usr/bin/docker-containerd-shim-latest
-```
-
-重启 docker 服务
+安装 docker :  
 
 ``` bash
-service docker restart
+# 查看当前的 Docker 版本
+yum list docker-ce.x86_64  --showduplicates |sort -r
 ```
 
-#### 1.2. 下载 Kubernetes 相关镜像
+Kubernetes 1.8 已经针对 Docker 的 `1.11.2`, `1.12.6`, `1.13.1` 和 `17.03.2` 等版本做了验证，在各节点安装 docker 的 `17.03.2` 版本  
+
+``` bash
+yum install -y --setopt=obsoletes=0 docker-ce-17.03.2.ce-1.el7.centos docker-ce-selinux-17.03.2.ce-1.el7.centos
+
+systemctl start docker
+systemctl enable docker
+
+# Docker 从 1.13 版本开始调整了默认的防火墙规则，禁用了iptables filter 表中 FOWARD 链，这样会引起 Kubernetes 集群中跨 Node 的 Pod 无法通信
+iptables -P FORWARD ACCEPT
+```
+
+``` bash
+vim /lib/systemd/system/docker.service
+# 增加
+ExecStartPost=/usr/sbin/iptables -P FORWARD ACCEPT
+```
+
+``` bash
+systemctl daemon-reload
+systemctl restart docker
+```
+
+#### 2.2 下载 Kubernetes 相关镜像
 
 阿里云镜像仓库
 > 注册阿里云 registry https://dev.aliyun.com/search.html    
@@ -108,91 +153,185 @@ service docker restart
 
 注册完之后在服务器登陆  
 
-```
+``` bash
 docker login registry.cn-hangzhou.aliyuncs.com
 ```
 
-12 个需要下载的镜像  
+16 个需要下载的镜像  
 
-```
-docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/pause-amd64:3.0
-docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/etcd-amd64:3.0.17
-docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/kube-apiserver-amd64:v1.7.5
-docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/kube-scheduler-amd64:v1.7.5
-docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/kube-controller-manager-amd64:v1.7.5
-docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/kube-proxy-amd64:v1.7.5
-docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/dnsmasq-metrics-amd64:1.0
+``` bash
+docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/kube-apiserver-amd64:v1.8.1
+docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/kube-controller-manager-amd64:v1.8.1
+docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/kube-scheduler-amd64:v1.8.1
+docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/kube-proxy-amd64:v1.8.1
+docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/k8s-dns-sidecar-amd64:1.14.5
 docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/k8s-dns-kube-dns-amd64:1.14.5
 docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/k8s-dns-dnsmasq-nanny-amd64:1.14.5
-docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/k8s-dns-sidecar-amd64:1.14.5
-docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/kube-discovery-amd64:1.0
-docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/exechealthz-amd64:1.2
+docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/etcd-amd64:3.0.17
+docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/pause-amd64:3.0
+docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/kubernetes-dashboard-amd64:1.7.1
 docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/kubernetes-dashboard-amd64:v1.7.1
-docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/kubedns-amd64:1.6
-docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/dnsmasq-metrics-amd64:1.0
-docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/kube-dnsmasq-amd64:1.4
-docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/defaultbackend:1.0
+docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/kubernetes-dashboard-init-amd64:v1.0.1
+docker pull registry.cn-shenzhen.aliyuncs.com/rancher_cn/heapster-influxdb-amd64:v1.3.3
+docker pull registry.cn-shenzhen.aliyuncs.com/rancher_cn/heapster-grafana-amd64:v4.4.3
+docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/heapster-amd64:v1.4.2
+docker pull registry.cn-hangzhou.aliyuncs.com/k8s_container/flannel:v0.9.0-amd64
 ```
 
 重命名镜像以供 kubeadm 使用  
 
-```
-docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/pause-amd64:3.0 gcr.io/google-containers/pause-amd64:3.0
-docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/etcd-amd64:3.0.17 gcr.io/google-containers/etcd-amd64:3.0.17
-docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/kube-apiserver-amd64:v1.7.5 gcr.io/google-containers/kube-apiserver-amd64:v1.7.5
-docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/kube-scheduler-amd64:v1.7.5 gcr.io/google-containers/kube-scheduler-amd64:v1.7.5
-docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/kube-controller-manager-amd64:v1.7.5 gcr.io/google-containers/kube-controller-manager-amd64:v1.7.5
-docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/kube-proxy-amd64:v1.7.5 gcr.io/google-containers/kube-proxy-amd64:v1.7.5
-docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/dnsmasq-metrics-amd64:1.0 gcr.io/google-containers/dnsmasq-metrics-amd64:1.0
+``` bash
+docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/kube-apiserver-amd64:v1.8.1 gcr.io/google-containers/kube-apiserver-amd64:v1.8.1
+docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/kube-controller-manager-amd64:v1.8.1 gcr.io/google-containers/kube-controller-manager-amd64:v1.8.1
+docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/kube-scheduler-amd64:v1.8.1 gcr.io/google-containers/kube-scheduler-amd64:v1.8.1
+docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/kube-proxy-amd64:v1.8.1 gcr.io/google-containers/kube-proxy-amd64:v1.8.1
+docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/k8s-dns-sidecar-amd64:1.14.5 gcr.io/google-containers/k8s-dns-sidecar-amd64:1.14.5
 docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/k8s-dns-kube-dns-amd64:1.14.5 gcr.io/google-containers/k8s-dns-kube-dns-amd64:1.14.5
 docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/k8s-dns-dnsmasq-nanny-amd64:1.14.5 gcr.io/google-containers/k8s-dns-dnsmasq-nanny-amd64:1.14.5
-docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/k8s-dns-sidecar-amd64:1.14.5 gcr.io/google-containers/k8s-dns-sidecar-amd64:1.14.5
-docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/kube-discovery-amd64:1.0 gcr.io/google-containers/kube-discovery-amd64:1.0
-docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/exechealthz-amd64:1.2 gcr.io/google-containers/exechealthz-amd64:1.2
+docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/etcd-amd64:3.0.17 gcr.io/google-containers/etcd-amd64:3.0.17
+docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/pause-amd64:3.0 gcr.io/google-containers/pause-amd64:3.0
+docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/kubernetes-dashboard-amd64:1.7.1 gcr.io/google-containers/kubernetes-dashboard-amd64:1.7.1
 docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/kubernetes-dashboard-amd64:v1.7.1 gcr.io/google-containers/kubernetes-dashboard-amd64:v1.7.1
-docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/kubedns-amd64:1.6 gcr.io/google-containers/kubedns-amd64:1.6
-docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/dnsmasq-metrics-amd64:1.0 gcr.io/google-containers/dnsmasq-metrics-amd64:1.0
-docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/kube-dnsmasq-amd64:1.4 gcr.io/google-containers/kube-dnsmasq-amd64:1.4
-docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/defaultbackend:1.0 gcr.io/google-containers/defaultbackend:1.0
-```
-
-删除镜像
-
-```
-docker rmi registry.cn-hangzhou.aliyuncs.com/google-containers/pause-amd64:3.0
-docker rmi registry.cn-hangzhou.aliyuncs.com/google-containers/etcd-amd64:3.0.17
-docker rmi registry.cn-hangzhou.aliyuncs.com/google-containers/kube-apiserver-amd64:v1.7.5
-docker rmi registry.cn-hangzhou.aliyuncs.com/google-containers/kube-scheduler-amd64:v1.7.5
-docker rmi registry.cn-hangzhou.aliyuncs.com/google-containers/kube-controller-manager-amd64:v1.7.5
-docker rmi registry.cn-hangzhou.aliyuncs.com/google-containers/kube-proxy-amd64:v1.7.5
-docker rmi registry.cn-hangzhou.aliyuncs.com/google-containers/dnsmasq-metrics-amd64:1.0
-docker rmi registry.cn-hangzhou.aliyuncs.com/google-containers/k8s-dns-kube-dns-amd64:1.14.5
-docker rmi registry.cn-hangzhou.aliyuncs.com/google-containers/k8s-dns-dnsmasq-nanny-amd64:1.14.5
-docker rmi registry.cn-hangzhou.aliyuncs.com/google-containers/k8s-dns-sidecar-amd64:1.14.5
-docker rmi registry.cn-hangzhou.aliyuncs.com/google-containers/kube-discovery-amd64:1.0
-docker rmi registry.cn-hangzhou.aliyuncs.com/google-containers/exechealthz-amd64:1.2
-docker rmi registry.cn-hangzhou.aliyuncs.com/google-containers/kubernetes-dashboard-amd64:v1.7.1
-docker rmi registry.cn-hangzhou.aliyuncs.com/google-containers/kubedns-amd64:1.6
-docker rmi registry.cn-hangzhou.aliyuncs.com/google-containers/dnsmasq-metrics-amd64:1.0
-docker rmi registry.cn-hangzhou.aliyuncs.com/google-containers/kube-dnsmasq-amd64:1.4
-docker rmi registry.cn-hangzhou.aliyuncs.com/google-containers/defaultbackend:1.0
+docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/kubernetes-dashboard-init-amd64:v1.0.1 gcr.io/google-containers/kubernetes-dashboard-init-amd64:v1.0.1
+docker tag registry.cn-shenzhen.aliyuncs.com/rancher_cn/heapster-influxdb-amd64:v1.3.3 gcr.io/rancher_cn/heapster-influxdb-amd64:v1.3.3
+docker tag registry.cn-shenzhen.aliyuncs.com/rancher_cn/heapster-grafana-amd64:v4.4.3 gcr.io/rancher_cn/heapster-grafana-amd64:v4.4.3
+docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/heapster-amd64:v1.4.2 gcr.io/google-containers/heapster-amd64:v1.4.2
+docker tag registry.cn-hangzhou.aliyuncs.com/k8s_container/flannel:v0.9.0-amd64 quay.io/coreos/flannel:v0.9.0-amd64
 ```
 
 
-#### 1.3. 运行 kubeadm init 安装 Master
+#### 2.3 安装并运行呢 Kubernetes 相关服务
 
 ``` bash
-kubeadm init --kubernetes-version=v1.7.5
+yum makecache fast
+yum install -y kubelet kubeadm kubectl
+```
+
+``` bash
+docker info | grep Cgroup
+# 显示 Cgroup Driver: systemd
+```
+
+根据 docker info 的结果修改 kubeadm 的参数  
+
+``` bash
+vim /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+
+Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=systemd"
+
+# 创建 /etc/docker/daemon.json
+vim /etc/docker/daemon.json
+
+{
+  "exec-opts": ["native.cgroupdriver=systemd"]
+}
+```
+
+``` bash
+systemctl restart docker
+systemctl status docker
+systemctl enable kubelet.service
+```
+
+#### 2.4 Master 节点初始化
+
+选择 `flannel` 作为 `Pod` 网络插件  
+令 `node1` 为 Master Node，在 `node1` 执行以下命令  
+
+``` bash
+kubeadm init \
+  --kubernetes-version=v1.8.1 \
+  --pod-network-cidr=10.244.0.0/16 \
+  --apiserver-advertise-address=172.16.174.131
+```
+
+#### 2.5 结果输出
+
+```
+kubeadm init --kubernetes-version=v1.8.1 --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=172.16.174.131
+
+[kubeadm] WARNING: kubeadm is in beta, please do not use it for production clusters.
+[init] Using Kubernetes version: v1.8.1
+[init] Using Authorization modes: [Node RBAC]
+[preflight] Running pre-flight checks
+[preflight] Starting the kubelet service
+[kubeadm] WARNING: starting in 1.8, tokens expire after 24 hours by default (if you require a non-expiring token use --token-ttl 0)
+[certificates] Generated ca certificate and key.
+[certificates] Generated apiserver certificate and key.
+[certificates] apiserver serving cert is signed for DNS names [node1 kubernetes kubernetes.default kubernetes.default.svc kubernetes.default.svc.cluster.local] and IPs [10.96.0.1 172.16.174.131]
+[certificates] Generated apiserver-kubelet-client certificate and key.
+[certificates] Generated sa key and public key.
+[certificates] Generated front-proxy-ca certificate and key.
+[certificates] Generated front-proxy-client certificate and key.
+[certificates] Valid certificates and keys now exist in "/etc/kubernetes/pki"
+[kubeconfig] Wrote KubeConfig file to disk: "admin.conf"
+[kubeconfig] Wrote KubeConfig file to disk: "kubelet.conf"
+[kubeconfig] Wrote KubeConfig file to disk: "controller-manager.conf"
+[kubeconfig] Wrote KubeConfig file to disk: "scheduler.conf"
+[controlplane] Wrote Static Pod manifest for component kube-apiserver to "/etc/kubernetes/manifests/kube-apiserver.yaml"
+[controlplane] Wrote Static Pod manifest for component kube-controller-manager to "/etc/kubernetes/manifests/kube-controller-manager.yaml"
+[controlplane] Wrote Static Pod manifest for component kube-scheduler to "/etc/kubernetes/manifests/kube-scheduler.yaml"
+[etcd] Wrote Static Pod manifest for a local etcd instance to "/etc/kubernetes/manifests/etcd.yaml"
+[init] Waiting for the kubelet to boot up the control plane as Static Pods from directory "/etc/kubernetes/manifests"
+[init] This often takes around a minute; or longer if the control plane images have to be pulled.
+[apiclient] All control plane components are healthy after 41.504266 seconds
+[uploadconfig] Storing the configuration used in ConfigMap "kubeadm-config" in the "kube-system" Namespace
+[markmaster] Will mark node node1 as master by adding a label and a taint
+[markmaster] Master node1 tainted and labelled with key/value: node-role.kubernetes.io/master=""
+[bootstraptoken] Using token: 3d97ad.4d01f99d0b28d473
+[bootstraptoken] Configured RBAC rules to allow Node Bootstrap tokens to post CSRs in order for nodes to get long term certificate credentials
+[bootstraptoken] Configured RBAC rules to allow the csrapprover controller automatically approve CSRs from a Node Bootstrap Token
+[bootstraptoken] Configured RBAC rules to allow certificate rotation for all node client certificates in the cluster
+[bootstraptoken] Creating the "cluster-info" ConfigMap in the "kube-public" namespace
+[addons] Applied essential addon: kube-dns
+[addons] Applied essential addon: kube-proxy
+
+Your Kubernetes master has initialized successfully!
+
+To start using your cluster, you need to run (as a regular user):
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+You should now deploy a pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  http://kubernetes.io/docs/admin/addons/
+
+You can now join any number of machines by running the following on each node
+as root:
+
+  kubeadm join --token 3d97ad.4d01f99d0b28d473 172.16.174.131:6443 --discovery-token-ca-cert-hash sha256:a7b4d9e13897161b0a1d17577a29912b33b6519434ab81aeed2a2cd4d30f0158
+```
+
+最后执行  
+
+``` bash
+mkdir -p $HOME/.kubesudo 
+cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+# 将节点加入集群
+kubeadm join --token 3d97ad.4d01f99d0b28d473 172.16.174.131:6443 --discovery-token-ca-cert-hash sha256:a7b4d9e13897161b0a1d17577a29912b33b6519434ab81aeed2a2cd4d30f0158
 ```
 
 如果因为网络等问题安装失败  
 
 ``` bash
-journalctl -xeu kubelet # 查看问题
-kubeadm reset           # 清理环境
+# 查看问题
+journalctl -xeu kubelet 
+
+# 清理环境
+kubeadm reset           
+ifconfig cni0 down
+ip link delete cni0
+ifconfig flannel.1 down
+ip link delete flannel.1
+rm -rf /var/lib/cni/
 ```
 
-init 如果报错
+init 如果报错  
+
 ```
 [preflight] Some fatal errors occurred:
 	/proc/sys/net/bridge/bridge-nf-call-iptables contents are not set to 1
@@ -201,15 +340,188 @@ init 如果报错
 
 执行
 
-```
+``` bash
 echo 1 > /proc/sys/net/bridge/bridge-nf-call-iptables
 echo 1 > /proc/sys/net/bridge/bridge-nf-call-ip6tables
 ```
 
+#### 2.6 搭建 etcd 高可用集群
 
-### 2. 神 TM 安装 kubernetes  
+*在 Master 节点执行*  
 
-#### 2.1 一些准备工作
+安装 cfssl  
+
+``` bash
+yum install go -y
+go get -u github.com/cloudflare/cfssl/cmd/...
+```
+
+创建 ca-config.json :  
+
+``` json
+{
+  "signing": {
+    "default": {
+      "expiry": "87600h"
+    },
+    "profiles": {
+      "frognew": {
+        "usages": [
+            "signing",
+            "key encipherment",
+            "server auth",
+            "client auth"
+        ],
+        "expiry": "87600h"
+      }
+    }
+  }
+}
+```
+
+创建 CA 证书签名请求配置 ca-csr.json :  
+
+``` json
+{
+  "CN": "frognew",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "CN",
+      "ST": "BeiJing",
+      "L": "BeiJing",
+      "O": "frognew",
+      "OU": "cloudnative"
+    }
+  ]
+}
+```
+
+cfss 生成 CA 证书和私钥  
+
+```
+~/go/bin/cfssl gencert -initca ca-csr.json | ~/go/bin/cfssljson -bare ca
+```
+
+创建 etcd 证书签名请求配置 etcd-csr.json :  
+
+``` json
+{
+    "CN": "frognew",
+    "hosts": [
+      "127.0.0.1",
+      "172.16.174.131",
+      "172.16.174.132",
+      "172.16.174.133",
+      "node1",
+      "node2",
+      "node3"
+    ],
+    "key": {
+        "algo": "rsa",
+        "size": 2048
+    },
+    "names": [
+        {
+            "C": "CN",
+            "ST": "BeiJing",
+            "L": "BeiJing",
+            "O": "frognew",
+            "OU": "cloudnative"
+        }
+    ]
+}
+```
+
+生成 etcd 的证书和私钥:  
+
+```
+~/go/bin/cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=frognew etcd-csr.json | ~/go/bin/cfssljson -bare etcd
+```
+
+*在所有节点执行以下命令*  
+
+``` bash 
+mkdir -p /etc/etcd/ssl
+```
+
+*在 master 节点执行以下命令*
+
+``` bash
+scp *.pem root@172.16.174.131:/etc/etcd/ssl/
+scp *.pem root@172.16.174.132:/etc/etcd/ssl/
+scp *.pem root@172.16.174.133:/etc/etcd/ssl/
+```
+
+*在所有节点执行以下命令*  
+
+``` bash
+wget https://github.com/coreos/etcd/releases/download/v3.1.6/etcd-v3.1.6-linux-amd64.tar.gz
+tar -zxvf etcd-v3.1.6-linux-amd64.tar.gz
+mkdir -p /var/lib/etcd
+mv etcd-v3.1.6-linux-amd64/etcd /usr/bin/
+mv etcd-v3.1.6-linux-amd64/etcdctl /usr/bin/
+```
+
+``` bash
+# 注意替换 node1 node2 node3, 172.16.174.131 172.16.174.132 172.16.174.133
+export ETCD_NAME=node1
+export INTERNAL_IP=172.16.174.131
+```
+
+``` bash
+vim /usr/lib/systemd/system/etcd.service
+
+[Unit]
+Description=etcd server
+After=network.target
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=notify
+WorkingDirectory=/var/lib/etcd/
+EnvironmentFile=-/etc/etcd/etcd.conf
+ExecStart=/usr/bin/etcd \
+  --name ${ETCD_NAME} \
+  --cert-file=/etc/etcd/ssl/etcd.pem \
+  --key-file=/etc/etcd/ssl/etcd-key.pem \
+  --peer-cert-file=/etc/etcd/ssl/etcd.pem \
+  --peer-key-file=/etc/etcd/ssl/etcd-key.pem \
+  --trusted-ca-file=/etc/etcd/ssl/ca.pem \
+  --peer-trusted-ca-file=/etc/etcd/ssl/ca.pem \
+  --initial-advertise-peer-urls https://${INTERNAL_IP}:2380 \
+  --listen-peer-urls https://${INTERNAL_IP}:2380 \
+  --listen-client-urls https://${INTERNAL_IP}:2379,https://127.0.0.1:2379 \
+  --advertise-client-urls https://${INTERNAL_IP}:2379 \
+  --initial-cluster-token etcd-cluster-1 \
+  --initial-cluster node1=https://172.16.174.131:2380,node2=https://172.16.174.132:2380,node3=https://172.16.174.133:2380 \
+  --initial-cluster-state new \
+  --data-dir=/var/lib/etcd
+Restart=on-failure
+RestartSec=5
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
+```
+
+启动 etcd 
+
+``` bash
+systemctl daemon-reload
+systemctl enable etcd
+systemctl start etcd
+systemctl status etcd
+```
+
+
+### 3. yum 安装 kubernetes 1.7
+
+#### 3.1 一些准备工作
 
 ```
 systemctl disable firewalld
@@ -235,7 +547,7 @@ hostnamectl --static set-hostname  kubernetes-node2
 172.16.174.143 registry
 ```
 
-#### 2.2 163 替换自带 yum 源:  
+#### 3.2 163 替换自带 yum 源:  
 
 master 和 node 机器都要替换  
 
@@ -252,7 +564,7 @@ yum makecache
 virt7-container-common-candidate`  
 在 http://cbs.centos.org/repos/ 找到即可，本文 yum 源 IP 为 http://cbs.centos.org/repos/virt7-container-common-candidate/x86_64/os/  
 
-#### 2.3 添加 virt7-container-common 源:  
+#### 3.3 添加 virt7-container-common 源:  
 
 master 和 node 机器都要添加  
 
@@ -267,7 +579,7 @@ baseurl=http://cbs.centos.org/repos/virt7-container-common-candidate/x86_64/os/
 gpgcheck=0
 ```
 
-#### 2.4 配置 etcd 与 docker
+#### 3.4 配置 etcd 与 docker
 
 `配置 docker`   
 ```
@@ -321,7 +633,7 @@ etcdctl -C http://etcd:2379 cluster-health
 yum -y install --enablerepo=k8s kubernetes
 ```
 
-#### 2.5 配置 master
+#### 3.5 配置 master
 
 ``` bash
 vim /etc/kubernetes/apiserver
@@ -397,7 +709,7 @@ systemctl enable kube-scheduler.service
 systemctl start kube-scheduler.service
 ```
 
-#### 2.6 配置 node
+#### 3.6 配置 node
 
 ```
 vim /etc/kubernetes/config
@@ -461,7 +773,7 @@ systemctl enable kube-proxy.service
 systemctl start kube-proxy.service
 ```
 
-#### 2.7 校验
+#### 3.7 校验
 
 master 执行  
 ```
@@ -487,7 +799,7 @@ https://github.com/kubernetes/kubernetes/issues/48924
 第三个 issus 下有人回复说升级 k8s 到 1.8.1 就好了  
 算了。。不折腾了。。。心累  
 
-#### 2.8 安装 Flannel
+#### 3.8 安装 Flannel
 
 在 master 和 node 均需安装，配置相同  
 
@@ -542,7 +854,7 @@ systemctl restart kubelet.service
 systemctl restart kube-proxy.service
 ```
 
-#### 2.9 安装 heapster
+#### 3.9 安装 heapster
 
 `部署 influxdb`:  
 
@@ -563,7 +875,7 @@ kubectl get services --namespace=kube-system monitoring-grafana monitoring-influ
 
 
 
-#### 2.10 安装 dashboard
+#### 3.10 安装 dashboard
 
 https://github.com/kubernetes/dashboard#kubernetes-dashboard  
 
@@ -588,13 +900,6 @@ kubectl proxy
 ```
 kubectl delete pods <unknown pods name> --grace-period=0 --force
 ```
-
-
-
-
-
-
-
 
 
 ___
