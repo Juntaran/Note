@@ -4,24 +4,25 @@
 
 ### 小米:
 
-1. Nginx 管理平台开发 (5人合作)
-2. 搭建 ELK 平台数据 Grafana 展示 (自己)
-3. 信息平台开发，学习前端 + 数据挖掘 (合作)
-4. Scribe 日志备份完善，两端 md5 校验 + 重传机制 (自己)
+1. ~~Nginx 管理平台开发 (被老大踢到 FAST 项目了，让我一心一意搞 FAST)~~
+2. ~~搭建 ELK 平台数据 Grafana 展示 (自己，已重新搭建 ELK 环境并用 lucence 查询 Grafana)~~
+3. MIUI FAST，数据存储 + 数据挖掘 + 机器学习预测 (合作)
+4. ~~Scribe 日志备份完善，两端 md5 校验 + 重传机制 (自己，重传没做，scp 稳定性还可以)~~
 5. Slack & Hubot 自己本地搭建一个，不依赖 Slack (有空看一看)
 6. 金融专区迁移，cash 和 nfcpay 迁移到金融专区，并搭建 L7 集群以及配置 ACL 规则
 
 ### 自己:  
 
-1. CongNet 完成开发  
+1. ~~CongNet 完成开发 已弃坑~~  
 2. IPTree & Firewall 解决 bug  
-3. 啃 《Kubernetes权威指南》  
+3. Nginx 哈希表实现  
+3. 啃 《Kubernetes权威指南》   
 4. 室内健身  
 5. 乌克丽丽弹两首歌  
 
 ### 总结 Q4 任务：
 
-1. 前端，Vue & Bootstrap & jQuery   
+1. Hadoop + Kylin + 数据挖掘   
 2. 容器相关，从 docker 到 k8s  
 3. 做一个更好的人  
 
