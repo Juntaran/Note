@@ -48,7 +48,7 @@ host k8s_node_2 {
 }
 ```
 
-接下来就是安装 Kubernetes 了，建议选择第一种安装方式，第二种适用于想单机部署玩一下的人～  
+接下来就是安装 Kubernetes 了，建议选择第一种安装方式，第二种适用于想单机部署玩一下的人～  
 
 
 ## 2: kubeadm 安装 Kubernetes 1.8.1 
@@ -454,7 +454,7 @@ Address 1: 10.96.0.1 kubernetes.default.svc.cluster.local
 
 ### 2.9 向 Kubernetes 集群添加 Node 
 
-如果在 2.5 已经添加了 node ，显示 `NotReady` ，现在可以查看一下节点状态了  
+如果在 2.5 已经添加了 node ，显示 `NotReady` ，现在可以查看一下节点状态了  
 
 ``` bash
 kubectl get nodes
@@ -464,7 +464,7 @@ node2     Ready     <none>    1h        v1.8.1
 node3     Ready     <none>    1h        v1.8.1
 ```
 
-如果在 2.5 没有添加 node ，或者是有新的 node 想加入集群，可以参看 2.5 命令  
+如果在 2.5 没有添加 node ，或者是有新的 node 想加入集群，可以参看 2.5 命令  
 
 ``` bash
 mkdir -p $HOME/.kubesudo 
@@ -475,14 +475,14 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 kubeadm join --token b693a6.f6303c0effabf4f1 172.16.174.131:6443 --discovery-token-ca-cert-hash sha256:9e760c90dd6d43246d92212fced6987b28c1cf9e9e26a22b525cdbaa4ffe1dad
 ```
 
-### 2.10 从 Kubernetes 集群移除 Node
+### 2.10 从 Kubernetes 集群移除 Node
 
 在 master 节点上执行:  
 
 ``` bash
 kubectl drain node2 --delete-local-data --force --ignore-daemonsets
 
-# 结果
+# 结果
 kubectl delete node node2
 ```
 
@@ -545,12 +545,12 @@ subjects:
 ``` bash
 kubectl create -f kubernetes-dashboard-admin.rbac.yaml
 
-# 结果
+# 结果
 serviceaccount "kubernetes-dashboard-admin" created
 clusterrolebinding "kubernetes-dashboard-admin" created
 ```
 
-查看 `kubernete-dashboard-admin` 的 token  
+查看 `kubernete-dashboard-admin` 的 token  
 
 ``` bash
 kubectl -n kube-system get secret | grep kubernetes-dashboard-admin
@@ -560,7 +560,7 @@ kubernetes-dashboard-admin-token-dd4nr   kubernetes.io/service-account-token   3
 
 kubectl describe -n kube-system secret/kubernetes-dashboard-admin-token-dd4nr
 
-# 结果
+# 结果
 
 Name:         kubernetes-dashboard-admin-token-dd4nr
 Namespace:    kube-system
@@ -579,18 +579,18 @@ token:      eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZ
 kubectl proxy
 ```
 
-> 这里有个坑，如果你是虚拟机部署 Kubernetes 集群  
+> 这里有个坑，如果你是虚拟机部署 Kubernetes 集群  
 > 不要试图从宿主机浏览器登陆  
-> 也不要试图从节点机登陆  
+> 也不要试图从节点机登陆  
 > 人家不让，除非你 `Nginx` 开启另一个端口反向代理过去~  
 
-现在可以在 `Master` 机器上登陆 `http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/`  
+现在可以在 `Master` 机器上登陆 `http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/`  
 
-选择 `token` 登陆，把刚才那一长串 token 粘进去即可  
+选择 `token` 登陆，把刚才那一长串 token 粘进去即可  
 
 ### 2.12 heapster 插件安装部署
 
-Heapster 为集群添加使用统计和监控功能，为 Dashboard 添加仪表盘  
+Heapster 为集群添加使用统计和监控功能，为 Dashboard 添加仪表盘  
 使用 InfluxDB 做为 Heapster 的后端存储  
 
 ``` bash
@@ -604,15 +604,15 @@ wget https://raw.githubusercontent.com/kubernetes/heapster/master/deploy/kube-co
 kubectl create -f ./
 ```
 
-> 如果长时间安装不成功，查看一下下载的 yaml 文件  
-> 看其中以 `gcr.io` 开头的镜像文件在 `docker images` 中能否找到，注意对应版本号  
+> 如果长时间安装不成功，查看一下下载的 yaml 文件  
+> 看其中以 `gcr.io` 开头的镜像文件在 `docker images` 中能否找到，注意对应版本号  
 
 最后检查一下  
 
 ``` bash
 kubectl get pod --all-namespaces -o wide
 
-# 结果
+# 结果
 NAMESPACE     NAME                                   READY     STATUS    RESTARTS   AGE       IP               NODE
 default       curl-6896d87888-jb898                  1/1       Running   0          1h        10.244.2.5       node3
 kube-system   etcd-node1                             1/1       Running   0          1h        172.16.174.131   node1
