@@ -1,12 +1,11 @@
-# Kubernetes
+# Kubernetes 集群部署
 
 *学习 Kubernetes 是源于与韩飞师兄吃饭时的闲谈*   
 *人生郁郁不得志，工作苦无出路，师兄建议我去学 k8s 找找乐子*  
 *唉*  
 
-## 一、Kubernetes 集群部署
 
-### 1. 配置 VMware Fusion 环境:  
+## 1. 配置 VMware Fusion 环境:  
 
 ``` bash
 sudo vim /Library/Preferences/VMware\ Fusion/vmnet8/dhcpd.conf
@@ -49,13 +48,15 @@ host k8s_node_2 {
 }
 ```
 
+接下来就是安装 Kubernetes 了，建议选择第一种安装方式，第二种适用于想单机部署玩一下的人～  
 
-### 2: kubeadm 安装 Kubernetes 1.8.1 
+
+## 2: kubeadm 安装 Kubernetes 1.8.1 
 
 经过了一周自虐，本节只作为参考，建议所有在大陆的中国人选择第二种方式  
 十九大期间在中国上外网，我真是石乐志，最后感谢阿里的开发者平台让我安装成功  
 
-#### 2.1 准备工作
+### 2.1 准备工作
 
 三台主机:  
 
@@ -109,10 +110,26 @@ cd /etc/yum.repos.d
 wget http://mirrors.163.com/.help/CentOS7-Base-163.repo
 yum clean all
 yum makecache
+```
 
+``` bash
 # 添加 docker 源
 yum install -y yum-utils device-mapper-persistent-data lvm2
 yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+```
+
+``` bash
+# 添加 google 源
+vim /etc/yum.repos.d/kubernetes.repo
+
+[kubernetes]
+name=Kubernetes
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
+        https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 ```
 
 安装 docker :  
@@ -145,7 +162,7 @@ systemctl daemon-reload
 systemctl restart docker
 ```
 
-#### 2.2 下载 Kubernetes 相关镜像
+### 2.2 下载 Kubernetes 相关镜像
 
 阿里云镜像仓库
 > 注册阿里云 registry https://dev.aliyun.com/search.html    
@@ -157,7 +174,7 @@ systemctl restart docker
 docker login registry.cn-hangzhou.aliyuncs.com
 ```
 
-16 个需要下载的镜像  
+15 个需要下载的镜像  
 
 ``` bash
 docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/kube-apiserver-amd64:v1.8.1
@@ -169,12 +186,11 @@ docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/k8s-dns-kube-dns
 docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/k8s-dns-dnsmasq-nanny-amd64:1.14.5
 docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/etcd-amd64:3.0.17
 docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/pause-amd64:3.0
-docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/kubernetes-dashboard-amd64:1.7.1
 docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/kubernetes-dashboard-amd64:v1.7.1
 docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/kubernetes-dashboard-init-amd64:v1.0.1
 docker pull registry.cn-shenzhen.aliyuncs.com/rancher_cn/heapster-influxdb-amd64:v1.3.3
 docker pull registry.cn-shenzhen.aliyuncs.com/rancher_cn/heapster-grafana-amd64:v4.4.3
-docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/heapster-amd64:v1.4.2
+docker pull registry.cn-hangzhou.aliyuncs.com/google-containers/heapster-amd64:v1.4.0
 docker pull registry.cn-hangzhou.aliyuncs.com/k8s_container/flannel:v0.9.0-amd64
 ```
 
@@ -190,17 +206,16 @@ docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/k8s-dns-kube-dns-
 docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/k8s-dns-dnsmasq-nanny-amd64:1.14.5 gcr.io/google-containers/k8s-dns-dnsmasq-nanny-amd64:1.14.5
 docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/etcd-amd64:3.0.17 gcr.io/google-containers/etcd-amd64:3.0.17
 docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/pause-amd64:3.0 gcr.io/google-containers/pause-amd64:3.0
-docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/kubernetes-dashboard-amd64:1.7.1 gcr.io/google-containers/kubernetes-dashboard-amd64:1.7.1
 docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/kubernetes-dashboard-amd64:v1.7.1 gcr.io/google-containers/kubernetes-dashboard-amd64:v1.7.1
 docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/kubernetes-dashboard-init-amd64:v1.0.1 gcr.io/google-containers/kubernetes-dashboard-init-amd64:v1.0.1
-docker tag registry.cn-shenzhen.aliyuncs.com/rancher_cn/heapster-influxdb-amd64:v1.3.3 gcr.io/rancher_cn/heapster-influxdb-amd64:v1.3.3
-docker tag registry.cn-shenzhen.aliyuncs.com/rancher_cn/heapster-grafana-amd64:v4.4.3 gcr.io/rancher_cn/heapster-grafana-amd64:v4.4.3
-docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/heapster-amd64:v1.4.2 gcr.io/google-containers/heapster-amd64:v1.4.2
+docker tag registry.cn-shenzhen.aliyuncs.com/rancher_cn/heapster-influxdb-amd64:v1.3.3 gcr.io/google-containers/heapster-influxdb-amd64:v1.3.3
+docker tag registry.cn-shenzhen.aliyuncs.com/rancher_cn/heapster-grafana-amd64:v4.4.3 gcr.io/google-containers/heapster-grafana-amd64:v4.4.3
+docker tag registry.cn-hangzhou.aliyuncs.com/google-containers/heapster-amd64:v1.4.0 gcr.io/google-containers/heapster-amd64:v1.4.0
 docker tag registry.cn-hangzhou.aliyuncs.com/k8s_container/flannel:v0.9.0-amd64 quay.io/coreos/flannel:v0.9.0-amd64
 ```
 
 
-#### 2.3 安装并运行呢 Kubernetes 相关服务
+### 2.3 安装并运行呢 Kubernetes 相关服务
 
 ``` bash
 yum makecache fast
@@ -233,7 +248,7 @@ systemctl status docker
 systemctl enable kubelet.service
 ```
 
-#### 2.4 Master 节点初始化
+### 2.4 Master 节点初始化
 
 选择 `flannel` 作为 `Pod` 网络插件  
 令 `node1` 为 Master Node，在 `node1` 执行以下命令  
@@ -245,7 +260,7 @@ kubeadm init \
   --apiserver-advertise-address=172.16.174.131
 ```
 
-#### 2.5 结果输出
+### 2.5 结果输出
 
 ```
 kubeadm init --kubernetes-version=v1.8.1 --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=172.16.174.131
@@ -301,7 +316,7 @@ Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
 You can now join any number of machines by running the following on each node
 as root:
 
-  kubeadm join --token 3d97ad.4d01f99d0b28d473 172.16.174.131:6443 --discovery-token-ca-cert-hash sha256:a7b4d9e13897161b0a1d17577a29912b33b6519434ab81aeed2a2cd4d30f0158
+  kubeadm join --token b693a6.f6303c0effabf4f1 172.16.174.131:6443 --discovery-token-ca-cert-hash sha256:9e760c90dd6d43246d92212fced6987b28c1cf9e9e26a22b525cdbaa4ffe1dad
 ```
 
 最后执行  
@@ -312,8 +327,22 @@ cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 # 将节点加入集群
-kubeadm join --token 3d97ad.4d01f99d0b28d473 172.16.174.131:6443 --discovery-token-ca-cert-hash sha256:a7b4d9e13897161b0a1d17577a29912b33b6519434ab81aeed2a2cd4d30f0158
+kubeadm join --token b693a6.f6303c0effabf4f1 172.16.174.131:6443 --discovery-token-ca-cert-hash sha256:9e760c90dd6d43246d92212fced6987b28c1cf9e9e26a22b525cdbaa4ffe1dad
 ```
+
+> 注意，这时候如果运行 `kubectl get nodes`，会提示 node2 和 node3 处于 `NotReady` 状态，这是正常的  
+
+查看一下集群状态   
+
+``` bash
+kubectl get cs
+
+NAME                 STATUS    MESSAGE              ERROR
+scheduler            Healthy   ok
+controller-manager   Healthy   ok
+etcd-0               Healthy   {"health": "true"}
+```
+
 
 如果因为网络等问题安装失败  
 
@@ -321,8 +350,11 @@ kubeadm join --token 3d97ad.4d01f99d0b28d473 172.16.174.131:6443 --discovery-tok
 # 查看问题
 journalctl -xeu kubelet 
 
-# 清理环境
-kubeadm reset           
+# master 机器清理环境:
+kubeadm reset   
+
+# node 机器执行:      
+kubeadm reset    
 ifconfig cni0 down
 ip link delete cni0
 ifconfig flannel.1 down
@@ -345,183 +377,266 @@ echo 1 > /proc/sys/net/bridge/bridge-nf-call-iptables
 echo 1 > /proc/sys/net/bridge/bridge-nf-call-ip6tables
 ```
 
-#### 2.6 搭建 etcd 高可用集群
+### 2.6 安装 Pod Network -> Flannel
 
-*在 Master 节点执行*  
-
-安装 cfssl  
-
-``` bash
-yum install go -y
-go get -u github.com/cloudflare/cfssl/cmd/...
-```
-
-创建 ca-config.json :  
-
-``` json
-{
-  "signing": {
-    "default": {
-      "expiry": "87600h"
-    },
-    "profiles": {
-      "frognew": {
-        "usages": [
-            "signing",
-            "key encipherment",
-            "server auth",
-            "client auth"
-        ],
-        "expiry": "87600h"
-      }
-    }
-  }
-}
-```
-
-创建 CA 证书签名请求配置 ca-csr.json :  
-
-``` json
-{
-  "CN": "frognew",
-  "key": {
-    "algo": "rsa",
-    "size": 2048
-  },
-  "names": [
-    {
-      "C": "CN",
-      "ST": "BeiJing",
-      "L": "BeiJing",
-      "O": "frognew",
-      "OU": "cloudnative"
-    }
-  ]
-}
-```
-
-cfss 生成 CA 证书和私钥  
-
-```
-~/go/bin/cfssl gencert -initca ca-csr.json | ~/go/bin/cfssljson -bare ca
-```
-
-创建 etcd 证书签名请求配置 etcd-csr.json :  
-
-``` json
-{
-    "CN": "frognew",
-    "hosts": [
-      "127.0.0.1",
-      "172.16.174.131",
-      "172.16.174.132",
-      "172.16.174.133",
-      "node1",
-      "node2",
-      "node3"
-    ],
-    "key": {
-        "algo": "rsa",
-        "size": 2048
-    },
-    "names": [
-        {
-            "C": "CN",
-            "ST": "BeiJing",
-            "L": "BeiJing",
-            "O": "frognew",
-            "OU": "cloudnative"
-        }
-    ]
-}
-```
-
-生成 etcd 的证书和私钥:  
-
-```
-~/go/bin/cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=frognew etcd-csr.json | ~/go/bin/cfssljson -bare etcd
-```
-
-*在所有节点执行以下命令*  
+因为 kubeadm 1.8 会自动安装证书、etcd，所以跨过了很多坑～ 直接可以安装 Flannel  
 
 ``` bash 
-mkdir -p /etc/etcd/ssl
+mkdir -p ~/k8s/
+cd ~/k8s/
+wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+kubectl apply -f  kube-flannel.yml
+
+# 结果
+clusterrole "flannel" created
+clusterrolebinding "flannel" created
+serviceaccount "flannel" created
+configmap "kube-flannel-cfg" created
+daemonset "kube-flannel-ds" created
 ```
 
-*在 master 节点执行以下命令*
+如果 node 有多个网卡的话，参考 [flannel issues 39701](https://github.com/kubernetes/kubernetes/issues/39701)  
+目前需要在 kube-flannel.yml 中使用 `--iface` 参数指定集群主机内网网卡的名称，否则可能会出现 dns 无法解析  
+需要将 kube-flannel.yml 下载到本地，flanneld 启动参数加上 `--iface=<iface-name>`  
+
+```yaml
+......
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: kube-flannel-ds
+......
+containers:
+      - name: kube-flannel
+        image: quay.io/coreos/flannel:v0.9.0-amd64
+        command: [ "/opt/bin/flanneld", "--ip-masq", "--kube-subnet-mgr", "--iface=eth1" ]
+......
+```
 
 ``` bash
-scp *.pem root@172.16.174.131:/etc/etcd/ssl/
-scp *.pem root@172.16.174.132:/etc/etcd/ssl/
-scp *.pem root@172.16.174.133:/etc/etcd/ssl/
+# 确保所有的 Pod 都处于 Running 状态
+kubectl get pod --all-namespaces -o wide
 ```
 
-*在所有节点执行以下命令*  
+### 2.7 master node 参与工作负载
+
+kubeadm 初始化的集群，出于安全考虑 Pod 不会被调度到 Master Node 上，也就是说 Master Node 不参与工作负载  
+如果不考虑安全问题，可以利用以下命令让 Master 参与工作负载  
 
 ``` bash
-wget https://github.com/coreos/etcd/releases/download/v3.1.6/etcd-v3.1.6-linux-amd64.tar.gz
-tar -zxvf etcd-v3.1.6-linux-amd64.tar.gz
-mkdir -p /var/lib/etcd
-mv etcd-v3.1.6-linux-amd64/etcd /usr/bin/
-mv etcd-v3.1.6-linux-amd64/etcdctl /usr/bin/
+kubectl taint nodes node1 node-role.kubernetes.io/master-
+
+# 结果
+node "node1" untainted
+```
+
+### 2.8 测试 DNS
+
+``` bash
+kubectl run curl --image=radial/busyboxplus:curl -i --tty
+
+# 结果
+If you dont see a command prompt, try pressing enter.
+```
+
+进入后 command prompt 后，执行 `nslookup kubernetes.default` 确认解析正常  
+
+``` bash
+nslookup kubernetes.default
+Server:    10.96.0.10
+Address 1: 10.96.0.10 kube-dns.kube-system.svc.cluster.local
+
+Name:      kubernetes.default
+Address 1: 10.96.0.1 kubernetes.default.svc.cluster.local
+```
+
+> 这一步我卡住了，没测试继续往下走了，一切正常  
+
+### 2.9 向 Kubernetes 集群添加 Node 
+
+如果在 2.5 已经添加了 node ，显示 `NotReady` ，现在可以查看一下节点状态了  
+
+``` bash
+kubectl get nodes
+NAME      STATUS    ROLES     AGE       VERSION
+node1     Ready     master    1h        v1.8.1
+node2     Ready     <none>    1h        v1.8.1
+node3     Ready     <none>    1h        v1.8.1
+```
+
+如果在 2.5 没有添加 node ，或者是有新的 node 想加入集群，可以参看 2.5 命令  
+
+``` bash
+mkdir -p $HOME/.kubesudo 
+cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+# 将节点加入集群
+kubeadm join --token b693a6.f6303c0effabf4f1 172.16.174.131:6443 --discovery-token-ca-cert-hash sha256:9e760c90dd6d43246d92212fced6987b28c1cf9e9e26a22b525cdbaa4ffe1dad
+```
+
+### 2.10 从 Kubernetes 集群移除 Node
+
+在 master 节点上执行:  
+
+``` bash
+kubectl drain node2 --delete-local-data --force --ignore-daemonsets
+
+# 结果
+kubectl delete node node2
+```
+
+在 node2 节点执行:  
+
+```
+kubeadm reset
+ifconfig cni0 down
+ip link delete cni0
+ifconfig flannel.1 down
+ip link delete flannel.1
+rm -rf /var/lib/cni/
+```
+
+### 2.11 Dashboard 插件安装部署
+
+`1.7.x` 版本的 dashboard 对安全做了增强，默认需要以 `https` 的方式访问，增加了登录的页面  
+同时增加了一个 `gcr.io/google_containers/kubernetes-dashboard-init-amd64` 的 init 容器  
+
+``` bash
+mkdir -p ~/k8s/
+wget https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
+kubectl create -f kubernetes-dashboard.yaml
+```
+
+`kubernetes-dashboard.yaml` 文件中的 `ServiceAccount kubernetes-dashboard` 只有相对较小的权限  
+因此创建一个 `kubernetes-dashboard-admin` 的 `ServiceAccount` 并授予集群 `admin` 的权限  
+
+``` bash
+vim kubernetes-dashboard-admin.rbac.yaml
+```
+
+``` yaml
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    k8s-app: kubernetes-dashboard
+  name: kubernetes-dashboard-admin
+  namespace: kube-system
+  
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: kubernetes-dashboard-admin
+  labels:
+    k8s-app: kubernetes-dashboard
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: kubernetes-dashboard-admin
+  namespace: kube-system
 ```
 
 ``` bash
-# 注意替换 node1 node2 node3, 172.16.174.131 172.16.174.132 172.16.174.133
-export ETCD_NAME=node1
-export INTERNAL_IP=172.16.174.131
+kubectl create -f kubernetes-dashboard-admin.rbac.yaml
+
+# 结果
+serviceaccount "kubernetes-dashboard-admin" created
+clusterrolebinding "kubernetes-dashboard-admin" created
 ```
+
+查看 `kubernete-dashboard-admin` 的 token  
 
 ``` bash
-vim /usr/lib/systemd/system/etcd.service
+kubectl -n kube-system get secret | grep kubernetes-dashboard-admin
 
-[Unit]
-Description=etcd server
-After=network.target
-After=network-online.target
-Wants=network-online.target
+# 结果
+kubernetes-dashboard-admin-token-dd4nr   kubernetes.io/service-account-token   3         1h
 
-[Service]
-Type=notify
-WorkingDirectory=/var/lib/etcd/
-EnvironmentFile=-/etc/etcd/etcd.conf
-ExecStart=/usr/bin/etcd \
-  --name ${ETCD_NAME} \
-  --cert-file=/etc/etcd/ssl/etcd.pem \
-  --key-file=/etc/etcd/ssl/etcd-key.pem \
-  --peer-cert-file=/etc/etcd/ssl/etcd.pem \
-  --peer-key-file=/etc/etcd/ssl/etcd-key.pem \
-  --trusted-ca-file=/etc/etcd/ssl/ca.pem \
-  --peer-trusted-ca-file=/etc/etcd/ssl/ca.pem \
-  --initial-advertise-peer-urls https://${INTERNAL_IP}:2380 \
-  --listen-peer-urls https://${INTERNAL_IP}:2380 \
-  --listen-client-urls https://${INTERNAL_IP}:2379,https://127.0.0.1:2379 \
-  --advertise-client-urls https://${INTERNAL_IP}:2379 \
-  --initial-cluster-token etcd-cluster-1 \
-  --initial-cluster node1=https://172.16.174.131:2380,node2=https://172.16.174.132:2380,node3=https://172.16.174.133:2380 \
-  --initial-cluster-state new \
-  --data-dir=/var/lib/etcd
-Restart=on-failure
-RestartSec=5
-LimitNOFILE=65536
+kubectl describe -n kube-system secret/kubernetes-dashboard-admin-token-dd4nr
 
-[Install]
-WantedBy=multi-user.target
+# 结果
+
+Name:         kubernetes-dashboard-admin-token-dd4nr
+Namespace:    kube-system
+Labels:       <none>
+Annotations:  kubernetes.io/service-account.name=kubernetes-dashboard-admin
+              kubernetes.io/service-account.uid=dcc54d70-bec6-11e7-95d4-000c297b18db
+
+Type:  kubernetes.io/service-account-token
+
+Data
+====
+ca.crt:     1025 bytes
+namespace:  11 bytes
+token:      eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJrdWJlcm5ldGVzLWRhc2hib2FyZC1hZG1pbi10b2tlbi1kZDRuciIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50Lm5hbWUiOiJrdWJlcm5ldGVzLWRhc2hib2FyZC1hZG1pbiIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6ImRjYzU0ZDcwLWJlYzYtMTFlNy05NWQ0LTAwMGMyOTdiMThkYiIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDprdWJlLXN5c3RlbTprdWJlcm5ldGVzLWRhc2hib2FyZC1hZG1pbiJ9.B3Moo1rVO1yhvH6my_2fw2pn7oA2Y8lksRV02xqLtN1a3ENc9KUA2LxeGbGEgfV_r1hL35ZCOo2PyMIFqJPhc64DO4o_p_1psCfglyIws5-XwIlytVR9CdZ6aeCz2SrzsJH_S1ibEzUu-DIgxCX-6TrWFbKPxyPqfTjwM381akz8jkLxe8HTC-HboTUyCi19CRtCCVlByOuNS_jqA2BJrWsKNoIzI3sqEXZNUEARG2b_pAEpD7OvsGHb_PPBjadyzmFiXsNGabnx_OUoorlFJq1VuF9_Cy1BMDlcWm3AkID4bDjEel2T5XfA-Da4ZcHpy5l9sZYuYdtEZakWCy-1xQ
+
+kubectl proxy
 ```
 
-启动 etcd 
+> 这里有个坑，如果你是虚拟机部署 Kubernetes 集群  
+> 不要试图从宿主机浏览器登陆  
+> 也不要试图从节点机登陆  
+> 人家不让，除非你 `Nginx` 开启另一个端口反向代理过去~  
+
+现在可以在 `Master` 机器上登陆 `http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/`  
+
+选择 `token` 登陆，把刚才那一长串 token 粘进去即可  
+
+### 2.12 heapster 插件安装部署
+
+Heapster 为集群添加使用统计和监控功能，为 Dashboard 添加仪表盘  
+使用 InfluxDB 做为 Heapster 的后端存储  
 
 ``` bash
-systemctl daemon-reload
-systemctl enable etcd
-systemctl start etcd
-systemctl status etcd
+mkdir -p ~/k8s/heapster
+cd ~/k8s/heapster/
+wget https://raw.githubusercontent.com/kubernetes/heapster/master/deploy/kube-config/influxdb/grafana.yaml
+wget https://raw.githubusercontent.com/kubernetes/heapster/master/deploy/kube-config/rbac/heapster-rbac.yaml
+wget https://raw.githubusercontent.com/kubernetes/heapster/master/deploy/kube-config/influxdb/heapster.yaml
+wget https://raw.githubusercontent.com/kubernetes/heapster/master/deploy/kube-config/influxdb/influxdb.yaml
+
+kubectl create -f ./
+```
+
+> 如果长时间安装不成功，查看一下下载的 yaml 文件  
+> 看其中以 `gcr.io` 开头的镜像文件在 `docker images` 中能否找到，注意对应版本号  
+
+最后检查一下  
+
+``` bash
+kubectl get pod --all-namespaces -o wide
+
+# 结果
+NAMESPACE     NAME                                   READY     STATUS    RESTARTS   AGE       IP               NODE
+default       curl-6896d87888-jb898                  1/1       Running   0          1h        10.244.2.5       node3
+kube-system   etcd-node1                             1/1       Running   0          1h        172.16.174.131   node1
+kube-system   heapster-5d67855584-n2bj7              1/1       Running   0          1h        10.244.1.4       node2
+kube-system   kube-apiserver-node1                   1/1       Running   0          1h        172.16.174.131   node1
+kube-system   kube-controller-manager-node1          1/1       Running   0          1h        172.16.174.131   node1
+kube-system   kube-dns-545bc4bfd4-6lczh              3/3       Running   0          1h        10.244.2.2       node3
+kube-system   kube-flannel-ds-cwcn8                  1/1       Running   0          1h        172.16.174.133   node3
+kube-system   kube-flannel-ds-qh5sv                  1/1       Running   0          1h        172.16.174.131   node1
+kube-system   kube-flannel-ds-vzbtk                  1/1       Running   0          1h        172.16.174.132   node2
+kube-system   kube-proxy-nlwsf                       1/1       Running   0          1h        172.16.174.131   node1
+kube-system   kube-proxy-tmgsk                       1/1       Running   0          1h        172.16.174.133   node3
+kube-system   kube-proxy-z9xg2                       1/1       Running   0          1h        172.16.174.132   node2
+kube-system   kube-scheduler-node1                   1/1       Running   0          1h        172.16.174.131   node1
+kube-system   kubernetes-dashboard-747c4f7cf-nfx6s   1/1       Running   0          1h        10.244.2.3       node3
+kube-system   monitoring-grafana-5bccc9f786-vfww9    1/1       Running   0          1h        10.244.1.5       node2
+kube-system   monitoring-influxdb-85cb4985d4-gz8gj   1/1       Running   0          1h        10.244.2.4       node3
 ```
 
 
-### 3. yum 安装 kubernetes 1.7
 
-#### 3.1 一些准备工作
+## 3. yum 安装 kubernetes 1.7
+
+### 3.1 一些准备工作
 
 ```
 systemctl disable firewalld
@@ -547,7 +662,7 @@ hostnamectl --static set-hostname  kubernetes-node2
 172.16.174.143 registry
 ```
 
-#### 3.2 163 替换自带 yum 源:  
+### 3.2 163 替换自带 yum 源:  
 
 master 和 node 机器都要替换  
 
@@ -564,7 +679,7 @@ yum makecache
 virt7-container-common-candidate`  
 在 http://cbs.centos.org/repos/ 找到即可，本文 yum 源 IP 为 http://cbs.centos.org/repos/virt7-container-common-candidate/x86_64/os/  
 
-#### 3.3 添加 virt7-container-common 源:  
+### 3.3 添加 virt7-container-common 源:  
 
 master 和 node 机器都要添加  
 
@@ -579,7 +694,7 @@ baseurl=http://cbs.centos.org/repos/virt7-container-common-candidate/x86_64/os/
 gpgcheck=0
 ```
 
-#### 3.4 配置 etcd 与 docker
+### 3.4 配置 etcd 与 docker
 
 `配置 docker`   
 ```
@@ -633,7 +748,7 @@ etcdctl -C http://etcd:2379 cluster-health
 yum -y install --enablerepo=k8s kubernetes
 ```
 
-#### 3.5 配置 master
+### 3.5 配置 master
 
 ``` bash
 vim /etc/kubernetes/apiserver
@@ -709,7 +824,7 @@ systemctl enable kube-scheduler.service
 systemctl start kube-scheduler.service
 ```
 
-#### 3.6 配置 node
+### 3.6 配置 node
 
 ```
 vim /etc/kubernetes/config
@@ -773,7 +888,7 @@ systemctl enable kube-proxy.service
 systemctl start kube-proxy.service
 ```
 
-#### 3.7 校验
+### 3.7 校验
 
 master 执行  
 ```
@@ -799,7 +914,7 @@ https://github.com/kubernetes/kubernetes/issues/48924
 第三个 issus 下有人回复说升级 k8s 到 1.8.1 就好了  
 算了。。不折腾了。。。心累  
 
-#### 3.8 安装 Flannel
+### 3.8 安装 Flannel
 
 在 master 和 node 均需安装，配置相同  
 
@@ -854,7 +969,7 @@ systemctl restart kubelet.service
 systemctl restart kube-proxy.service
 ```
 
-#### 3.9 安装 heapster
+### 3.9 安装 heapster
 
 `部署 influxdb`:  
 
@@ -874,8 +989,7 @@ kubectl get services --namespace=kube-system monitoring-grafana monitoring-influ
 ```
 
 
-
-#### 3.10 安装 dashboard
+### 3.10 安装 dashboard
 
 https://github.com/kubernetes/dashboard#kubernetes-dashboard  
 
@@ -891,7 +1005,7 @@ kubectl proxy
 ```
 访问 http://127.0.0.1:8001/  
 
-## 二. 问题记录：  
+## 4 问题记录：  
 
 1. 别忘了 --namespace  
 
@@ -971,3 +1085,5 @@ ___
 * [kubespray 安装 Kubernetes](http://www.wisely.top/category/cloud-computing/kubernetes/)
 * [Kubernetes 中文文档](http://hardocs.com/d/kubernetes/)
 * [Kubernetes 中文文档_写的一般](https://www.kubernetes.org.cn/doc)
+* [使用 kubeadm 安装 Kubernetes 1.8](http://blog.frognew.com/2017/09/kubeadm-install-kubernetes-1.8.html#9heapster插件部署)
+* [青蛙小白博客_ Kubernetes 相关写的非常详细](http://blog.frognew.com/)
