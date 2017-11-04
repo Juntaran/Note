@@ -53,7 +53,6 @@ host k8s_node_2 {
 
 ## 2: kubeadm 安装 Kubernetes 1.8.1 
 
-经过了一周自虐，本节只作为参考，建议所有在大陆的中国人选择第二种方式  
 十九大期间在中国上外网，我真是石乐志，最后感谢阿里的开发者平台让我安装成功  
 
 ### 2.1 准备工作
@@ -674,12 +673,12 @@ yum clean all
 yum makecache
 ```
 
+### 3.3 添加 virt7-container-common 源:  
+
 找一个靠谱的源站： http://cbs.centos.org/  
 搜索相应的包，本文直接搜索 `kubernetes` 即可，可以看到 1.7.6 版本的 kubernetes 对应的 tags `
 virt7-container-common-candidate`  
 在 http://cbs.centos.org/repos/ 找到即可，本文 yum 源 IP 为 http://cbs.centos.org/repos/virt7-container-common-candidate/x86_64/os/  
-
-### 3.3 添加 virt7-container-common 源:  
 
 master 和 node 机器都要添加  
 
