@@ -129,5 +129,6 @@
 
 * [ip计算器](http://ip.chacuo.net/ipcalc)
 * [cron解析器](http://cron.qqe2.com/)
+* [tcp 负载工具](https://github.com/machinezone/tcpkali)
 * [windows10 insider](https://software-download.microsoft.com/db/Windows10_InsiderPreview_Client_x64_zh-cn_16278.iso?t=65a45538-74fd-4310-be83-2873aa221c48&e=1507458698&h=3a6c1ab1080b55aa099daf7dc602709d
 )
