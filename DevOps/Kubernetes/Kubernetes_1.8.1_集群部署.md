@@ -1089,7 +1089,7 @@ kubectl proxy
 
 ## 4 问题记录：  
 
-1. 别忘了 --namespace  
+1. 别忘了 --namespace `--all-namespaces -o wide` 也很有用    
 
 2. pods 无法删除时  
 
