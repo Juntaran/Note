@@ -431,6 +431,8 @@ node "node1" untainted
 
 ### 2.8 测试 DNS
 
+1. curl
+
 ``` bash
 kubectl run curl --image=radial/busyboxplus:curl -i --tty
 
@@ -450,6 +452,90 @@ Address 1: 10.96.0.1 kubernetes.default.svc.cluster.local
 ```
 
 > 这一步我卡住了，没测试继续往下走了，一切正常  
+
+2. 自建服务
+
+mysql.yaml
+
+``` yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: mysql
+```
+
+busybox.yaml
+
+``` yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox
+  namespace: default
+spec:
+  containers:
+  - image: hub.c.163.com/library/busybox
+    command:
+      - sleep
+      - "3600"
+    imagePullPolicy: IfNotPresent
+    name: busybox
+  restartPolicy: Always
+```
+
+``` shell
+kubectl apply -f mysql.yaml
+kubectl apply -f busybox.yaml
+
+##############################################
+
+kubectl get services
+
+# 结果
+[root@node1 k8s]# kubectl get services
+NAME         TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)    AGE
+kubernetes   ClusterIP   10.96.0.1     <none>        443/TCP    5d
+mysql        ClusterIP   10.97.38.14   <none>        3306/TCP   19s
+
+##############################################
+
+kubectl exec busybox -c busybox -- nslookup mysql
+
+# 结果
+[root@node1 k8s]# kubectl exec busybox -c busybox -- nslookup mysql
+Server:    10.96.0.10
+Address 1: 10.96.0.10 kube-dns.kube-system.svc.cluster.local
+
+Name:      mysql
+Address 1: 10.97.38.14 mysql.default.svc.cluster.local
+[root@node1 k8s]# kubectl exec busybox -c busybox -- nslookup mysql
+Server:    10.96.0.10
+Address 1: 10.96.0.10 kube-dns.kube-system.svc.cluster.local
+
+##############################################
+
+kubectl describe svc mysql
+
+# 结果
+[root@node1 k8s]# kubectl describe svc mysql
+Name:              mysql
+Namespace:         default
+Labels:            <none>
+Annotations:       kubectl.kubernetes.io/last-applied-configuration={"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"mysql" "namespace":"default"},"spec":{"ports":[{"port":3306}],"selector":{"app..."}
+Selector:          app=mysql
+Type:              ClusterIP
+IP:                10.97.38.14
+Port:              <unset>  3306/TCP
+TargetPort:        3306/TCP
+Endpoints:         <none>
+Session Affinity:  None
+Events:            <none>
+```
 
 ### 2.9 向 Kubernetes 集群添加 Node 
 
@@ -1081,8 +1167,9 @@ ___
 * [yum 安装 Kubernetes 1.5](http://www.cnblogs.com/zhenyuyaodidiao/p/6500830.html)
 * [CentOS 部署 Kubernetes 集群](https://www.kubernetes.org.cn/doc-16)
 * [Flannel 解析](http://dockone.io/article/618)
-* [kubespray 安装 Kubernetes](http://www.wisely.top/category/cloud-computing/kubernetes/)
+* [Kubespray 安装 Kubernetes](http://www.wisely.top/category/cloud-computing/kubernetes/)
 * [Kubernetes 中文文档](http://hardocs.com/d/kubernetes/)
 * [Kubernetes 中文文档_写的一般](https://www.kubernetes.org.cn/doc)
 * [使用 kubeadm 安装 Kubernetes 1.8](http://blog.frognew.com/2017/09/kubeadm-install-kubernetes-1.8.html#9heapster插件部署)
 * [青蛙小白博客_ Kubernetes 相关写的非常详细](http://blog.frognew.com/)
+* [时间轨迹博客_ Kubernetes 入门写的很好](http://time-track.cn/tag/Kubernetes/)
