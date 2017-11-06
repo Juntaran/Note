@@ -575,13 +575,10 @@ ca.crt:     1025 bytes
 namespace:  11 bytes
 token:      eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJrdWJlcm5ldGVzLWRhc2hib2FyZC1hZG1pbi10b2tlbi1kZDRuciIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50Lm5hbWUiOiJrdWJlcm5ldGVzLWRhc2hib2FyZC1hZG1pbiIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6ImRjYzU0ZDcwLWJlYzYtMTFlNy05NWQ0LTAwMGMyOTdiMThkYiIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDprdWJlLXN5c3RlbTprdWJlcm5ldGVzLWRhc2hib2FyZC1hZG1pbiJ9.B3Moo1rVO1yhvH6my_2fw2pn7oA2Y8lksRV02xqLtN1a3ENc9KUA2LxeGbGEgfV_r1hL35ZCOo2PyMIFqJPhc64DO4o_p_1psCfglyIws5-XwIlytVR9CdZ6aeCz2SrzsJH_S1ibEzUu-DIgxCX-6TrWFbKPxyPqfTjwM381akz8jkLxe8HTC-HboTUyCi19CRtCCVlByOuNS_jqA2BJrWsKNoIzI3sqEXZNUEARG2b_pAEpD7OvsGHb_PPBjadyzmFiXsNGabnx_OUoorlFJq1VuF9_Cy1BMDlcWm3AkID4bDjEel2T5XfA-Da4ZcHpy5l9sZYuYdtEZakWCy-1xQ
 
-kubectl proxy
+kubectl proxy  
+# 如果想通过其它主机访问就需要指定监听的地址：
+kubectl proxy --address=0.0.0.0 --accept-hosts='^*$'
 ```
-
-> 这里有个坑，如果你是虚拟机部署 Kubernetes 集群  
-> 不要试图从宿主机浏览器登陆  
-> 也不要试图从节点机登陆  
-> 人家不让，除非你 `Nginx` 开启另一个端口反向代理过去~  
 
 现在可以在 `Master` 机器上登陆 `http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/`  
 
