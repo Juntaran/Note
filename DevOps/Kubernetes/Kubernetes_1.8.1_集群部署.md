@@ -1014,6 +1014,9 @@ kubectl proxy
 kubectl delete pods <unknown pods name> --grace-period=0 --force
 ```
 
+3. 别忘了 `kubectl proxy`  
+
+4. 如果把镜像修改了 tag ，初始化的时候利用 `kubectl describe` 查看，发现仍然不断访问 `gcr.io`，修改 yaml 文件，添加 `imagePullPolicy: Never`  
 
 ___
 
