@@ -80,12 +80,11 @@
 
 ## Front-end   
 
-* [Bootstrap](http://www.bootcss.com/)
-    * [Bootstrap 特效对照手册](http://www.jqhtml.com/bootstraps-syntaxhigh/index.html)
-    * [Bootstrap 教程](http://www.runoob.com/bootstrap/bootstrap-grid-system.html)
-    * [Bootstrap 表格](http://issues.wenzhixin.net.cn/bootstrap-table/)
-    
-    
+* [Bootstrap](http://www.bootcss.com/)  
+    * [Bootstrap 特效对照手册](http://www.jqhtml.com/bootstraps-syntaxhigh/index.html)  
+    * [Bootstrap 教程](http://www.runoob.com/bootstrap/bootstrap-grid-system.html)  
+    * [Bootstrap 表格](http://issues.wenzhixin.net.cn/bootstrap-table/)  
+   
      
 * [Vue.js](https://cn.vuejs.org/v2/guide/)
     * [Vue 1 新手教程](http://www.cnblogs.com/keepfool/category/845804.html)
