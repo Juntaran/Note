@@ -1,5 +1,30 @@
 # Todo
 
+## 2018 Q1:
+
+### 小米:
+
+1. 金融专区  
+2. 印度海外  
+3. MIUI FAST  
+
+### 自己:  
+
+1. IPTree & Firewall 解决 bug  
+2. Nginx 哈希表实现  
+3. 啃 《Kubernetes权威指南》   
+4. kaggle  
+4. 室内健身  
+5. 乌克丽丽弹两首歌  
+
+### 总结 Q4 任务：
+
+1. Hadoop + Kylin + 数据挖掘   
+2. 容器相关，从 docker 到 k8s  
+3. 做一个更好的人  
+
+______
+
 ## 2017 Q4:
 
 ### 小米:
@@ -18,9 +43,9 @@
 1. ~~CongNet 完成开发 已弃坑~~  
 2. IPTree & Firewall 解决 bug  
 3. Nginx 哈希表实现  
-3. 啃 《Kubernetes权威指南》   
-4. 室内健身  
-5. 乌克丽丽弹两首歌  
+4. 啃 《Kubernetes权威指南》   
+5. 室内健身  
+6. 乌克丽丽弹两首歌  
 
 ### 总结 Q4 任务：
 
