@@ -10,10 +10,10 @@
 
 ### 自己:  
 
-1. IPTree & Firewall 解决 bug  
-2. Nginx 哈希表实现  
-3. 啃 《Kubernetes权威指南》   
-4. kaggle  
+1. 概率论  
+2. 贝叶斯  
+3. 线性代数  
+4. kaggle  
 5. 和余鲲做股票预测  
 4. 室内健身  
 5. 乌克丽丽弹两首歌  
