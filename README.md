@@ -7,7 +7,7 @@
     * [Go语言教程](http://www.yiibai.com/go/)
     * [Go入门指南](https://github.com/Unknwon/the-way-to-go_ZH_CN/blob/master/eBook/directory.md)
     * [实效Go编程](http://docscn.studygolang.com/doc/effective_go.html#Web服务器)
-    * [深入解析Go](https://tiancaiamao.gitbooks.io/go-internals/zh/)  
+    * [深入解析Go](https://tiancaiamao.gitbooks.io/go-internals/zh/)
     * [Go语言高级编程](https://chai2010.gitbooks.io/advanced-go-programming-book/content/)
 
 * [beego](https://github.com/astaxie/beego)
