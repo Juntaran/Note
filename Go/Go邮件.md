@@ -14,4 +14,4 @@ ___
 
 ## Reference 
 
-*[linux shell发送邮件](http://littlewhite.us/archives/397)
+* [linux shell发送邮件](http://littlewhite.us/archives/397)
