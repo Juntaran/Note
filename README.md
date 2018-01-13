@@ -108,7 +108,11 @@
     
 * [Echarts](https://github.com/ecomfe/echarts)
     * [Echarts-doc](https://github.com/ecomfe/echarts-doc)
-
+    
+* 后端展示解决方案  
+    * [antd-admin](https://github.com/zuiidea/antd-admin)  
+    * [blur-admin](https://github.com/akveo/blur-admin)  
+    * [gentelella](https://github.com/puikinsh/gentelella)  
 
 ## Ops  
 
