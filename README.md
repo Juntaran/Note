@@ -26,6 +26,10 @@
 * [Go标准库](http://studygolang.com/pkgdoc)
 * [awesome-go](https://github.com/avelino/awesome-go)
 
+* Go设计模式
+    * [golang_design_pattern](https://github.com/BPing/golang_design_pattern/tree/master/pattern)  
+    * [DesignPattern](https://github.com/zhenbianshu/DesignPattern)  
+
 * Go 与 Json  
     * [json-iterator](https://github.com/json-iterator/go)
     * [gjson](https://github.com/tidwall/gjson)
