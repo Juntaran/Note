@@ -19,8 +19,11 @@
     * [GORM 中文文档](http://gorm.book.jasperxu.com/)
     * [GORM godoc](https://godoc.org/github.com/jinzhu/gorm#DB.CreateTable)
 
-* [Go练习代码](https://github.com/Juntaran/Go_In_Action)
-* [Go算法与数据结构](https://github.com/Juntaran/Golang_Algorithm)
+* [Go练习代码](https://github.com/Juntaran/Go_In_Action)  
+
+* [Go算法与数据结构](https://github.com/Juntaran/Golang_Algorithm)  
+    * [GoDs](https://github.com/emirpasic/gods)   
+    
 * [Go pkg手册](https://github.com/Juntaran/gopkg)
 * [Go官方文档](https://godoc.org/)
 * [Go标准库](http://studygolang.com/pkgdoc)
