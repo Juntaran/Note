@@ -22,7 +22,7 @@
 * [Go练习代码](https://github.com/Juntaran/Go_In_Action)  
 
 * [Go算法与数据结构](https://github.com/Juntaran/Golang_Algorithm)  
-    * [GoDs](https://github.com/emirpasic/gods)   
+    * [GoDs](https://github.com/emirpasic/gods)   
     
 * [Go pkg手册](https://github.com/Juntaran/gopkg)
 * [Go官方文档](https://godoc.org/)
