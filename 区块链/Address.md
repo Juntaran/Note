@@ -5,7 +5,7 @@
 大多数的区块链系统利用 `to` 和 `from` 作为 `transaction` 的两端  
 address 比公钥短并且不是私密的  
 
-## 生成一个 address 的流程
+## 生成一个 address 的流程
 
 > 公钥 -> hash -> address  
 
