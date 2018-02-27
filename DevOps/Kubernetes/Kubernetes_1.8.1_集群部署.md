@@ -214,7 +214,7 @@ docker tag registry.cn-hangzhou.aliyuncs.com/k8s_container/flannel:v0.9.0-amd64 
 ```
 
 
-### 2.3 安装并运行呢 Kubernetes 相关服务
+### 2.3 安装并运行 Kubernetes 相关服务
 
 ``` bash
 yum makecache fast
