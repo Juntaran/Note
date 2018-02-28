@@ -236,6 +236,16 @@ docker info | grep Cgroup
 # 显示 Cgroup Driver: systemd
 ```
 
+如果显示 cgroup  
+
+```
+vim /etc/docker/daemon.json
+
+{
+  "exec-opts": ["native.cgroupdriver=systemd"]
+}
+```
+
 根据 docker info 的结果修改 kubeadm 的参数  
 
 ``` bash
