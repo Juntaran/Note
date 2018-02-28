@@ -100,6 +100,16 @@ vim /etc/fstab
 /dev/mapper/centos-swap swap                    swap    defaults        0 0
 ```
 
+解决 curl call error:  
+
+```
+[Errno 14] curl#77 - "Problem with the SSL CA cert (path? access rights?)"
+```
+
+``` bash
+yum install ca-certificates -y
+```
+
 更新 yum 源:  
 
 ``` bash
