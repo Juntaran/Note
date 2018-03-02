@@ -54,3 +54,124 @@ curl -X 'POST' -H 'Content-Type:application/json' -d @quickstart/wikiticker-inde
 ```
 
 可以去 `http://localhost:8090/console.html` 查看进度
+
+
+## kafka
+
+``` sh
+curl -O http://www.us.apache.org/dist/kafka/0.9.0.0/kafka_2.11-0.9.0.0.tgz
+tar -xzf kafka_2.11-0.9.0.0.tgz
+cd kafka_2.11-0.9.0.0
+
+# 启动 kafka
+./bin/kafka-server-start.sh config/server.properties
+
+# 创建 topic
+./bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic pageviews
+```
+
+待输入格式  
+
+``` json
+{"time": "2000-01-01T00:00:00Z", "url": "/foo/bar", "user": "alice", "latencyMs": 32}
+```
+
+``` sh
+vim conf-quickstart/tranquility/kafka.json
+```
+
+``` json
+{
+  "dataSources" : {
+    "pageviews-kafka" : {
+      "spec" : {
+        "dataSchema" : {
+          "dataSource" : "pageviews-kafka",
+          "parser" : {
+            "type" : "string",
+            "parseSpec" : {
+              "timestampSpec" : {
+                "column" : "time",
+                "format" : "auto"
+              },
+              "dimensionsSpec" : {
+                "dimensions" : ["url", "user"],
+                "dimensionExclusions" : [
+                  "timestamp",
+                  "value"
+                ]
+              },
+              "format" : "json"
+            }
+          },
+          "granularitySpec" : {
+            "type" : "uniform",
+            "segmentGranularity" : "hour",
+            "queryGranularity" : "none"
+          },
+          "metricsSpec" : [
+            {
+              "name": "views",
+             "type": "count"
+            },
+           {
+              "name": "latencyMs", 
+              "type": "doubleSum",
+              "fieldName": "latencyMs"
+            }
+          ]
+        },
+        "ioConfig" : {
+          "type" : "realtime"
+        },
+        "tuningConfig" : {
+          "type" : "realtime",
+          "maxRowsInMemory" : "100000",
+          "intermediatePersistPeriod" : "PT10M",
+          "windowPeriod" : "PT10M"
+        }
+      },
+      "properties" : {
+        "task.partitions" : "1",
+        "task.replicants" : "1",
+        "topicPattern" : "pageviews"
+      }
+    }
+  },
+  "properties" : {
+    "zookeeper.connect" : "localhost",
+    "druid.discovery.curator.path" : "/druid/discovery",
+    "druid.selectors.indexing.serviceName" : "druid/overlord",
+    "commit.periodMillis" : "15000",
+    "consumer.numThreads" : "2",
+    "kafka.zookeeper.connect" : "localhost",
+    "kafka.group.id" : "tranquility-kafka"
+  }
+}
+```
+
+启动 Druid kafka
+
+``` sh
+bin/tranquility kafka -configFile ../druid-0.11.0/conf-quickstart/tranquility/kafka.json
+```
+
+待发送的数据
+
+``` json
+{"time": "2000-01-01T00:00:00Z", "url": "/foo/bar", "user": "alice", "latencyMs": 32}
+{"time": "2000-01-01T00:00:00Z", "url": "/", "user": "bob", "latencyMs": 11}
+{"time": "2000-01-01T00:00:00Z", "url": "/foo/bar", "user": "bob", "latencyMs": 45}
+```
+
+需要对数据时间进行替换
+
+``` sh
+python -c 'import datetime; print(datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"))'
+```
+
+向 kafka 发送数据
+
+```
+./bin/kafka-console-producer.sh --broker-list localhost:9092 --topic pageview
+```
