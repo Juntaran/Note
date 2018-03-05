@@ -341,8 +341,8 @@ as root:
 最后执行  
 
 ``` bash
-mkdir -p $HOME/.kubesudo 
-cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 # 将节点加入集群
