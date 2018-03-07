@@ -41,9 +41,13 @@ cd druid-0.11.0
 bin/init
 
 java `cat conf-quickstart/druid/historical/jvm.config | xargs` -cp "conf-quickstart/druid/_common:conf-quickstart/druid/historical:lib/*" io.druid.cli.Main server historical
+
 java `cat conf-quickstart/druid/broker/jvm.config | xargs` -cp "conf-quickstart/druid/_common:conf-quickstart/druid/broker:lib/*" io.druid.cli.Main server broker
+
 java `cat conf-quickstart/druid/coordinator/jvm.config | xargs` -cp "conf-quickstart/druid/_common:conf-quickstart/druid/coordinator:lib/*" io.druid.cli.Main server coordinator
+
 java `cat conf-quickstart/druid/overlord/jvm.config | xargs` -cp "conf-quickstart/druid/_common:conf-quickstart/druid/overlord:lib/*" io.druid.cli.Main server overlord
+
 java `cat conf-quickstart/druid/middleManager/jvm.config | xargs` -cp "conf-quickstart/druid/_common:conf-quickstart/druid/middleManager:lib/*" io.druid.cli.Main server middleManager
 ```
 
@@ -53,7 +57,13 @@ java `cat conf-quickstart/druid/middleManager/jvm.config | xargs` -cp "conf-quic
 curl -X 'POST' -H 'Content-Type:application/json' -d @quickstart/wikiticker-index.json localhost:8090/druid/indexer/v1/task
 ```
 
-可以去 `http://localhost:8090/console.html` 查看进度
+可以去 `http://localhost:8090/console.html` 查看进度  
+
+完成之后可以进行查询操作
+
+``` sh
+curl -L -H'Content-Type: application/json' -XPOST --data-binary @quickstart/wikiticker-top-pages.json http://localhost:8082/druid/v2/?pretty
+```
 
 
 ## kafka
@@ -154,6 +164,10 @@ vim conf-quickstart/tranquility/kafka.json
 
 ``` sh
 bin/tranquility kafka -configFile ../druid-0.11.0/conf-quickstart/tranquility/kafka.json
+```
+
+``` sh
+./bin/kafka-server-start.sh config/server.properties
 ```
 
 待发送的数据
