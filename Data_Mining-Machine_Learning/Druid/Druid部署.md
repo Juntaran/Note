@@ -187,5 +187,32 @@ python -c 'import datetime; print(datetime.datetime.utcnow().strftime("%Y-%m-%dT
 向 kafka 发送数据
 
 ```
-./bin/kafka-console-producer.sh --broker-list localhost:9092 --topic pageview
+./bin/kafka-console-producer.sh --broker-list localhost:9092 --topic pageviews
+```
+
+查询数据
+
+```
+curl -L -H'Content-Type: application/json' -XPOST --data-binary @conf-quickstart/tranquility/kafka-query.json http://localhost:8082/druid/v2/\?pretty
+```
+
+kafka-query.json
+
+``` json
+{
+  "queryType" : "topN",
+  "dataSource" : "wikiticker",
+  "intervals" : ["2018-03-07/2018-03-09"],
+  "granularity" : "all",
+  "dimension" : "url",
+  "metric" : "latencyMs",
+  "threshold" : 2,
+  "aggregations" : [
+    {
+      "name": "latencyMs", 
+      "type": "doubleSum",
+      "fieldName": "latencyMs"
+    }
+  ]
+}
 ```
