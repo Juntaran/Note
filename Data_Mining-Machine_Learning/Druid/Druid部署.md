@@ -92,72 +92,68 @@ vim conf-quickstart/tranquility/kafka.json
 
 ``` json
 {
-  "dataSources" : {
-    "pageviews-kafka" : {
-      "spec" : {
-        "dataSchema" : {
-          "dataSource" : "pageviews-kafka",
-          "parser" : {
-            "type" : "string",
-            "parseSpec" : {
-              "timestampSpec" : {
-                "column" : "time",
-                "format" : "auto"
-              },
-              "dimensionsSpec" : {
-                "dimensions" : ["url", "user"],
-                "dimensionExclusions" : [
-                  "timestamp",
-                  "value"
-                ]
-              },
-              "format" : "json"
-            }
-          },
-          "granularitySpec" : {
-            "type" : "uniform",
-            "segmentGranularity" : "hour",
-            "queryGranularity" : "none"
-          },
-          "metricsSpec" : [
-            {
-              "name": "views",
-             "type": "count"
+    "dataSources" : {
+      "pageviews-kafka" : {
+        "spec" : {
+          "dataSchema" : {
+            "dataSource" : "pageviews-kafka",
+            "parser" : {
+              "type" : "string",
+              "parseSpec" : {
+                "timestampSpec" : {
+                  "format": "auto",
+                  "column": "time"
+                },
+                "dimensionsSpec" : {
+                  "dimensions" : ["url", "user"]
+                },
+                "format" : "json"
+              }
             },
-           {
-              "name": "latencyMs", 
-              "type": "doubleSum",
-              "fieldName": "latencyMs"
-            }
-          ]
+            "granularitySpec" : {
+              "type" : "uniform",
+              "segmentGranularity" : "hour",
+              "queryGranularity" : "none"
+            },
+            "metricsSpec" : [
+              {
+                "name": "views",
+                "type": "count"
+              },
+             {
+                "name": "latencyMs", 
+                "type": "doubleSum",
+                "fieldName": "latencyMs"
+              }
+            ]
+          },
+          "ioConfig" : {
+            "type" : "realtime"
+          },
+          "tuningConfig" : {
+            "type" : "realtime",
+            "maxRowsInMemory" : "100000",
+            "intermediatePersistPeriod" : "PT10M",
+            "windowPeriod" : "PT10M"
+          }
         },
-        "ioConfig" : {
-          "type" : "realtime"
-        },
-        "tuningConfig" : {
-          "type" : "realtime",
-          "maxRowsInMemory" : "100000",
-          "intermediatePersistPeriod" : "PT10M",
-          "windowPeriod" : "PT10M"
+        "properties" : {
+          "task.partitions" : "1",
+          "task.replicants" : "1",
+          "topicPattern" : "pageviews2"
         }
-      },
-      "properties" : {
-        "task.partitions" : "1",
-        "task.replicants" : "1",
-        "topicPattern" : "pageviews"
       }
+    },
+    "properties" : {
+      "zookeeper.connect" : "localhost",
+      "druid.discovery.curator.path" : "/druid/discovery",
+      "druid.selectors.indexing.serviceName" : "druid/overlord",
+      "commit.periodMillis" : "15000",
+      "consumer.numThreads" : "2",
+      "kafka.zookeeper.connect" : "localhost",
+      "kafka.group.id" : "tranquility-kafka"
     }
-  },
-  "properties" : {
-    "zookeeper.connect" : "localhost",
-    "druid.discovery.curator.path" : "/druid/discovery",
-    "druid.selectors.indexing.serviceName" : "druid/overlord",
-    "commit.periodMillis" : "15000",
-    "consumer.numThreads" : "2",
-    "kafka.zookeeper.connect" : "localhost",
-    "kafka.group.id" : "tranquility-kafka"
   }
-}
 ```
 
 启动 Druid kafka
@@ -201,7 +197,7 @@ kafka-query.json
 ``` json
 {
   "queryType" : "topN",
-  "dataSource" : "wikiticker",
+  "dataSource" : "pageviews-kafka",
   "intervals" : ["2018-03-07/2018-03-09"],
   "granularity" : "all",
   "dimension" : "url",
