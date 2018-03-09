@@ -50,6 +50,9 @@
 * [goHTTP: 一个http的文件服务器](https://github.com/codeskyblue/gohttp)
 * [DHT协议](https://github.com/Juntaran/dht)
 
+* Go 与 RPC  
+    * [Go RPC 实践指南](https://github.com/Jergoo/go-grpc-example)
+    * [rpcx](https://github.com/smallnest/rpcx)
 
 
 ## Python
