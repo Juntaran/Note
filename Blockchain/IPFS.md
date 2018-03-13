@@ -5,23 +5,23 @@
 IPFS(InterPlanetary File System)，星际文件系统  
 名字很好听，是一个 `点对点的分布式版本文件系统` ，目标是为了补充(取代) HTTP  
 把所有具有 `相同文件` 系统的计算设备连接在一起  
-用 `基于内容` 的地址替代`基于域名`的地址  
+用 `基于内容` 的地址替代`基于域名`的地址  
 这样用户寻找的不是某个 `地址` 而是存储在某个地方的 `内容`   
 无需验证发送者的身份，只验证内容的 hash 值  
 从而提升网页速度、更快、更安全  
 
 可以把 IPFS 想象成所有文件数据是在同一个 BitTorrent 群并且通过同一个 Git 仓库存取  
 
-## IPFS 原理
+## IPFS 原理
 
-HTTP 可以视为一种集中化的协议，有以下几个缺点:  
+HTTP 可以视为一种集中化的协议，有以下几个缺点:  
 
-1. 容易遭受 DDoS 攻击  
+1. 容易遭受 DDoS 攻击  
 2. 过度依赖于骨干网  
 3. 容易被监视审查控制  
 
 HTTP 首先 `基于域名` 寻找服务器 IP 地址，之后根据路径访问资源  
-IPFS 则是根据内容哈希，通过底层的 DHT(分布式哈希表) 来快速找到拥有数据的节点  
+IPFS 则是根据内容哈希，通过底层的 DHT(分布式哈希表) 来快速找到拥有数据的节点  
 可以把 IPFS 简单视作为 CDN  
 
 以下摘自 http://www.infoq.com/cn/articles/ipfs  
@@ -201,19 +201,19 @@ du -sh *
 # 30M	test.pdf
 ```
 
-打开浏览器，输入 http://localhost:5001/webui 你会看到你存储的文件以及连接到 ipfs 服务器的信息  
-从 IPFS 网络查看数据: `https://ipfs.io/ipfs/{hash值}`  
+打开浏览器，输入 http://localhost:5001/webui 你会看到你存储的文件以及连接到 ipfs 服务器的信息  
+从 IPFS 网络查看数据: `https://ipfs.io/ipfs/{hash值}`  
 
 ``` bash
 wget https://ipfs.io/ipfs/QmaAHZbevQL9wRUVAWEeUmxkkqftTrffnmRN2GszBVGKVr
 ```
 
-等待一段时间后，你就会收到我的加密后的 pdf～  
+等待一段时间后，你就会收到我的加密后的 pdf～  
 
-在另一台服务器下载后  
+在另一台服务器下载后  
 
 ``` bash
-# 首先要分发私钥，不建议这样做，我只是为了测试
+# 首先要分发私钥，不建议这样做，我只是为了测试
 
 # 导入私钥
 gpg --import Juntaran.sec.key
