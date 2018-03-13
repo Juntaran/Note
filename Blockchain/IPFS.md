@@ -242,7 +242,7 @@ cat QmSnyy9Z934Rwj11tVgyPiQq5v9TgdxPvzavgEfnQWECtm
 ### 6.1 Filecoin
 
 为什么把 IPFS 放在这里呢，因为这是一个落地的应用，而不是无谓的浪费电力  
-有人提出了 `Filecoin` 作为 IPFS 的激励系统，也就是 IPFS 的代币  
+有人提出了 `Filecoin` 作为 IPFS 的激励系统，也就是 IPFS 的代币  
 Filecoin 也是基于区块链的产物，在 Filecoin 中，矿工不通过大量计算来进行工作证明  
 矿工的任务是存储，工作量也就等价于复制量    
 
