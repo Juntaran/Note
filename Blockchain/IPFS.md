@@ -284,7 +284,7 @@ gpg -o filename -d filename.asc
 输入私钥密码  
 即可把 filename.asc 的加密文件解密成 filename 文件  
 
-### 删除密钥
+### 8.6 删除密钥
 删除私钥 
 gpg --delete-secret-key newkey  
 删除公钥 
