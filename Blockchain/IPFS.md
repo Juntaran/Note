@@ -1,6 +1,6 @@
 # IPFS
 
-## 1. 简介
+## 1 简介
 
 IPFS(InterPlanetary File System)，星际文件系统  
 名字很好听，是一个 `点对点的分布式版本文件系统` ，目标是为了补充(取代) HTTP  
@@ -12,7 +12,7 @@ IPFS(InterPlanetary File System)，星际文件系统
 
 可以把 IPFS 想象成所有文件数据是在同一个 BitTorrent 群并且通过同一个 Git 仓库存取  
 
-## 2. IPFS 原理
+## 2 IPFS 原理
 
 HTTP 可以视为一种集中化的协议，有以下几个缺点:  
 
@@ -43,13 +43,13 @@ IPFS 则是根据内容哈希，通过底层的 DHT(分布式哈希表) 来快�
 
 简而言之就是结合 DHT 和 blockchain 组成了一个 "CDN"  
 
-## 3. 使用前提
+## 3 使用前提
 
 - 自备翻墙 :L  
 - Mac | Linux (虽然 Windows 也支持，但是我并不想研究)  
 - Go Env (最好有，如果喜欢源码编译的话)
 
-## 4. 安装 GPG
+## 4 安装 GPG
 
 ``` bash
 brew install gnupg
@@ -95,7 +95,7 @@ gpg --import pubkey.asc
 gpg --list-keys
 ```
 
-## 5. 安装 IPFS
+## 5 安装 IPFS
 
 参考 https://ipfs.io/docs/install/ 安装  
 
@@ -237,7 +237,7 @@ cat QmSnyy9Z934Rwj11tVgyPiQq5v9TgdxPvzavgEfnQWECtm
 # Hello IPFS from Juntaran
 ```
 
-## 6. 扩展
+## 6 扩展
 
 ### 6.1 Filecoin
 
@@ -246,7 +246,7 @@ cat QmSnyy9Z934Rwj11tVgyPiQq5v9TgdxPvzavgEfnQWECtm
 Filecoin 也是基于区块链的产物，在 Filecoin 中，矿工不通过大量计算来进行工作证明  
 矿工的任务是存储，工作量也就等价于复制量    
 
-### 6.2对韭当割
+### 6.2 对韭当割
 
 迅雷的 `玩客云` 也类似于 IPFS，搞了个 `链克` 作为数字资产  
 有一种 Filecoin 和 IPFS 关系的感觉  
@@ -255,12 +255,12 @@ Filecoin 也是基于区块链的产物，在 Filecoin 中，矿工不通过大�
 突然有了一种连韭菜苗都要割的感觉  
 
 
-## 7. 总结
+## 7 总结
 
 IPFS 诞生已经几年了，希望能够借着区块链这波热度起飞～  
 成为真正的 `InterPlanetary`  
 
-## 8. 附录 
+## 8 附录 
 
 gpg 的简单操作
 
@@ -290,7 +290,7 @@ gpg --delete-secret-key newkey
 删除公钥 
 gpg --delete-key newkey   
 
-## 9. Reference
+## 9 Reference
 
 - [IPFS White Paper](https://hacpai.com/forward?goto=https%3A%2F%2Fgithub.com%2Fipfs%2Fpapers%2Fraw%2Fmaster%2Fipfs-cap2pfs%2Fipfs-p2p-file-system.pdf)
 - [IPFS](https://github.com/ipfs/papers/)
