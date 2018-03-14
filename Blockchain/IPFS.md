@@ -293,7 +293,7 @@ gpg --delete-key newkey
 
 ## 9 Reference
 
-- [IPFS White Paper](https://hacpai.com/forward?goto=https%3A%2F%2Fgithub.com%2Fipfs%2Fpapers%2Fraw%2Fmaster%2Fipfs-cap2pfs%2Fipfs-p2p-file-system.pdf)
+- [IPFS White Paper](https://github.com/ipfs/papers/raw/master/ipfs-cap2pfs/ipfs-p2p-file-system.pdf)
 - [IPFS](https://github.com/ipfs/papers/)
 - [IPFS 入门笔记](https://hacpai.com/article/1511015097370)
 - [IPFS：替代HTTP的分布式网络协议](http://www.infoq.com/cn/articles/ipfs)
