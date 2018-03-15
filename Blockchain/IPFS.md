@@ -291,7 +291,8 @@ gpg --delete-secret-key newkey
 删除公钥 
 gpg --delete-key newkey   
 
-## 9 Reference
+___
+## Reference
 
 - [IPFS White Paper](https://github.com/ipfs/papers/raw/master/ipfs-cap2pfs/ipfs-p2p-file-system.pdf)
 - [IPFS](https://github.com/ipfs/papers/)
