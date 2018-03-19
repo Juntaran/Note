@@ -12,6 +12,7 @@ import os
 import requests
 import json
 import urllib
+import time
 
 NICKNAMES_FILE = 'weibo_nicknames.txt'
 HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'}
@@ -89,6 +90,7 @@ def getImageUrls(cid, page):
 
 # 下载图片
 def saveImage(nickname, url):
+    time.sleep(1)
     save_path = os.path.join('WeiboAlbum', nickname)
     if not os.path.exists(save_path):
         os.makedirs(save_path)
