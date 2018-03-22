@@ -1,9 +1,9 @@
-# Go 连接 kafka
+# Go 连接 kafka
 
 [Sarama](https://github.com/Shopify/sarama) 支持 Kafka 0.8 及以上版本  
 
-Kafka 0.8.2 和以前的版本，可以参考 [wvanbergen/kafka](https://github.com/wvanbergen/kafka) 基于 Sarama 的实现  
-Kafka 0.9 和以上的版本，可以参考 [bsm/sarama-cluster](https://github.com/bsm/sarama-cluster) 基于 Sarama 的实现
+Kafka 0.8.2 和以前的版本，可以参考 [wvanbergen/kafka](https://github.com/wvanbergen/kafka) 基于 Sarama 的实现  
+Kafka 0.9 和以上的版本，可以参考 [bsm/sarama-cluster](https://github.com/bsm/sarama-cluster) 基于 Sarama 的实现
 
 
 ``` go
