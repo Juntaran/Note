@@ -1,4 +1,4 @@
-# Go 连接 kafka
+# Go 连接 Kafka
 
 [Sarama](https://github.com/Shopify/sarama) 支持 Kafka 0.8 及以上版本  
 
