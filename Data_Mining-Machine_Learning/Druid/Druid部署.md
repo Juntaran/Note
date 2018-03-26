@@ -212,3 +212,6 @@ kafka-query.json
   ]
 }
 ```
+
+## Json Stream 打入 druid
+
