@@ -52,7 +52,7 @@ java `cat conf-quickstart/druid/overlord/jvm.config | xargs` -cp "conf-quickstar
 java `cat conf-quickstart/druid/middleManager/jvm.config | xargs` -cp "conf-quickstart/druid/_common:conf-quickstart/druid/middleManager:lib/*" io.druid.cli.Main server middleManager
 ```
 
-## 加载 demo 数据
+## 加载 demo 数据
 
 ``` sh
 curl -X 'POST' -H 'Content-Type:application/json' -d @quickstart/wikiticker-index.json localhost:8090/druid/indexer/v1/task
