@@ -24,6 +24,9 @@ cd druid-0.11.0
 - lib/* - all included software packages for core Druid  
 - quickstart/* - files useful for this quickstart  
 
+
+## 开启 druid 服务
+
 开启 Zookeeper  
 
 ``` sh
@@ -33,8 +36,6 @@ cd zookeeper-3.4.10
 cp conf/zoo_sample.cfg conf/zoo.cfg
 ./bin/zkServer.sh start
 ```
-
-开启 Druid 服务
 
 ``` sh
 cd druid-0.11.0
