@@ -66,7 +66,7 @@ curl -L -H'Content-Type: application/json' -XPOST --data-binary @quickstart/wiki
 ```
 
 
-## kafka
+## kafka 打入 druid
 
 ``` sh
 curl -O http://www.us.apache.org/dist/kafka/0.9.0.0/kafka_2.11-0.9.0.0.tgz
@@ -156,9 +156,10 @@ vim conf-quickstart/tranquility/kafka.json
   }
 ```
 
-启动 Druid kafka
+启动 tranquility 实现 Druid kafka 对接
 
 ``` sh
+cd ~/workspace/druid/tranquility-distribution-0.8.0
 bin/tranquility kafka -configFile ../druid-0.11.0/conf-quickstart/tranquility/kafka.json
 ```
 
@@ -213,5 +214,103 @@ kafka-query.json
 }
 ```
 
-## Json Stream 打入 druid
+## HTTP 打入 druid
 
+创建 json 文件指定 http json 格式  
+
+``` json
+{
+  "dataSources" : {
+    "pageviews" : {
+      "spec" : {
+        "dataSchema" : {
+         
+          "dataSource" : "pageviews",
+          "parser" : {
+            "type" : "string",
+            "parseSpec" : {
+             
+              "timestampSpec" : {
+                "column" : "time",
+                "format" : "auto"
+              },
+              "dimensionsSpec" : {
+          
+                "dimensions" : ["url", "user"],
+                "dimensionExclusions" : [
+                  "timestamp",
+                  "value"
+                ]
+              },
+              "format" : "json"
+            }
+          },
+          "granularitySpec" : {
+            "type" : "uniform",
+            "segmentGranularity" : "hour",
+            "queryGranularity" : "none"
+          },
+        
+          "metricsSpec" : [
+            {
+              "name": "views",
+              "type": "count"
+            },
+            {
+              "name": "latencyMs", 
+              "type": "doubleSum", 
+              "fieldName": "latencyMs"
+            }
+          ]
+        },
+        "ioConfig" : {
+          "type" : "realtime"
+        },
+        "tuningConfig" : {
+          "type" : "realtime",
+          "maxRowsInMemory" : "100000",
+          "intermediatePersistPeriod" : "PT10M",
+          "windowPeriod" : "PT10M"
+        }
+      },
+      "properties" : {
+        "task.partitions" : "1",
+        "task.replicants" : "1"
+      }
+    }
+  },
+  "properties" : {
+    "zookeeper.connect" : "localhost",
+    "druid.discovery.curator.path" : "/druid/discovery",
+    "druid.selectors.indexing.serviceName" : "druid/overlord",
+    "http.port" : "8200",
+    "http.threads" : "8"
+  }
+}
+```
+
+启动 tranquility
+
+``` sh
+cd ~/workspace/druid/tranquility-distribution-0.8.0
+bin/tranquility server -configFile ./conf/pageviews.json
+```
+
+向 tranquility 使用 `POST` 发送数据  http://localhost:8200/v1/post/pageviews  
+
+``` json
+{"time": 1522147671, "url": "/foo/bar", "user": "alice", "latencyMs": 32}
+```
+
+结果:  
+
+``` json
+{
+    "result": {
+        "received": 1,
+        "sent": 0
+    }
+}
+```
+
+- 注意时间戳必须是 10 分钟以内  
