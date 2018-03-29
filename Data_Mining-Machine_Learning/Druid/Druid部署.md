@@ -78,7 +78,7 @@ cd kafka_2.11-0.9.0.0
 ./bin/kafka-server-start.sh config/server.properties
 
 # 创建 topic
-./bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic pageviews
+./bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic pageviews-kafka
 ```
 
 待输入格式  
@@ -141,7 +141,7 @@ vim conf-quickstart/tranquility/kafka.json
         "properties" : {
           "task.partitions" : "1",
           "task.replicants" : "1",
-          "topicPattern" : "pageviews2"
+          "topicPattern" : "pageviews-kafka"
         }
       }
     },
@@ -185,7 +185,7 @@ python -c 'import datetime; print(datetime.datetime.utcnow().strftime("%Y-%m-%dT
 向 kafka 发送数据
 
 ```
-./bin/kafka-console-producer.sh --broker-list localhost:9092 --topic pageviews
+./bin/kafka-console-producer.sh --broker-list localhost:9092 --topic pageviews-kafka
 ```
 
 查询数据
