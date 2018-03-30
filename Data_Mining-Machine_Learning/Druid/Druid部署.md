@@ -314,4 +314,4 @@ bin/tranquility server -configFile ./conf/pageviews.json
 }
 ```
 
-- 注意时间戳必须是 10 分钟以内，如果 sent: 0 有可能是时间戳有问题  
+- 注意时间戳必须是 10 分钟以内，如果 `"sent": 0` 有可能是时间戳有问题  
