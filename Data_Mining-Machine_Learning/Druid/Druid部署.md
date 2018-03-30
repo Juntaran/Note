@@ -297,6 +297,9 @@ cd ~/workspace/druid/tranquility-distribution-0.8.0
 bin/tranquility server -configFile ./conf/pageviews.json
 ```
 
+## 数据查询
+
+以查询之前 kafka 打入的数据为例  
 向 tranquility 使用 `POST` 发送数据  http://localhost:8200/v1/post/pageviews  
 
 ``` json
