@@ -300,7 +300,7 @@ bin/tranquility server -configFile ./conf/pageviews.json
 向 tranquility 使用 `POST` 发送数据  http://localhost:8200/v1/post/pageviews  
 
 ``` json
-{"time": 1522147671, "url": "/foo/bar", "user": "alice", "latencyMs": 32}
+{"time": "2018-03-30T08:52:53Z", "url": "/foo/bar", "user": "alice", "latencyMs": 32}
 ```
 
 结果:  
@@ -309,9 +309,9 @@ bin/tranquility server -configFile ./conf/pageviews.json
 {
     "result": {
         "received": 1,
-        "sent": 0
+        "sent": 1
     }
 }
 ```
 
-- 注意时间戳必须是 10 分钟以内  
+- 注意时间戳必须是 10 分钟以内，如果 sent: 0 有可能是时间戳有问题  
