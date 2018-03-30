@@ -78,7 +78,7 @@ cd kafka_2.11-0.9.0.0
 ./bin/kafka-server-start.sh config/server.properties
 
 # 创建 topic
-./bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic pageviews
+./bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic pageviews-kafka
 ```
 
 待输入格式  
@@ -141,7 +141,7 @@ vim conf-quickstart/tranquility/kafka.json
         "properties" : {
           "task.partitions" : "1",
           "task.replicants" : "1",
-          "topicPattern" : "pageviews2"
+          "topicPattern" : "pageviews-kafka"
         }
       }
     },
@@ -185,7 +185,7 @@ python -c 'import datetime; print(datetime.datetime.utcnow().strftime("%Y-%m-%dT
 向 kafka 发送数据
 
 ```
-./bin/kafka-console-producer.sh --broker-list localhost:9092 --topic pageviews
+./bin/kafka-console-producer.sh --broker-list localhost:9092 --topic pageviews-kafka
 ```
 
 查询数据
@@ -303,7 +303,7 @@ bin/tranquility server -configFile ./conf/pageviews.json
 向 tranquility 使用 `POST` 发送数据  http://localhost:8200/v1/post/pageviews  
 
 ``` json
-{"time": 1522147671, "url": "/foo/bar", "user": "alice", "latencyMs": 32}
+{"time": "2018-03-30T08:52:53Z", "url": "/foo/bar", "user": "alice", "latencyMs": 32}
 ```
 
 结果:  
@@ -312,9 +312,9 @@ bin/tranquility server -configFile ./conf/pageviews.json
 {
     "result": {
         "received": 1,
-        "sent": 0
+        "sent": 1
     }
 }
 ```
 
-- 注意时间戳必须是 10 分钟以内  
+- 注意时间戳必须是 10 分钟以内，如果 `"sent": 0` 有可能是时间戳有问题  
