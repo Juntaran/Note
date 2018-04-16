@@ -1,7 +1,7 @@
 # Go 性能调优
 
 之前写的 [KafkaToDruid](https://github.com/Juntaran/Go_In_Action/tree/master/Demo/KafkaToDruid) 存在性能瓶颈  
-为了进行性能优化，必须找出瓶颈，根据 [Go 调试](https://github.com/Juntaran/Note/blob/master/Go/Go%E8%B0%83%E8%AF%95.md) 这篇以前的笔记进行了进一步的深入  
+为了进行性能优化，必须找出瓶颈，根据 [Go 调试](https://github.com/Juntaran/Note/blob/master/Go/Go%E8%B0%83%E8%AF%95.md) 这篇以前的笔记进行了进一步的深入  
 
 1. 安装工具  
 
@@ -48,7 +48,7 @@ func main() {
 
 > 注意: 不能使用 `kill` 方式来终止，否则会记录为空
 
-3. 开始记录  
+3. 开始记录  
 
 ``` sh
 # 编译
@@ -85,7 +85,7 @@ go-torch -b test.prof -f test_flame.svg
 第一次优化后的火焰图，可以看到 `gc` 占用了绝大部分  
 
 ![svg_3](https://rawgit.com/Juntaran/Go_In_Action/master/Demo/KafkaToDruid/testing/k2d_pprof_3.svg?sanitize=true)  
-去除了 `fmt.Println()` 并修改了字符串拼接，选择了 `bytes.Buffer` 后的 svg  
+去除了 `fmt.Println()` 并修改了字符串拼接，选择了 `bytes.Buffer` 后的 svg  
 
 ![flame_3](https://rawgit.com/Juntaran/Go_In_Action/master/Demo/KafkaToDruid/testing/k2d_flame_3.svg?sanitize=true)  
 最终优化后的火焰图  
