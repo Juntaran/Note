@@ -72,22 +72,22 @@ go-torch -b test.prof -f test_flame.svg
 5. 观察 svg 图  
 
  
-![svg_1](https://rawgit.com/Juntaran/Go_In_Action/master/Demo/KafkaToDruid/testing/k2d_pprof_1.svg)  
-最初的 svg 图，性能极差  
+![svg_1](https://rawgit.com/Juntaran/Go_In_Action/master/Demo/KafkaToDruid/testing/k2d_pprof_1.svg?sanitize=true)  
+最初的 [svg 图](https://rawgit.com/Juntaran/Go_In_Action/master/Demo/KafkaToDruid/testing/k2d_pprof_1.svg?sanitize=true) ，性能极差  
 
 ![flame_1](https://rawgit.com/Juntaran/Go_In_Action/master/Demo/KafkaToDruid/testing/k2d_flame_1.svg)  
-最初的火焰图，可以看出 `producer` 占用了很多时间  
+最初的 [火焰图](https://rawgit.com/Juntaran/Go_In_Action/master/Demo/KafkaToDruid/testing/k2d_flame_1.svg) ，可以看出 `producer` 占用了很多时间  
 
 ![svg_2](https://rawgit.com/Juntaran/Go_In_Action/master/Demo/KafkaToDruid/testing/k2d_pprof_2.svg?sanitize=true)  
-第一次优化后的 svg 图  
+第一次优化后的 [svg 图](https://rawgit.com/Juntaran/Go_In_Action/master/Demo/KafkaToDruid/testing/k2d_pprof_2.svg?sanitize=true)  
 
 ![flame_2](https://rawgit.com/Juntaran/Go_In_Action/master/Demo/KafkaToDruid/testing/k2d_flame_2.svg?sanitize=true)  
-第一次优化后的火焰图，可以看到 `gc` 占用了绝大部分  
+第一次优化后的 [火焰图](https://rawgit.com/Juntaran/Go_In_Action/master/Demo/KafkaToDruid/testing/k2d_flame_2.svg?sanitize=true) ，可以看到 `gc` 占用了绝大部分  
 
 ![svg_3](https://rawgit.com/Juntaran/Go_In_Action/master/Demo/KafkaToDruid/testing/k2d_pprof_3.svg?sanitize=true)  
-去除了 `fmt.Println()` 并修改了字符串拼接，选择了 `bytes.Buffer` 后的 svg  
+去除了 `fmt.Println()` 并修改了字符串拼接，选择了 `bytes.Buffer` 后的 [svg 图](https://rawgit.com/Juntaran/Go_In_Action/master/Demo/KafkaToDruid/testing/k2d_pprof_3.svg?sanitize=true)  
 
 ![flame_3](https://rawgit.com/Juntaran/Go_In_Action/master/Demo/KafkaToDruid/testing/k2d_flame_3.svg?sanitize=true)  
-最终优化后的火焰图  
+最终优化后的 [火焰图](https://rawgit.com/Juntaran/Go_In_Action/master/Demo/KafkaToDruid/testing/k2d_flame_3.svg?sanitize=true)    
 
 
