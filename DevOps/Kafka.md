@@ -15,7 +15,7 @@ sh kafka-console-consumer.sh --topic testtopic --from-beginning --bootstrap-serv
 # 根据 zk 查询 group list
 sh kafka-consumer-groups.sh --zookeeper localhost:2181 --list
 
-# 创建 topic
+# 创建 topic
 sh kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 8 --topic testtopic
 
 # 生产数据
