@@ -124,6 +124,12 @@ Pos 的缺点在于“富人”可以更加容易地获取数字资产，但是�
 多数区块链系统采用 “长者优先” 原则  
 冲突一旦发生会很快解决，根据 “长者优先” 的策略确定一个 `offical` 链，再由他增加下一个合法的 block，非该链发生的交易会被添加进来  
 
+### 4.5 写入信息
+
+`Transcation` 就会被当作 `Info` 写入到区块链，例如 https://etherscan.io/tx/0x2d6a7b0f6adeff38423d4c62cd8b6ccb708ddad85da5d3d06756ad4d8a04a6a2
+
+[比特币的第一笔交易](https://btc.com/000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f?page=1&asc=1&order_by=outputs_count)
+
 ## 5 一个可用的落地项目: IPFS
 
 ### 5.1 简介
