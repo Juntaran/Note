@@ -58,7 +58,7 @@ go build main.go
 ./main --cpuprofile=test.prof
 
 # 使用 pprof
-go tool main test.prof
+go tool pprof test.prof
 ```
 
 可以输入 `web/pdf` 来生成文件，`web命令` 生成的 `svg` 在 `/tmp` 下，`pdf命令` 生成的 `pdf` 在当前目录  
