@@ -32,6 +32,25 @@ IPv6 的数据传输与 IPv4 相同，可以查看 [RFC 791](https://tools.ietf
 
 ## 2 术语
 
+|  名称  |  意义  |
+|----|----|
+|  node  |  实现了 IPv6 的设备  |
+|  router  |  一个转发 IPv6 数据包但是地址不是自己的设备  |
+|  host  |  除了 router 的任何 node  |
+|  upper layer  |  基于 IPv6 实现的协议层  |
+|  link  |  一种通信设备或媒介，node 它可以在链路层通信，比如以太网（简单/桥接）；PPP 链路；X.25，帧中继，ATM 网络；以及互联网层或更高层的隧道，比如 IPv4 或 IPv6 本身的隧道  |
+|  neighbors  |  连接到同一链路的节点  |
+|  interface  |  节点依赖它连接到链路  |
+|  address  | 一个 interface 或一组 interface 的 IPv6 层标识符   |
+|  packet  |  IPv6 头 + 载荷  |
+|  link MTU  |  最大传输单元  |
+|  path MTU  |  源 node 和目的 node 间所有链路中的最小链路 MTU  |
+
+> 注意：
+> 对于一个具有多个网卡的设备，是可以配置成从它的一部分网卡（非所有）转发非自身到达的数据包并丢弃从其他网卡接收到的非自身到达的数据包  
+> 前置网卡也就是发送端必须服从路由器的发送数据包、与 neighbors 交互的协议要求
+> 后置网卡也就是接收端必须满足对于 hosts(主机)的接收数据包、与 neighbors 交互的协议要求
+
 ## 3 IPv6 头部格式
 
 ```
