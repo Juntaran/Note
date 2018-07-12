@@ -27,7 +27,8 @@
 
     为 IPv6 增加了支持认证、数据完整性、(可选)数据机密性的特性扩展
 
-IPv6 的规范和语义在 [RFC 4291](https://tools.ietf.org/html/rfc4291) 中规定，ICMP 的 IPv 版本，以及所有 IPv6 的实现在 [RFC 4443](https://tools.ietf.org/html/rfc4443) 中规定
+IPv6 的规范和语义在 [RFC 4291](https://tools.ietf.org/html/rfc4291) 中规定，ICMP 的 IPv 版本，以及所有 IPv6 的实现都在 [RFC 4443](https://tools.ietf.org/html/rfc4443) 中规定  
+IPv6 的数据传输与 IPv4 相同，可以查看 [RFC 791](https://tools.ietf.org/html/rfc791) 的附录B
 
 ## 2 术语
 
