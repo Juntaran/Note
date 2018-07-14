@@ -3,6 +3,33 @@
 2017年7月14日，IPv6 完成标准化，RFC 8200 诞生  
 本篇可以近似视作 RFC 8200 的翻译
 
+****
+## 目录
+
+* [1 简介](#1-简介)
+* [2 术语](#2-术语)
+* [3 IPv6 头部格式](#3-IPv6-头部格式)
+* [4 IPv6 扩展头](#4-IPv6-扩展头)
+    * [4.1](#4.1)
+    * [4.2](#4.2)
+    * [4.3](#4.3)
+    * [4.4](#4.4)
+    * [4.5](#4.5)
+    * [4.6](#4.6)
+    * [4.7](#4.7)
+    * [4.8](#4.8)
+* [5 数据包大小](#5-数据包大小)
+* [6 流标签](#6-流标签) 
+* [7 通信量类](#7-通信量类)
+* [8 上层协议](#8-上层协议)
+    * [8.1](#8.1)
+    * [8.2](#8.2)
+    * [8.3](#8.3)
+    * [8.4](#8.4)
+* [9 IANA 建议](#9-IANA-建议) 
+* [10 安全问题](#10-安全问题)
+___
+
 ## 1 简介
 
 从 [IPv4](https://tools.ietf.org/html/rfc791) 到 [IPv6](https://tools.ietf.org/html/rfc8200) 的变化主要体现在以下几个方面:
@@ -75,8 +102,21 @@ IPv6 的数据传输与 IPv4 相同，可以查看 [RFC 791](https://tools.ietf.
  +                                                               +
  |                                                               |
  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
 ```
+
+
+ |  名称  |  作用  |
+|----|----|
+|  Version  |  4-bit 协议版本值为 6  |
+|  Traffic Class  |  8-bit [通信量类](#7-通信量类)  |
+|  Flow Label  |  20-bit [流标签](#6-流标签)  |
+|  Payload Length  |  16-bit 无符号整型，IPv6 有效载荷的长度，即该 IPv6 报头后面的分组的剩余部分，单位为 8-bit(Bytes)，注意[任何扩展标头](#4-IPv6-扩展头)都被认为是有效载荷的一部分，也就是说扩展头包括在长度计数中  |
+|  Next Header  |  8-bit 选择器，表示跟在 IPv6 头后面的类型，用途相当于 IPv4 头部的[协议号](https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml)  |
+|  Hop Limit  |  8-bit 无符号整型。通过转发数据包的每个节点递减 1。当转发时，如果接收到跳数为零或被递减到零，则丢弃该分组。作为分组目的地的节点不应该丢弃跳数等于零的分组；它应该正常处理分组  |
+|  Source Address  |  128-bit，数据包发送者的地址，可以参考 [RFC 4291](https://tools.ietf.org/html/rfc4291)   |
+|  Destination Address  |  128-bit，数据包接收者的地址（如果存在路由头部，可能不是最终接收者），可以参考 [RFC 4291](https://tools.ietf.org/html/rfc4291) 和 [4.1 节](#4.1)  |
+
+
 
 ## 4 IPv6 扩展头
 
@@ -101,26 +141,24 @@ IPv6 的数据传输与 IPv4 相同，可以查看 [RFC 791](https://tools.ietf.
 +---------------+----------------+-----------------+-----------------
 ```
 
-|  名称  |  作用  |
-|----|----|
-|  Version  |    |
-|  Traffic Class  |    |
-|  Flow Label  |    |
-|  Payload Length  |    |
-|  Next Header  |    |
-|  Hop Limit  |    |
-|  Source Address  |    |
-|  Destination Address  |    |
 
-## 5 包大小
 
-## 6 流标签 (Flow Labels)
+## 5 数据包大小
 
-## 7 通信量类 (Traffic Classes)
+## 6 流标签
+
+Flow Labels
+
+
+## 7 通信量类
+
+Traffic Classes
 
 ## 8 上层协议
 
-## 9 国际互联网代理成员管理局-Internet Assigned Numbers Authority(IANA)
+## 9 IANA 建议
+
+国际互联网代理成员管理局-Internet Assigned Numbers Authority(IANA)
 
 ## 10 安全问题
 
