@@ -8,8 +8,8 @@
 
 * [1 简介](#1-简介)
 * [2 术语](#2-术语)
-* [3 IPv6 头部格式](#3-IPv6-头部格式)
-* [4 IPv6 扩展头](#4-IPv6-扩展头)
+* [3 IPv6 头部格式](#3-IPv6)
+* [4 IPv6 扩展头](#4-IPv6)
     * [4.1](#4.1)
     * [4.2](#4.2)
     * [4.3](#4.3)
@@ -26,7 +26,7 @@
     * [8.2](#8.2)
     * [8.3](#8.3)
     * [8.4](#8.4)
-* [9 IANA 建议](#9-IANA-建议) 
+* [9 IANA 建议](#9-IANA) 
 * [10 安全问题](#10-安全问题)
 ___
 
@@ -110,10 +110,10 @@ IPv6 的数据传输与 IPv4 相同，可以查看 [RFC 791](https://tools.ietf.
 |  Version  |  4-bit 协议版本值为 6  |
 |  Traffic Class  |  8-bit [通信量类](#7-通信量类)  |
 |  Flow Label  |  20-bit [流标签](#6-流标签)  |
-|  Payload Length  |  16-bit 无符号整型，IPv6 有效载荷的长度，即该 IPv6 报头后面的分组的剩余部分，单位为 8-bit(Bytes)，注意[任何扩展标头](#4-IPv6-扩展头)都被认为是有效载荷的一部分，也就是说扩展头包括在长度计数中  |
+|  Payload Length  |  16-bit 无符号整型，IPv6 有效载荷的长度，即该 IPv6 报头后面的分组的剩余部分，单位为 8-bit(Bytes)，注意[任何扩展标头](#4-IPv6)都被认为是有效载荷的一部分，也就是说扩展头包括在长度计数中  |
 |  Next Header  |  8-bit 选择器，表示跟在 IPv6 头后面的类型，用途相当于 IPv4 头部的[协议号](https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml)  |
 |  Hop Limit  |  8-bit 无符号整型。通过转发数据包的每个节点递减 1。当转发时，如果接收到跳数为零或被递减到零，则丢弃该分组。作为分组目的地的节点不应该丢弃跳数等于零的分组；它应该正常处理分组  |
-|  Source Address  |  128-bit，数据包发送者的地址，可以参考 [RFC 4291](https://tools.ietf.org/html/rfc4291)   |
+|  Source Address  |  128-bit，数据包发送者的地址，可以参考 [RFC 4291]   |
 |  Destination Address  |  128-bit，数据包接收者的地址（如果存在路由头部，可能不是最终接收者），可以参考 [RFC 4291](https://tools.ietf.org/html/rfc4291) 和 [4.1 节](#4.1)  |
 
 
