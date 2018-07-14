@@ -101,6 +101,17 @@ IPv6 的数据传输与 IPv4 相同，可以查看 [RFC 791](https://tools.ietf
 +---------------+----------------+-----------------+-----------------
 ```
 
+|  名称  |  作用  |
+|----|----|
+|  Version  |    |
+|  Traffic Class  |    |
+|  Flow Label  |    |
+|  Payload Length  |    |
+|  Next Header  |    |
+|  Hop Limit  |    |
+|  Source Address  |    |
+|  Destination Address  |    |
+
 ## 5 包大小
 
 ## 6 流标签 (Flow Labels)
