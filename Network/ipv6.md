@@ -119,6 +119,16 @@ IPv6 的数据传输与 IPv4 相同，可以查看 [RFC 791](https://tools.ietf.
 
 
 ## 4 扩展头
+
+IPv6 的扩展头代替了 IPv4 头的可选项，在一个数据包中，IPv6 的可选网络层信息是夹在 IPv6 头和上层协议头中间的  
+有少量的扩展头每个都由 `Next Header` 值标记  
+
+扩展头根据 [IP 协议号](https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml)编号，IPv4 和 IPv6 使用相同的值  
+当处理数据包中一系列的 `Next Header` 值时，第一个不是扩展头，[IANA-EH](https://www.iana.org/assignments/ipv6-parameters/ipv6-parameters.xhtml) 中表明这是下一个才是上层头部的对应值  
+当没有上层头部时，使用一个特殊的 `No Next Header` 值  
+
+一个 IPv6 数据包可以携带任意个扩展头，每个扩展头由前一个报头的 `Next Header` 定义
+
 
 ```
 +---------------+------------------------
@@ -140,6 +150,14 @@ IPv6 的数据传输与 IPv4 相同，可以查看 [RFC 791](https://tools.ietf.
 |    Routing    |    Fragment    |       TCP       |
 +---------------+----------------+-----------------+-----------------
 ```
+
+扩展头（除了 `Hop-by-Hop` 可选头）不会被任何沿着数据包传输路径的节点处理、增加或者删除，直到数据包到达 IPv6 头中 `Destination Address` 定义的节点（或是多播节点中的任意节点） 
+`Hop-by-Hop` 选项头不会被增加或删除，但是可能会被数据包沿途经过的任何节点处理或校验，直到数据包到达 IPv6 头中 `Destination Address` 定义的节点（或是多播节点中的任意节点）  
+`Hop-by-Hop` 可选头当出现时，必须紧跟 IPv6 头，它的存在由 IPv6 头中的 `Next Header` 处的 `0` 值表示
+
+> 注意:  
+> 虽然 [RFC-2460](https://tools.ietf.org/html/rfc2460) 中要求所有节点必须检查并处理 `Hop-by-Hop` 可选头，但是现在是否处理 `Hop-by-Hop` 可选头，只会在配置中明确表示要处理才会处理
+
 
 
 
