@@ -221,6 +221,22 @@ IPv6 节点必须遵守并尝试以任意顺序、任意次数处理分组的扩
 
 ### 4.2 可选头
 
+当前两个定义的扩展头: Hop-by-Hop 和 Destination 可选头是负载可变数量的扩展头，它们是按照以下格式编码的 `type-length-value`(TLV)  
+
+```
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- - - - - - - - -
+|  Option Type  |  Opt Data Len |  Option Data
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- - - - - - - - -
+```
+
+|    |    |
+|----|----|
+|  Option Type  |  8-bit 的选项类型标识符  |
+|  Opt Data Len  |  8-bit 无符号整形，以8位字节为单位的 `Option Data` 字段的长度  |
+|  Option Data  |  可变长字段  |
+
+
+
 ### 4.3 逐条可选头
 
 Hop-by-Hop Options Header
