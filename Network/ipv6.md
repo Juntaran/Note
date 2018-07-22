@@ -193,6 +193,32 @@ IPv6 的完整实现包含了以下扩展头的实现:
 
 ### 4.1 扩展头顺序
 
+当一个分组中包含多个扩展头时，建议根据以下顺序排序扩展头  
+
+1. IPv6 header
+2. Hop-by-Hop Options header
+3. Destination Options header (注释1)
+4. Routing header
+5. Fragment header
+6. Authentication header (注释2)
+7. Encapsulating Security Payload header (注释2)
+8. Destination Options header (注释3)
+9. Upper-Layer header
+
+> 注释1:  
+> options 除了被在 IPv6 Destination Address 中出现的第一个目的地处理，也会被 Routing 头中列出的后续目的地处理
+
+> 注释2:  
+> 在 [RCF4303](https://tools.ietf.org/html/rfc4303) 中给出了关于认证和封装安全有效载荷报头的相对顺序的附加建议  
+
+> 注释3:  
+> 分组的 options 只会被最终目的地处理
+
+除了 Destination Options 头会出现至多2次(一次为 Routing 头前，一次为上层报头前)，每个扩展头最多只会出现一次  
+如果上层报头是另一个 IPv6 头(IPv6 被隧道化或者被封装在 IPv6 中)，可能会遵循自己的扩展头，这些扩展头会分别服从相同的排序建议  
+如果定义了其他的扩展头，它们会强制服从上面列出的头顺序  
+IPv6 节点必须遵守并尝试以任意顺序、任意次数处理分组的扩展头，除了 Hop-by-Hop 可选头，它会紧紧跟在 IPv6 头后面。然而，我们还是强烈建议 IPv6 分组遵循上述建议除非随后的规范修订了该建议
+
 ### 4.2 可选头
 
 ### 4.3 逐条可选头
