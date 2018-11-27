@@ -157,11 +157,11 @@ func (this *SafeExpressionCache) Init() {
 
 
 
-### rpc/agent.go
+### 一个完整的逻辑
 
 ___
 
-包含了 MinePlugins() 和 ReportStatus() 给 Agent 使用
+`rpc/agent.go` 包含了 MinePlugins() 和 ReportStatus() 给 Agent 使用
 
 ```go
 func (t *Agent) MinePlugins(args model.AgentHeartbeatRequest, reply *model.AgentPluginsResponse) error {
