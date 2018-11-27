@@ -28,7 +28,7 @@ Hbs(heart-beat server) 提供给 Agent 和 Judge 的接口都是 json rpc
 
 1.5 缓存监控策略
 
-​	Judge(报警组建)需要获取所有的报警策略，Judge 读取 Portal 的数据库是不好的，因为 judge 的实例数可能有很多，对 Portal 数据库的压力比较大，既然根据以上几个需求，Hbs 都需要访问 Portal 的数据库，那就让 Hbs 也干了获取报警策略的活，获取报警策略缓存到内存里，之后 Judge 向 Hbs 发起请求，这样就会大大减小对 Portal 数据库的压力，此时 Hbs 就相当于 Portal 的一个 cache
+​	Judge(报警组件)需要获取所有的报警策略，Judge 读取 Portal 的数据库是不好的，因为 judge 的实例数可能有很多，对 Portal 数据库的压力比较大，既然根据以上几个需求，Hbs 都需要访问 Portal 的数据库，那就让 Hbs 也干了获取报警策略的活，获取报警策略缓存到内存里，之后 Judge 向 Hbs 发起请求，这样就会大大减小对 Portal 数据库的压力，此时 Hbs 就相当于 Portal 的一个 cache
 
 
 
