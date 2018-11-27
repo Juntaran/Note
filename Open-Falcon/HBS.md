@@ -157,7 +157,7 @@ func (this *SafeExpressionCache) Init() {
 
 
 
-### 一个完整的逻辑
+### Plugin 完整的逻辑
 
 ___
 
@@ -233,11 +233,50 @@ type SafeHostGroupsMap struct {
 
 cache.GetPlugins() 的逻辑如下
 
-1. 根据 hostname 寻找所属的 hostId（`hid, exists := HostMap.GetID(hostname)`，HostMap 也是一个内存中的结构，并不是实时访问数据库的，HostMap 也是在 main.go 中的 `HostMap.Init()` 初始化的，并一分钟更新一次）
-2. 根据 hostId 寻找所属的 group（`gids, exists := HostGroupsMap.GetGroupIds(hid)`，HostGroupMap 也是一个内存中的结构，并不是实时访问数据库的，HostMap 也是在 main.go 中的 `HostGroupsMap.Init()` 初始化的，并一分钟更新一次）
-3. 根据查处的 gid 列表，取出所有的 plugins （`GroupPlugins.GetPlugins(gid)`，同上 GroupPlugins 也是在 main.go 中 `GroupPlugins.Init()` 进行初始化的，同样也是一分钟更新一次）
+1. 根据 hostname 寻找所属的 hostId（`hid, exists := HostMap.GetID(hostname)`，HostMap 也是一个内存中的结构，并不是实时访问数据库的，HostMap 也是在 cache.go 中的 `HostMap.Init()` 初始化的，并一分钟更新一次）
+2. 根据 hostId 寻找所属的 group（`gids, exists := HostGroupsMap.GetGroupIds(hid)`，HostGroupMap 也是一个内存中的结构，并不是实时访问数据库的，HostMap 也是在 cache.go 中的 `HostGroupsMap.Init()` 初始化的，并一分钟更新一次）
+3. 根据查出的 gid 列表，取出所有的 plugins （`GroupPlugins.GetPlugins(gid)`，同上 GroupPlugins 也是在 cache.go 中 `GroupPlugins.Init()` 进行初始化的，同样也是一分钟更新一次）
 4. 因为机器关联了多个 Group，每个 Group 可能关联多个 Plugin，故而一个机器关联的 Plugin 可能重复，所有的 plugins 信息放到 `pluginDirs := make(map[string]struct{})` 中，此时利用 map 来去重，然后便利 pluginDirs 这个 map ，取出所有的 key 也就是去重后的 plugin 列表写入 dirs，之后对 dirs 排序后返回
-5. 排序的意义在于 rpc 中 Agent 调用 BuiltinMetrics() ，有 md5 计算，已经传过的就不用再传了
+
+
+
+## 4 Strategy 的完整逻辑
+
+strategy 与 plugin 类似，只是更为复杂
+
+1. main.go 里 cache.Init() 中进行了 `TemplateCache.Init()` 和 `Strategies.Init(TemplateCache.GetMap())` 并且定时 1分钟执行一次
+
+   1.1 `TemplateCache.Init()` 则是获取所有的策略模版列表，填充并返回一个 `map[int]*model.Template` 的 map ，map 的 value 中包含了模板表 Id, Name, ParentId, ActionId, Creator，map 的 key 是模板在模板表的Id ，之后把这个 map 写入全局变量 `TemplateCache`
+
+   1.2 `Strategies.Init(TemplateCache.GetMap())` 传入了`TemplateCache.Init()` 写入全局变量 `TemplateCache` 中的 map ，根据这个 map 查询数据库 `db.QueryStrategies(tpls)` ，这个 map 包含了所有的模板ID 以及模板内容    
+
+   ​		1.2.1 在 `db/strategy.go` 里的 `QueryStrategies()` 函数中，先查询所有的策略信息，之后根据传入的 map 进行匹配，如果查出来的 Strategy 没有对应的模板，那就没有 action，就没法报警，无需往后传递了，之后 db.QueryStrategies() 返回一个 map `map[int]*model.Strategy` ，该 map key 是策略ID，value 是策略内容
+
+   ​		1.2.2 `cache.go` 中的 `Strategies.Init(TemplateCache.GetMap())` 方法把之前查出的策略 map 写入全局变量 `Strategies` 中的 map
+
+2. `cache\strategies.go` 中的 `GetBuiltinMetrics()` 函数，会被 `rpc/agent.go` 中的 `BuiltinMetrics()` 方法调用
+
+   2.1 首先，获取 hostId ，根据 hostname 寻找所属的 hostId（`hid, exists := HostMap.GetID(hostname)`，HostMap 也是一个内存中的结构，并不是实时访问数据库的，HostMap 也是在 cache.go 中的 `HostMap.Init()` 初始化的，并一分钟更新一次）
+
+   2.2 根据 hostId 寻找所属的 group（`gids, exists := HostGroupsMap.GetGroupIds(hid)`，HostGroupMap 也是一个内存中的结构，并不是实时访问数据库的，HostMap 也是在 cache.go 中的 `HostGroupsMap.Init()` 初始化的，并一分钟更新一次）
+
+   2.3 根据 gids，获取绑定的所有 tids，因为机器可能关联了多个 Group，每个 Group 可能关联多个 Template，可能会重复，因此在这里使用了 set 去重，`tidSet := set.NewIntSet()` ，根据查出的 gid 列表，取出所有的 templates （`GroupTemplates.GetTemplateIds(gid)`，同上 GroupTemplates 也是在 cache.go 中 `GroupTemplates.Init()` 进行初始化的，同样也是一分钟更新一次），之后把 tidSet 转换成 slice `tidSlice := tidSet.ToSlice()`。
+
+   2.4 然而还没完，获取所有的模板  `allTpls := TemplateCache.GetMap()`， 同上，template 在 `cache.go` 中的 `TemplateCache.Init()` 之前已经定时更新好了，把 2.3 查出的 template 放到 `ParentIds(allTpls, tid)` 函数中查找他们的父模版，此处最大深度是 10，超过 10 就会直接返回。之后把所有的模板以及他们的父模板放到 set 里去重，并转换回 slice `tidSlice = tidSet.ToSlice()`
+
+   2.5 把所有相关的模版 id 用逗号拼接，开始查库 `db.QueryBuiltinMetrics(strings.Join(tidStrArr, ","))`，查询相关模版内，metric 为 `net.port.listen, proc.num, du.bs, url.check.health ` 的结果，返回 `[]*model.BuiltinMetric` 结构的数据
+
+   2.6 `rpc/agent.go ` 中的 `BuiltinMetrics()` 方法存在 md5 校验
+
+
+
+
+
+## 5 问题
+
+1. BuiltinMetric 只有内建 metric(net.port.listen, proc.num, du.bs, url.check.health) 吗
+2. 用户自定义的 metric 怎么查
+3. db/strategy.go  QueryStrategies() 方法 `kv := strings.SplitN(tag, "=", 2)` 是什么操作
 
 
 
