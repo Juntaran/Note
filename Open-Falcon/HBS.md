@@ -254,7 +254,7 @@ strategy 与 plugin 类似，只是更为复杂
 
    ​		1.2.2 `cache.go` 中的 `Strategies.Init(TemplateCache.GetMap())` 方法把之前查出的策略 map 写入全局变量 `Strategies` 中的 map
 
-2. `cache\strategies.go` 中的 `GetBuiltinMetrics()` 函数，会被 `rpc/agent.go` 中的 `BuiltinMetrics()` 方法调用
+2. `cache/strategies.go` 中的 `GetBuiltinMetrics()` 函数，会被 `rpc/agent.go` 中的 `BuiltinMetrics()` 方法调用
 
    2.1 首先，获取 hostId ，根据 hostname 寻找所属的 hostId（`hid, exists := HostMap.GetID(hostname)`，HostMap 也是一个内存中的结构，并不是实时访问数据库的，HostMap 也是在 cache.go 中的 `HostMap.Init()` 初始化的，并一分钟更新一次）
 
@@ -275,8 +275,12 @@ strategy 与 plugin 类似，只是更为复杂
 ## 5 问题
 
 1. BuiltinMetric 只有内建 metric(net.port.listen, proc.num, du.bs, url.check.health) 吗
+
+   —— Agent 查询 Hbs 这些内容哪些需要监控
+
 2. 用户自定义的 metric 怎么查
-3. db/strategy.go  QueryStrategies() 方法 `kv := strings.SplitN(tag, "=", 2)` 是什么操作
+
+   —— 除了上述都是 Agent 自己来查
 
 
 
