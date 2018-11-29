@@ -4,6 +4,8 @@
 
 Hbs(heart-beat server) 提供给 Agent 和 Judge 的接口都是 json rpc
 
+
+
 ## 1 职责
 
 1.1 处理 Agent 心跳请求，填充 host 表
@@ -270,9 +272,25 @@ strategy 与 plugin 类似，只是更为复杂
 
 
 
+## 5 Agent 的心跳上报
+
+在 `agent/cron/report.go` 中，`ReportAgentStatus()` 会调用 `reportAgentStatus()` ，该函数根据根据 Agent 的配置，每 60s 通过 rpc 连接 Hbs 上报 Hostname, IP, AgentVersion, PluginVersion
+
+```go
+g.HbsClient.Call("Agent.ReportStatus", req, &resp)
+```
+
+也就是调用 `hbs/rpc/agent.go` 中的 `ReportStatus()` 方法  
+
+该方法调用了 `cache.Agents.Put()` 方法，把所有的信息放入内存 cache，之后写入数据库
+
+这里每个 Agent 心跳一次无需立刻更新数据库，Falcon 的逻辑是把他们缓存在内存，每隔 1h 写一次 DB
 
 
-## 5 问题
+
+
+
+## 6 问题
 
 1. BuiltinMetric 只有内建 metric(net.port.listen, proc.num, du.bs, url.check.health) 吗
 
