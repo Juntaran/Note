@@ -34,7 +34,26 @@ Hbs(heart-beat server) 提供给 Agent 和 Judge 的接口都是 json rpc
 
 
 
-## 2 代码结构
+## 2 配置说明
+
+```yaml
+{
+    "debug": true,
+    "database": "root:password@tcp(127.0.0.1:3306)/falcon_portal?loc=Local&parseTime=true", # Portal的数据库地址
+    "hosts": "", # portal数据库中有个host表，如果表中数据是从其他系统同步过来的，此处配置为sync，否则就维持默认，留空即可
+    "maxIdle": 100,
+    "listen": ":6030", # hbs监听的rpc地址
+    "trustable": [""],
+    "http": {
+        "enabled": true,
+        "listen": "0.0.0.0:6031" # hbs监听的http地址
+    }
+}
+```
+
+
+
+## 3 代码结构
 
 ```shell
 .
@@ -77,7 +96,7 @@ Hbs(heart-beat server) 提供给 Agent 和 Judge 的接口都是 json rpc
 
 
 
-## 3 查询缓存
+## 4 查询缓存
 
 Agent 和 Judge 模块都通过 Hbs 来读取用户配置信息，Hbs 周期性的读取 Protal DB 的内容缓存到内存中
 
@@ -89,7 +108,7 @@ Hbs 则周期性读取 Portal DB 的内容，缓存到内存中，Agent、Judge 
 
 
 
-### db/agent.go
+### 4. db/agent.go
 
 ___
 
@@ -103,7 +122,7 @@ hostname 其实是 Agent 执行了 `hostname` 这条指令，ip 则是进行探�
 
 
 
-### db/host.go...
+### 4.2 db/host.go...
 
 ___
 
@@ -113,7 +132,7 @@ ___
 
 
 
-### rpc/hbs.go
+### 4.3 rpc/hbs.go
 
 ___
 
@@ -159,7 +178,7 @@ func (this *SafeExpressionCache) Init() {
 
 
 
-### Plugin 完整的逻辑
+### 4.4 Plugin 完整的逻辑
 
 ___
 
@@ -242,7 +261,7 @@ cache.GetPlugins() 的逻辑如下
 
 
 
-## 4 Strategy 的完整逻辑
+## 5 Strategy 的完整逻辑
 
 strategy 与 plugin 类似，只是更为复杂
 
@@ -272,7 +291,7 @@ strategy 与 plugin 类似，只是更为复杂
 
 
 
-## 5 Agent 的心跳上报
+## 6 Agent 的心跳上报
 
 在 `agent/cron/report.go` 中，`ReportAgentStatus()` 会调用 `reportAgentStatus()` ，该函数根据根据 Agent 的配置，每 60s 通过 rpc 连接 Hbs 上报 Hostname, IP, AgentVersion, PluginVersion
 
@@ -290,7 +309,7 @@ g.HbsClient.Call("Agent.ReportStatus", req, &resp)
 
 
 
-## 6 问题
+## 7 问题
 
 1. BuiltinMetric 只有内建 metric(net.port.listen, proc.num, du.bs, url.check.health) 吗
 
