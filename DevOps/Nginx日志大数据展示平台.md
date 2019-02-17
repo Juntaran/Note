@@ -129,8 +129,9 @@ nginxlogpath:
 
 nginxpospath: /tmp/offset.pos	# enlc 如果被 kill 会在退出之前记录当前读取文件的进度到这个文件
 
+# Decorator 是按照这个规则处理的
 nginxlogfmt:  $http_host\t$server_addr\t$hostname\t$remote_addr\t$http_x_forwarded_for\t$time_local\t$request_uri\t$request_time\t$status\t$upstream_addr\t$upstream_response_time\t$scheme  
-								# Decorator 是按照这个规则处理的
+
 filterpattern:
   - ^\d+$						# 过滤规则1：如果有一段为纯数字，则其与其后皆删除
   - ^\w{8}(-\w{4}){3}-\w{12}$	# 过滤规则2：如果有一段为 uuid，则其与其后皆删除
