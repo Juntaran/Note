@@ -15,7 +15,7 @@ touch body.txt
 echo 'This is test mail'>body.txt
 mail -s 'Test mail' jacinthmail@gmail.com < body.txt
 
-echo "This is test mail" | mail -s 'Test mail' zhangjiangchuan@xiaomi.com
+echo "This is test mail" | mail -s 'Test mail' juntaran@sina.com
 ```
 
 
