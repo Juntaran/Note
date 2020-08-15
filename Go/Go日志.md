@@ -74,7 +74,7 @@ func 	OutLog(info, name string, action int)  {
 		Action: 		Action[action],
 		Info: 			info,
 		Name: 			name,
-		User:           "zhangjiangchuan",
+		User:           "juntaran",
 	}
 	// 格式化日志　
 	Logger.Printf("{\"@timestamp\":%v, \"action\":\"%s\", \"info\":\"%s\", \"name\":\"%s\", \"user\":\"%s\"}", logS.Timestamp, logS.Action, logS.Info, logS.Name, logS.User)
